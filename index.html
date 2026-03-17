@@ -156,6 +156,16 @@
         .btn-secondary:hover {
             background-color: #FFF0F0;
         }
+        
+        /* 錯誤提示文字 */
+        .error-msg {
+            color: var(--ntnu-red);
+            display: none;
+            margin-top: 5px;
+            font-weight: bold;
+            font-size: 0.9em;
+            animation: shake 0.3s ease;
+        }
 
         /* 字卡解謎區 */
         .sentence-container {
@@ -290,24 +300,37 @@
         </div>
 
         <div id="step-1" class="step-section">
+            <label>你的本國名字 (Your Name)：</label>
+            <input type="text" id="input-foreign-name" placeholder="e.g. Emily, David, サクラ">
+            
+            <div id="error-msg-1" class="error-msg">⚠️ Emily 老師提醒：請輸入你的名字喔！</div>
+            
+            <button onclick="submitForeignName()">下一步 Next</button>
+        </div>
+
+        <div id="step-2" class="step-section">
             <button class="btn-secondary" onclick="window.open('https://translate.google.com/?sl=auto&tl=zh-TW', '_blank')">
                 🔍 去 Google 翻譯聽聽看發音
             </button>
             <br><br>
-            <label>你的本國名字 (Your Name)：</label>
-            <input type="text" id="input-foreign-name" placeholder="e.g. David, サクラ, สมชาย">
             <label>你的中文名字 (Chinese Name)：</label>
-            <input type="text" id="input-chinese-name" placeholder="e.g. 大衛, 櫻, 頌猜">
-            <button onclick="submitNames()">下一步 Next</button>
-        </div>
-
-        <div id="step-2" class="step-section">
-            <label>這個名字代表什麼意義？(Meaning in English)：</label>
-            <input type="text" id="input-meaning" placeholder="e.g. Brave, Beautiful flower, Strong">
-            <button onclick="submitMeaning()">下一步 Next</button>
+            <input type="text" id="input-chinese-name" placeholder="e.g. 愛蜜莉, 大衛, 櫻">
+            
+            <div id="error-msg-2" class="error-msg">⚠️ Emily 老師提醒：請把查到的中文名字貼上來喔！</div>
+            
+            <button onclick="submitChineseName()">下一步 Next</button>
         </div>
 
         <div id="step-3" class="step-section">
+            <label>這個名字代表什麼意義？(Meaning in English)：</label>
+            <input type="text" id="input-meaning" placeholder="e.g. Brave, Beautiful flower, Strong">
+            
+            <div id="error-msg-3" class="error-msg">⚠️ Emily 老師提醒：請寫下這個名字的意思喔！</div>
+            
+            <button onclick="submitMeaning()">下一步 Next</button>
+        </div>
+
+        <div id="step-4" class="step-section">
             <div class="sentence-container">
                 <div class="sentence">你好，我叫 <span class="drop-slot" data-type="foreign" onclick="selectSlot(this)">[ 點擊填空 ]</span>。</div>
                 <div class="sentence">我的中文名字是 <span class="drop-slot" data-type="chinese" onclick="selectSlot(this)">[ 點擊填空 ]</span>。</div>
@@ -317,7 +340,7 @@
                 </div>
         </div>
 
-        <div id="step-4" class="step-section">
+        <div id="step-5" class="step-section">
             <div class="id-card">
                 <div class="id-header">國立台灣師範大學 華語學園學生證</div>
                 <p id="final-intro"></p>
@@ -374,40 +397,75 @@
         document.getElementById(`step-${stepNumber}`).classList.add('active');
     }
 
-    // 步驟控制邏輯
+    // --- 步驟控制邏輯 ---
+
     function startGame() {
         showStep(1);
-        typeWriter("你好！我是 Emily 老師。歡迎來到師大！中文名字通常會根據你原本名字的發音來取。點擊按鈕去聽聽發音，然後把名字告訴我吧！", "dialogue-text");
+        typeWriter("你好！我是 Emily 老師。歡迎來到師大！很高興認識你，請告訴我你的本國名字是什麼？", "dialogue-text");
     }
 
-    function submitNames() {
+    // 處理第一頁：本國名字
+    function submitForeignName() {
         const fn = document.getElementById("input-foreign-name").value.trim();
-        const cn = document.getElementById("input-chinese-name").value.trim();
-        if(!fn || !cn) {
-            alert("請輸入你的名字喔！ Please enter your names.");
+        const errorMsg = document.getElementById("error-msg-1");
+        
+        if(!fn) {
+            errorMsg.style.display = "block";
+            errorMsg.classList.remove('shake');
+            void errorMsg.offsetWidth; 
+            errorMsg.classList.add('shake');
             return;
         }
+        
+        errorMsg.style.display = "none";
         userData.foreignName = fn;
-        userData.chineseName = cn;
         
         showStep(2);
+        typeWriter(`太好了，${fn}！中文名字通常會根據原本名字的發音來取。點擊上方的按鈕去 Google 翻譯聽聽看發音，然後把查到的「中文名字」告訴我吧！`, "dialogue-text");
+    }
+
+    // 處理第二頁：中文名字
+    function submitChineseName() {
+        const cn = document.getElementById("input-chinese-name").value.trim();
+        const errorMsg = document.getElementById("error-msg-2");
+        
+        if(!cn) {
+            errorMsg.style.display = "block";
+            errorMsg.classList.remove('shake');
+            void errorMsg.offsetWidth; 
+            errorMsg.classList.add('shake');
+            return;
+        }
+        
+        errorMsg.style.display = "none";
+        userData.chineseName = cn;
+        
+        showStep(3);
         typeWriter(`太棒了！「${cn}」是個好名字。在中文字裡，每個字都有意思。你希望這個名字代表什麼意義呢？請用英文寫下來。`, "dialogue-text");
     }
 
+    // 處理第三頁：名字的意義
     function submitMeaning() {
         const mn = document.getElementById("input-meaning").value.trim();
+        const errorMsg = document.getElementById("error-msg-3");
+        
         if(!mn) {
-            alert("請輸入名字的意義喔！ Please enter the meaning.");
+            errorMsg.style.display = "block";
+            errorMsg.classList.remove('shake');
+            void errorMsg.offsetWidth; 
+            errorMsg.classList.add('shake');
             return;
         }
+        
+        errorMsg.style.display = "none";
         userData.meaning = mn;
         
-        showStep(3);
+        showStep(4);
         setupCards();
         typeWriter("現在，我們來練習自我介紹。請先點擊句子裡的 [空格]，然後點擊下方的 [字卡] 來完成句子！", "dialogue-text");
     }
 
-    // 字卡互動邏輯
+    // --- 字卡互動邏輯 ---
     function setupCards() {
         const container = document.getElementById("cards-area");
         container.innerHTML = "";
@@ -462,9 +520,9 @@
         }
     }
 
-    // 最終名片與印章生成
+    // --- 最終名片與印章生成 ---
     function finishGame() {
-        showStep(4);
+        showStep(5);
         typeWriter("恭喜你完成報到！這是你的專屬學生證。請選擇字體，為它蓋上專屬的姓名印章吧！", "dialogue-text");
         
         document.getElementById("final-intro").innerHTML = `
