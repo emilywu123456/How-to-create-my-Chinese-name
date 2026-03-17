@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>師大華語學園 - 新生報到</title>
-    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+TC:wght@400;700&family=Noto+Serif+TC:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Noto+Serif+TC:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --ntnu-red: #8A1538; /* 師大紅 */
-            --bg-color: #FDFBF7; /* 米白色背景 */
+            --ntnu-red: #8A1538;
+            --bg-color: #FDFBF7;
             --text-main: #333333;
             --card-bg: #FFFFFF;
             --accent: #D4A373;
@@ -41,7 +41,6 @@
             position: relative;
         }
 
-        /* 頂部場景 */
         #scene-area {
             background: linear-gradient(135deg, var(--ntnu-red), #A32A4C);
             height: 200px;
@@ -64,7 +63,6 @@
             pointer-events: none;
         }
 
-        /* 老師頭像 */
         #avatar {
             width: 100px;
             height: 100px;
@@ -80,7 +78,6 @@
             z-index: 10;
         }
 
-        /* 對話與互動區 */
         #interaction-area {
             padding: 50px 30px 30px 30px;
             flex-grow: 1;
@@ -108,7 +105,6 @@
             display: block;
         }
 
-        /* 表單與按鈕 */
         input[type="text"] {
             width: 100%;
             padding: 12px;
@@ -117,7 +113,6 @@
             border-radius: 8px;
             font-size: 1em;
             box-sizing: border-box;
-            transition: border-color 0.3s;
         }
 
         input[type="text"]:focus {
@@ -133,54 +128,68 @@
             border-radius: 8px;
             font-size: 1em;
             cursor: pointer;
-            transition: background-color 0.3s, transform 0.1s;
+            transition: all 0.2s;
             width: 100%;
             margin-top: 10px;
             font-family: 'Noto Sans TC', sans-serif;
         }
 
-        button:hover {
-            background-color: #A32A4C;
-        }
-
-        button:active {
-            transform: scale(0.98);
-        }
-
-        .btn-secondary {
-            background-color: #FFF;
-            color: var(--ntnu-red);
-            border: 2px solid var(--ntnu-red);
-        }
-
-        .btn-secondary:hover {
-            background-color: #FFF0F0;
-        }
+        button:hover { background-color: #A32A4C; }
+        button:active { transform: scale(0.98); }
+        .btn-secondary { background-color: #FFF; color: var(--ntnu-red); border: 2px solid var(--ntnu-red); }
+        .btn-secondary:hover { background-color: #FFF0F0; }
         
-        /* 錯誤提示文字 */
         .error-msg {
             color: var(--ntnu-red);
             display: none;
             margin-top: 5px;
             font-weight: bold;
             font-size: 0.9em;
-            animation: shake 0.3s ease;
+        }
+
+        /* 相似音建議選單區 */
+        .char-selection-block {
+            background: #FFF;
+            border: 2px solid #EEE;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            text-align: left;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .char-title {
+            color: var(--ntnu-red);
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+            border-bottom: 1px solid #EEE;
+            padding-bottom: 5px;
+        }
+        .radio-option {
+            display: block;
+            margin-bottom: 10px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 5px;
+            transition: background 0.2s;
+            border: 1px solid transparent;
+        }
+        .radio-option:hover {
+            background: #FFF0F0;
+            border: 1px solid #FADBD8;
+        }
+        input[type="radio"] {
+            margin-right: 10px;
+            accent-color: var(--ntnu-red);
+            transform: scale(1.2);
         }
 
         /* 字卡解謎區 */
-        .sentence-container {
-            margin-top: 20px;
-            font-size: 1.2em;
-        }
-
-        .sentence {
-            margin-bottom: 15px;
-            line-height: 2;
-        }
-
+        .sentence-container { margin-top: 20px; font-size: 1.2em; }
+        .sentence { margin-bottom: 15px; line-height: 2; }
         .drop-slot {
             display: inline-block;
-            width: 120px;
+            min-width: 120px;
             height: 35px;
             border-bottom: 2px dashed #999;
             vertical-align: middle;
@@ -188,97 +197,103 @@
             color: var(--ntnu-red);
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s;
+            padding: 0 10px;
         }
-
-        .drop-slot.selected {
-            background-color: #FFF0F0;
-            border-bottom: 2px solid var(--ntnu-red);
-        }
-
-        .drop-slot.filled {
-            border-bottom: 2px solid #4CAF50;
-            color: #4CAF50;
-        }
-
-        .cards-container {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 20px;
-        }
-
+        .drop-slot.selected { background-color: #FFF0F0; border-bottom: 2px solid var(--ntnu-red); }
+        .drop-slot.filled { border-bottom: 2px solid #4CAF50; color: #4CAF50; }
+        .cards-container { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
         .word-card {
-            background-color: #FFF;
-            border: 2px solid var(--accent);
-            padding: 10px 15px;
+            background-color: #FFF; border: 2px solid var(--accent); padding: 10px 15px;
+            border-radius: 8px; cursor: pointer; font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); transition: transform 0.2s;
+        }
+        .word-card:hover { transform: translateY(-3px); border-color: var(--ntnu-red); }
+        .word-card.used { opacity: 0.5; pointer-events: none; background-color: #EEE; border-color: #CCC; }
+
+        /* --- 新增：名片與教學區塊設計 --- */
+        .business-card {
+            width: 100%;
+            background: #FFF;
             border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
-        }
-
-        .word-card:hover {
-            transform: translateY(-3px);
-            border-color: var(--ntnu-red);
-        }
-
-        .word-card.used {
-            opacity: 0.5;
-            pointer-events: none;
-            background-color: #EEE;
-            border-color: #CCC;
-        }
-
-        /* 名片與印章區 */
-        .id-card {
-            background: linear-gradient(to right bottom, #FFFFFF, #F8F9FA);
-            border: 1px solid #E0E0E0;
-            border-radius: 12px;
-            padding: 20px;
-            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 25px;
+            box-sizing: border-box;
             position: relative;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="40" stroke="%23F0F0F0" stroke-width="2" fill="none"/></svg>');
+            background-position: right -20px top -20px;
+            background-repeat: no-repeat;
+            border-left: 8px solid var(--ntnu-red);
+            margin-bottom: 20px;
         }
-
-        .id-header {
-            color: var(--ntnu-red);
-            font-weight: bold;
-            border-bottom: 2px solid var(--accent);
-            padding-bottom: 10px;
-            margin-bottom: 15px;
+        
+        .bc-header {
             font-family: 'Noto Serif TC', serif;
+            color: #666;
+            font-size: 0.9em;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #EEE;
+            padding-bottom: 5px;
+        }
+        
+        .bc-name-foreign {
+            font-size: 1.2em;
+            color: #555;
+            margin-bottom: 5px;
+        }
+        
+        .bc-name-chinese {
+            font-size: 2.5em;
+            font-weight: bold;
+            font-family: 'Noto Serif TC', serif;
+            color: var(--text-main);
+            letter-spacing: 5px;
         }
 
         .seal-container {
             position: absolute;
             bottom: 20px;
-            right: 20px;
+            right: 25px;
             width: 80px;
             height: 80px;
         }
 
-        select {
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            border-radius: 5px;
-            border: 1px solid #CCC;
-            font-family: 'Noto Sans TC', sans-serif;
+        /* 教學區塊 */
+        .teaching-section {
+            background-color: #2C3E50;
+            color: #FFF;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        .teaching-title {
+            color: #F39C12;
+            font-weight: bold;
+            border-bottom: 1px solid #555;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        .pinyin-line {
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+        .py-text {
+            color: #AAB7B8;
+            font-size: 0.85em;
+            font-family: Arial, sans-serif;
+            letter-spacing: 1px;
+        }
+        .zh-text {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .highlight {
+            color: #F1C40F;
         }
 
-        /* 動畫 */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
         .shake { animation: shake 0.3s ease; }
     </style>
 </head>
@@ -291,8 +306,7 @@
     </div>
     
     <div id="interaction-area">
-        <div class="dialogue-box" id="dialogue-text">
-            </div>
+        <div class="dialogue-box" id="dialogue-text"></div>
 
         <div id="step-0" class="step-section active">
             <h2 style="color: var(--ntnu-red); text-align: center;">國立台灣師範大學<br>華語文新生報到</h2>
@@ -301,33 +315,25 @@
 
         <div id="step-1" class="step-section">
             <label>你的本國名字 (Your Name)：</label>
-            <input type="text" id="input-foreign-name" placeholder="e.g. Emily, David, サクラ">
-            
+            <input type="text" id="input-foreign-name" placeholder="e.g. Emily, David">
             <div id="error-msg-1" class="error-msg">⚠️ Emily 老師提醒：請輸入你的名字喔！</div>
-            
             <button onclick="submitForeignName()">下一步 Next</button>
         </div>
 
         <div id="step-2" class="step-section">
             <button class="btn-secondary" onclick="window.open('https://translate.google.com/?sl=auto&tl=zh-TW', '_blank')">
-                🔍 去 Google 翻譯聽聽看發音
+                🔍 去 Google 翻譯聽聽看中文發音
             </button>
             <br><br>
-            <label>你的中文名字 (Chinese Name)：</label>
-            <input type="text" id="input-chinese-name" placeholder="e.g. 愛蜜莉, 大衛, 櫻">
-            
-            <div id="error-msg-2" class="error-msg">⚠️ Emily 老師提醒：請把查到的中文名字貼上來喔！</div>
-            
-            <button onclick="submitChineseName()">下一步 Next</button>
+            <label>貼上 Google 翻譯給你的名字 (Google Translation)：</label>
+            <input type="text" id="input-google-name" placeholder="e.g. 艾蜜莉, 大衛">
+            <div id="error-msg-2" class="error-msg">⚠️ 請把查到的中文名字貼上來喔！</div>
+            <button onclick="submitGoogleName()">為名字選擇意義 Next</button>
         </div>
 
         <div id="step-3" class="step-section">
-            <label>這個名字代表什麼意義？(Meaning in English)：</label>
-            <input type="text" id="input-meaning" placeholder="e.g. Brave, Beautiful flower, Strong">
-            
-            <div id="error-msg-3" class="error-msg">⚠️ Emily 老師提醒：請寫下這個名字的意思喔！</div>
-            
-            <button onclick="submitMeaning()">下一步 Next</button>
+            <div id="suggestions-area"></div>
+            <button onclick="submitChosenName()">確認我的名字 Confirm Name</button>
         </div>
 
         <div id="step-4" class="step-section">
@@ -336,46 +342,104 @@
                 <div class="sentence">我的中文名字是 <span class="drop-slot" data-type="chinese" onclick="selectSlot(this)">[ 點擊填空 ]</span>。</div>
                 <div class="sentence">它的意思是 <span class="drop-slot" data-type="meaning" onclick="selectSlot(this)">[ 點擊填空 ]</span>。</div>
             </div>
-            <div class="cards-container" id="cards-area">
-                </div>
+            <div class="cards-container" id="cards-area"></div>
         </div>
 
         <div id="step-5" class="step-section">
-            <div class="id-card">
-                <div class="id-header">國立台灣師範大學 華語學園學生證</div>
-                <p id="final-intro"></p>
+            
+            <div class="business-card" id="final-business-card">
+                <div class="bc-header">National Taiwan Normal University 國立台灣師範大學</div>
+                <div class="bc-name-foreign" id="bc-foreign"></div>
+                <div class="bc-name-chinese" id="bc-chinese"></div>
                 <div class="seal-container">
                     <canvas id="seal-canvas" width="160" height="160" style="width:80px; height:80px;"></canvas>
                 </div>
             </div>
-            <div style="margin-top: 20px;">
-                <label>選擇你的專屬印章字體：</label>
-                <select id="font-selector" onchange="drawSeal()">
-                    <option value="'Noto Serif TC', serif">古典明體 (Classic Serif)</option>
-                    <option value="'Noto Sans TC', sans-serif">現代黑體 (Modern Sans)</option>
-                    <option value="'Ma Shan Zheng', cursive">豪放毛筆 (Brush Cursive)</option>
-                </select>
-                <button onclick="drawSeal()">蓋上印章 Stamp It!</button>
-                <button class="btn-secondary" onclick="location.reload()">重新開始 Restart</button>
+
+            <div class="teaching-section" id="teaching-area">
+                <div class="teaching-title">📝 介紹自己 Introduce Yourself</div>
+                
+                <div class="pinyin-line">
+                    <div class="py-text">Nǐ hǎo, wǒ jiào <span id="teach-py-foreign"></span>.</div>
+                    <div class="zh-text">你好，我叫 <span class="highlight" id="teach-zh-foreign"></span>。</div>
+                </div>
+                
+                <div class="pinyin-line">
+                    <div class="py-text">Wǒ de zhōng wén míng zì shì <span id="teach-py-chinese" class="highlight"></span>.</div>
+                    <div class="zh-text">我的中文名字是 <span class="highlight" id="teach-zh-chinese"></span>。</div>
+                </div>
+
+                <div class="pinyin-line">
+                    <div class="py-text">Tā de yì sī shì <span id="teach-py-meaning"></span>.</div>
+                    <div class="zh-text">它的意思是 <span class="highlight" id="teach-zh-meaning"></span>。</div>
+                </div>
             </div>
+
+            <button onclick="drawSeal()">重新蓋印章 Re-stamp</button>
+            <button class="btn-secondary" onclick="location.reload()">重新開始 Restart</button>
         </div>
 
     </div>
 </div>
 
 <script>
-    // 遊戲狀態變數
+    // --- 升級版字典：加入拼音 ---
+    const phoneticMap = {
+        '艾': [{c: '愛', m: 'Love', p: 'ài'}, {c: '安', m: 'Peace', p: 'ān'}],
+        '蜜': [{c: '米', m: 'Rice', p: 'mǐ'}, {c: '明', m: 'Bright', p: 'míng'}],
+        '莉': [{c: '麗', m: 'Beautiful', p: 'lì'}, {c: '立', m: 'Independent', p: 'lì'}],
+        '大': [{c: '達', m: 'Reach', p: 'dá'}, {c: '德', m: 'Virtue', p: 'dé'}],
+        '衛': [{c: '偉', m: 'Great', p: 'wěi'}, {c: '威', m: 'Power', p: 'wēi'}],
+        '瑪': [{c: '馬', m: 'Energetic', p: 'mǎ'}, {c: '滿', m: 'Full', p: 'mǎn'}],
+        '麗': [{c: '莉', m: 'Jasmine', p: 'lì'}, {c: '理', m: 'Reason', p: 'lǐ'}],
+        '傑': [{c: '捷', m: 'Victory', p: 'jié'}, {c: '結', m: 'Unite', p: 'jié'}],
+        '克': [{c: '可', m: 'Lovely', p: 'kě'}, {c: '客', m: 'Guest', p: 'kè'}],
+        '斯': [{c: '思', m: 'Think', p: 'sī'}, {c: '詩', m: 'Poetry', p: 'shī'}],
+        '丁': [{c: '頂', m: 'Top', p: 'dǐng'}, {c: '定', m: 'Stable', p: 'dìng'}],
+        '湯': [{c: '唐', m: 'Tang', p: 'táng'}, {c: '天', m: 'Sky', p: 'tiān'}],
+        '姆': [{c: '慕', m: 'Admire', p: 'mù'}, {c: '沐', m: 'Grace', p: 'mù'}],
+        '約': [{c: '躍', m: 'Leap', p: 'yuè'}, {c: '月', m: 'Moon', p: 'yuè'}],
+        '翰': [{c: '漢', m: 'Han', p: 'hàn'}, {c: '浩', m: 'Vast', p: 'hào'}],
+        '威': [{c: '偉', m: 'Great', p: 'wěi'}, {c: '維', m: 'Maintain', p: 'wéi'}],
+        '廉': [{c: '連', m: 'Connect', p: 'lián'}, {c: '林', m: 'Forest', p: 'lín'}],
+        '喬': [{c: '巧', m: 'Clever', p: 'qiǎo'}, {c: '橋', m: 'Bridge', p: 'qiáo'}],
+        '治': [{c: '智', m: 'Wisdom', p: 'zhì'}, {c: '志', m: 'Ambition', p: 'zhì'}],
+        '妮': [{c: '霓', m: 'Rainbow', p: 'ní'}, {c: '泥', m: 'Nature', p: 'ní'}],
+        '娜': [{c: '南', m: 'South', p: 'nán'}, {c: '納', m: 'Accept', p: 'nà'}],
+        '莎': [{c: '沙', m: 'Sand', p: 'shā'}, {c: '姍', m: 'Elegant', p: 'shān'}],
+        '拉': [{c: '蘭', m: 'Orchid', p: 'lán'}, {c: '朗', m: 'Bright', p: 'lǎng'}],
+        '亞': [{c: '雅', m: 'Elegant', p: 'yǎ'}, {c: '芽', m: 'Sprout', p: 'yá'}],
+        '歷': [{c: '力', m: 'Strength', p: 'lì'}, {c: '立', m: 'Stand', p: 'lì'}],
+        '山': [{c: '善', m: 'Kindness', p: 'shàn'}, {c: '閃', m: 'Shine', p: 'shǎn'}],
+        '彼': [{c: '必', m: 'Certain', p: 'bì'}, {c: '碧', m: 'Jade green', p: 'bì'}],
+        '得': [{c: '德', m: 'Virtue', p: 'dé'}, {c: '的', m: 'Clear', p: 'de'}],
+        '爾': [{c: '耳', m: 'Listen', p: 'ěr'}, {c: '二', m: 'Balance', p: 'èr'}],
+        '卡': [{c: '凱', m: 'Triumph', p: 'kǎi'}, {c: '開', m: 'Open', p: 'kāi'}],
+        '羅': [{c: '洛', m: 'River', p: 'luò'}, {c: '樂', m: 'Joy', p: 'lè'}],
+        '柏': [{c: '博', m: 'Profound', p: 'bó'}, {c: '波', m: 'Wave', p: 'bō'}],
+        '特': [{c: '泰', m: 'Peaceful', p: 'tài'}, {c: '天', m: 'Sky', p: 'tiān'}]
+    };
+
+    const fallbacks = [
+        [{c: '佳', m: 'Excellent', p: 'jiā'}, {c: '宇', m: 'Universe', p: 'yǔ'}],
+        [{c: '心', m: 'Heart', p: 'xīn'}, {c: '星', m: 'Star', p: 'xīng'}],
+        [{c: '真', m: 'True', p: 'zhēn'}, {c: '光', m: 'Light', p: 'guāng'}],
+        [{c: '恩', m: 'Grace', p: 'ēn'}, {c: '熙', m: 'Bright', p: 'xī'}],
+        [{c: '雅', m: 'Elegant', p: 'yǎ'}, {c: '涵', m: 'Connotative', p: 'hán'}]
+    ];
+
     let userData = {
         foreignName: "",
+        googleName: "",
         chineseName: "",
-        meaning: ""
+        meaning: "",
+        pinyin: ""
     };
     
     let currentSlot = null;
     let correctCount = 0;
-
-    // 對話打字機功能
     let typeWriterTimeout;
+
     function typeWriter(text, elementId, speed = 40) {
         clearTimeout(typeWriterTimeout);
         const el = document.getElementById(elementId);
@@ -391,85 +455,107 @@
         type();
     }
 
-    // 切換步驟視圖
     function showStep(stepNumber) {
         document.querySelectorAll('.step-section').forEach(el => el.classList.remove('active'));
         document.getElementById(`step-${stepNumber}`).classList.add('active');
     }
 
-    // --- 步驟控制邏輯 ---
-
     function startGame() {
         showStep(1);
-        typeWriter("你好！我是 Emily 老師。歡迎來到師大！很高興認識你，請告訴我你的本國名字是什麼？", "dialogue-text");
+        typeWriter("你好！我是 Emily 老師。很高興認識你，請告訴我你的本國名字是什麼？", "dialogue-text");
     }
 
-    // 處理第一頁：本國名字
     function submitForeignName() {
         const fn = document.getElementById("input-foreign-name").value.trim();
-        const errorMsg = document.getElementById("error-msg-1");
-        
-        if(!fn) {
-            errorMsg.style.display = "block";
-            errorMsg.classList.remove('shake');
-            void errorMsg.offsetWidth; 
-            errorMsg.classList.add('shake');
-            return;
-        }
-        
-        errorMsg.style.display = "none";
+        const err = document.getElementById("error-msg-1");
+        if(!fn) { err.style.display="block"; err.classList.remove('shake'); void err.offsetWidth; err.classList.add('shake'); return; }
+        err.style.display="none";
         userData.foreignName = fn;
-        
         showStep(2);
-        typeWriter(`太好了，${fn}！中文名字通常會根據原本名字的發音來取。點擊上方的按鈕去 Google 翻譯聽聽看發音，然後把查到的「中文名字」告訴我吧！`, "dialogue-text");
+        typeWriter(`太好了，${fn}！點擊按鈕去 Google 翻譯聽聽看發音，然後把查到的「中文名字」貼給我吧！`, "dialogue-text");
     }
 
-    // 處理第二頁：中文名字
-    function submitChineseName() {
-        const cn = document.getElementById("input-chinese-name").value.trim();
-        const errorMsg = document.getElementById("error-msg-2");
-        
-        if(!cn) {
-            errorMsg.style.display = "block";
-            errorMsg.classList.remove('shake');
-            void errorMsg.offsetWidth; 
-            errorMsg.classList.add('shake');
-            return;
-        }
-        
-        errorMsg.style.display = "none";
-        userData.chineseName = cn;
-        
+    function submitGoogleName() {
+        const gn = document.getElementById("input-google-name").value.trim();
+        const err = document.getElementById("error-msg-2");
+        if(!gn) { err.style.display="block"; err.classList.remove('shake'); void err.offsetWidth; err.classList.add('shake'); return; }
+        err.style.display="none";
+        userData.googleName = gn;
+        generateNameSuggestions(gn);
         showStep(3);
-        typeWriter(`太棒了！「${cn}」是個好名字。在中文字裡，每個字都有意思。你希望這個名字代表什麼意義呢？請用英文寫下來。`, "dialogue-text");
+        typeWriter(`針對每一個字，我推薦了幾個聲音相似但意義不同的字，請挑選你最喜歡的組合吧！`, "dialogue-text");
     }
 
-    // 處理第三頁：名字的意義
-    function submitMeaning() {
-        const mn = document.getElementById("input-meaning").value.trim();
-        const errorMsg = document.getElementById("error-msg-3");
+    function generateNameSuggestions(name) {
+        const container = document.getElementById("suggestions-area");
+        container.innerHTML = "";
+        for (let i = 0; i < name.length; i++) {
+            const char = name[i];
+            let options = phoneticMap[char];
+            if (!options) {
+                options = fallbacks[Math.floor(Math.random() * fallbacks.length)];
+            }
+            let blockHtml = `
+                <div class="char-selection-block">
+                    <div class="char-title">字 ${i + 1}：【${char}】</div>
+                    <label class="radio-option">
+                        <input type="radio" name="char${i}" value="${char}" data-meaning="Original" data-pinyin="---" checked> 
+                        <b>${char}</b> - 原本的字 (Original)
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="char${i}" value="${options[0].c}" data-meaning="${options[0].m}" data-pinyin="${options[0].p}"> 
+                        <b>${options[0].c}</b> (${options[0].p}) - ${options[0].m}
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="char${i}" value="${options[1].c}" data-meaning="${options[1].m}" data-pinyin="${options[1].p}"> 
+                        <b>${options[1].c}</b> (${options[1].p}) - ${options[1].m}
+                    </label>
+                </div>
+            `;
+            container.innerHTML += blockHtml;
+        }
+    }
+
+    function submitChosenName() {
+        let finalName = "";
+        let finalMeaning = [];
+        let finalPinyin = [];
+        const gn = userData.googleName;
         
-        if(!mn) {
-            errorMsg.style.display = "block";
-            errorMsg.classList.remove('shake');
-            void errorMsg.offsetWidth; 
-            errorMsg.classList.add('shake');
-            return;
+        for (let i = 0; i < gn.length; i++) {
+            const radios = document.getElementsByName(`char${i}`);
+            for (let radio of radios) {
+                if (radio.checked) {
+                    finalName += radio.value;
+                    
+                    let meaningStr = radio.getAttribute('data-meaning');
+                    if(meaningStr !== "Original") {
+                        finalMeaning.push(meaningStr);
+                    }
+                    
+                    let pinyinStr = radio.getAttribute('data-pinyin');
+                    if(pinyinStr !== "---") {
+                        finalPinyin.push(pinyinStr);
+                    } else {
+                        finalPinyin.push("?"); // 如果選原本的字且沒資料，補個問號
+                    }
+                    break;
+                }
+            }
         }
         
-        errorMsg.style.display = "none";
-        userData.meaning = mn;
+        userData.chineseName = finalName;
+        userData.meaning = finalMeaning.length > 0 ? finalMeaning.join(", ") : "Beautiful name";
+        userData.pinyin = finalPinyin.join(" ");
         
         showStep(4);
         setupCards();
-        typeWriter("現在，我們來練習自我介紹。請先點擊句子裡的 [空格]，然後點擊下方的 [字卡] 來完成句子！", "dialogue-text");
+        typeWriter(`太棒了！你的專屬中文名字是「${userData.chineseName}」。請點擊 [空格]，再點擊下方的 [字卡] 來完成句子！`, "dialogue-text");
     }
 
-    // --- 字卡互動邏輯 ---
     function setupCards() {
         const container = document.getElementById("cards-area");
         container.innerHTML = "";
-        // 打亂陣列順序
         const cardsData = [
             { id: "foreign", text: userData.foreignName },
             { id: "chinese", text: userData.chineseName },
@@ -487,96 +573,91 @@
 
     function selectSlot(slotElement) {
         if(slotElement.classList.contains('filled')) return;
-        
         document.querySelectorAll('.drop-slot').forEach(el => el.classList.remove('selected'));
         slotElement.classList.add('selected');
         currentSlot = slotElement;
     }
 
     function selectCard(cardElement, cardType, text) {
-        if (!currentSlot) {
-            alert("請先點擊上面的 [空格]！ Please click a blank space first!");
-            return;
-        }
-
-        const expectedType = currentSlot.getAttribute("data-type");
-        
-        if (cardType === expectedType) {
-            // 答對了
+        if (!currentSlot) { alert("請先點擊上面的 [空格]！"); return; }
+        if (cardType === currentSlot.getAttribute("data-type")) {
             currentSlot.innerText = text;
             currentSlot.classList.remove('selected');
             currentSlot.classList.add('filled');
             cardElement.classList.add('used');
             currentSlot = null;
             correctCount++;
-
-            if(correctCount === 3) {
-                setTimeout(finishGame, 800);
-            }
+            if(correctCount === 3) setTimeout(finishGame, 800);
         } else {
-            // 答錯了
             currentSlot.classList.add('shake');
             setTimeout(() => currentSlot.classList.remove('shake'), 300);
         }
     }
 
-    // --- 最終名片與印章生成 ---
     function finishGame() {
         showStep(5);
-        typeWriter("恭喜你完成報到！這是你的專屬學生證。請選擇字體，為它蓋上專屬的姓名印章吧！", "dialogue-text");
+        typeWriter("恭喜你完成報到！這是你的專屬名片，下方還有 Emily 老師為你準備的自我介紹發音教學喔！", "dialogue-text");
         
-        document.getElementById("final-intro").innerHTML = `
-            你好，我叫 <b>${userData.foreignName}</b>。<br>
-            我的中文名字是 <b>${userData.chineseName}</b>。<br>
-            它的意思是 <b>${userData.meaning}</b>。
-        `;
+        // 渲染名片
+        document.getElementById("bc-foreign").innerText = userData.foreignName;
+        document.getElementById("bc-chinese").innerText = userData.chineseName;
+        
+        // 渲染教學區
+        document.getElementById("teach-py-foreign").innerText = userData.foreignName;
+        document.getElementById("teach-zh-foreign").innerText = userData.foreignName;
+        
+        document.getElementById("teach-py-chinese").innerText = userData.pinyin;
+        document.getElementById("teach-zh-chinese").innerText = userData.chineseName;
+        
+        document.getElementById("teach-py-meaning").innerText = `"${userData.meaning}"`;
+        document.getElementById("teach-zh-meaning").innerText = userData.meaning;
+
         drawSeal();
     }
 
     function drawSeal() {
         const canvas = document.getElementById("seal-canvas");
         const ctx = canvas.getContext("2d");
-        const fontStr = document.getElementById("font-selector").value;
         const name = userData.chineseName;
         
-        // 清空畫布
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
-        // 畫印章邊框 (帶點粗糙感)
+        // 優化印章邊框，加入一點圓角感覺
         ctx.strokeStyle = "#C1121F";
-        ctx.lineWidth = 8;
+        ctx.lineWidth = 6;
+        ctx.lineJoin = "round";
         ctx.strokeRect(10, 10, 140, 140);
-        ctx.lineWidth = 3;
-        ctx.strokeRect(16, 16, 128, 128); // 雙框
+        ctx.lineWidth = 2;
+        ctx.strokeRect(18, 18, 124, 124); 
 
-        // 設定文字
+        // 換上更具傳統氣息的標楷體或內建宋體
         ctx.fillStyle = "#C1121F";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
+        // Fallback chain: 標楷體 -> 微軟正黑體 -> 明體
+        const sealFont = '"DFKai-SB", "BiauKai", "Noto Serif TC", "PMingLiU", serif';
         
-        // 根據字數決定排版
         if (name.length <= 2) {
-            ctx.font = `bold 50px ${fontStr}`;
+            ctx.font = `bold 55px ${sealFont}`;
             for(let i=0; i<name.length; i++) {
                 ctx.fillText(name[i], 80, 50 + (i * 60));
             }
         } else if (name.length === 3) {
-            ctx.font = `bold 40px ${fontStr}`;
+            ctx.font = `bold 45px ${sealFont}`;
             for(let i=0; i<3; i++) {
-                ctx.fillText(name[i], 80, 40 + (i * 40));
+                ctx.fillText(name[i], 80, 35 + (i * 45));
             }
         } else {
-            // 4個字以上，採用 2x2 排版 (右到左，上到下)
-            ctx.font = `bold 45px ${fontStr}`;
-            ctx.fillText(name[0] || "", 110, 50);
-            ctx.fillText(name[1] || "", 110, 110);
-            ctx.fillText(name[2] || "", 50, 50);
-            ctx.fillText(name[3] || "", 50, 110);
+            ctx.font = `bold 48px ${sealFont}`;
+            ctx.fillText(name[0] || "", 115, 45);
+            ctx.fillText(name[1] || "", 115, 115);
+            ctx.fillText(name[2] || "", 45, 45);
+            ctx.fillText(name[3] || "", 45, 115);
         }
         
-        // 加入一點斑駁效果讓它像印泥
-        ctx.fillStyle = "#FDFBF7"; // 背景色
-        for(let i=0; i<30; i++) {
+        // 斑駁印泥效果
+        ctx.fillStyle = "#FFFFFF"; 
+        for(let i=0; i<40; i++) {
             let x = Math.random() * 160;
             let y = Math.random() * 160;
             let r = Math.random() * 2;
@@ -585,9 +666,6 @@
             ctx.fill();
         }
     }
-
-    // 初始對話
-    typeWriter("點擊下方的按鈕，開始你的華語文學習之旅吧！", "dialogue-text");
 </script>
 
 </body>
