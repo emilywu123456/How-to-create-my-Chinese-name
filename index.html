@@ -306,4 +306,235 @@
         const fn = document.getElementById("input-foreign-name").value.trim();
         const err = document.getElementById("error-msg-1");
         if(!fn) { err.style.display="block"; err.classList.remove('shake'); void err.offsetWidth; err.classList.add('shake'); return; }
-        err.style.display="none"; userData.foreignName
+        err.style.display="none"; userData.foreignName = fn;
+        showStep(2); typeWriter(`太好了，${fn}！去 Google 翻譯聽聽發音，把查到的「中文名字」貼給我吧！`, "dialogue-text");
+    }
+    function submitGoogleName() {
+        const gn = document.getElementById("input-google-name").value.trim();
+        const err = document.getElementById("error-msg-2");
+        if(!gn) { err.style.display="block"; err.classList.remove('shake'); void err.offsetWidth; err.classList.add('shake'); return; }
+        err.style.display="none"; userData.googleName = gn; generateNameSuggestions(gn);
+        showStep(3); typeWriter(`針對每一個字，我推薦了幾個聲音相似但意義不同的字，請挑選你最喜歡的吧！`, "dialogue-text");
+    }
+    function generateNameSuggestions(name) {
+        const container = document.getElementById("suggestions-area"); container.innerHTML = "";
+        for (let i = 0; i < name.length; i++) {
+            const char = name[i]; let options = phoneticMap[char] || fallbacks[0];
+            let blockHtml = `
+                <div class="char-selection-block">
+                    <div class="char-title">字 ${i + 1}：【${char}】</div>
+                    <label class="radio-option"><input type="radio" name="char${i}" value="${char}" data-meaning="Original" data-pinyin="---" checked> <b>${char}</b> - 原本的字</label>
+                    <label class="radio-option"><input type="radio" name="char${i}" value="${options[0].c}" data-meaning="${options[0].m}" data-pinyin="${options[0].p}"> <b>${options[0].c}</b> (${options[0].p}) - ${options[0].m}</label>
+                    <label class="radio-option"><input type="radio" name="char${i}" value="${options[1].c}" data-meaning="${options[1].m}" data-pinyin="${options[1].p}"> <b>${options[1].c}</b> (${options[1].p}) - ${options[1].m}</label>
+                </div>`;
+            container.innerHTML += blockHtml;
+        }
+    }
+    function submitChosenName() {
+        let finalName = "", finalMeaning = [], finalPinyin = [];
+        for (let i = 0; i < userData.googleName.length; i++) {
+            const radios = document.getElementsByName(`char${i}`);
+            for (let radio of radios) {
+                if (radio.checked) {
+                    finalName += radio.value;
+                    let mStr = radio.getAttribute('data-meaning'); if(mStr !== "Original") finalMeaning.push(mStr);
+                    let pStr = radio.getAttribute('data-pinyin'); finalPinyin.push(pStr !== "---" ? pStr : "?");
+                    break;
+                }
+            }
+        }
+        userData.chineseName = finalName; userData.meaning = finalMeaning.length > 0 ? finalMeaning.join(", ") : "Beautiful name"; userData.pinyin = finalPinyin.join(" ");
+        sentences = [`你好，我叫${userData.foreignName}。`, `我的中文名字是${userData.chineseName}。`, `它的意思是${userData.meaning}。`];
+        showStep(4); setupCards(); typeWriter(`熟悉一下句子：點擊 [空格]，再點擊下方的 [字卡] 來完成句子！`, "dialogue-text");
+    }
+    function setupCards() {
+        const container = document.getElementById("cards-area"); container.innerHTML = "";
+        const cardsData = [{ id: "foreign", text: userData.foreignName }, { id: "chinese", text: userData.chineseName }, { id: "meaning", text: userData.meaning }].sort(() => Math.random() - 0.5);
+        cardsData.forEach(data => {
+            const btn = document.createElement("div"); btn.className = "word-card"; btn.innerText = data.text;
+            btn.onclick = () => selectCard(btn, data.id, data.text); container.appendChild(btn);
+        });
+    }
+    function selectSlot(slotElement) {
+        if(slotElement.classList.contains('filled')) return;
+        document.querySelectorAll('.drop-slot').forEach(el => el.classList.remove('selected'));
+        slotElement.classList.add('selected'); currentSlot = slotElement;
+    }
+    function selectCard(cardElement, cardType, text) {
+        if (!currentSlot) { alert("請先點擊上面的 [空格]！"); return; }
+        if (cardType === currentSlot.getAttribute("data-type")) {
+            currentSlot.innerText = text; currentSlot.classList.remove('selected'); currentSlot.classList.add('filled');
+            cardElement.classList.add('used'); currentSlot = null; correctCount++;
+            if(correctCount === 3) setTimeout(startChatPractice, 800);
+        } else { currentSlot.classList.add('shake'); setTimeout(() => currentSlot.classList.remove('shake'), 300); }
+    }
+    function startChatPractice() {
+        showStep(5); typeWriter("跟 Emily 老師對話練習 (Dialogue Practice)。請點選正確的回答！", "dialogue-text");
+        chatStage = 0; document.getElementById('chat-history').innerHTML = ""; nextChatStage();
+    }
+    function addChatBubble(sender, text) {
+        const chatHistory = document.getElementById('chat-history');
+        const bubble = document.createElement('div'); bubble.className = `chat-bubble ${sender === 'emily' ? 'chat-emily' : 'chat-student'}`;
+        bubble.innerHTML = text; chatHistory.appendChild(bubble); chatHistory.scrollTop = chatHistory.scrollHeight;
+    }
+    function generateChatOptions(correctIndex) {
+        const optionsArea = document.getElementById('chat-options-area'); optionsArea.innerHTML = "";
+        let options = [0, 1, 2].sort(() => Math.random() - 0.5);
+        options.forEach(idx => {
+            const btn = document.createElement('button'); btn.className = "chat-btn"; btn.innerHTML = `<span>${sentences[idx]}</span> <span class="icon">🔊</span>`;
+            btn.onclick = () => {
+                speakText(sentences[idx]);
+                if (idx === correctIndex) {
+                    addChatBubble('student', sentences[idx]); optionsArea.innerHTML = ""; chatStage++;
+                    setTimeout(nextChatStage, 1000);
+                } else { btn.classList.add('shake'); setTimeout(() => btn.classList.remove('shake'), 300); }
+            };
+            optionsArea.appendChild(btn);
+        });
+    }
+    function nextChatStage() {
+        if (chatStage === 0) { addChatBubble('emily', "👩🏻‍🏫 Emily: 你好！很高興認識你。"); generateChatOptions(0); } 
+        else if (chatStage === 1) { addChatBubble('emily', "👩🏻‍🏫 Emily: 你的中文名字是什麼？"); generateChatOptions(1); } 
+        else if (chatStage === 2) { addChatBubble('emily', "👩🏻‍🏫 Emily: 這名字真好聽！它的意思是什麼？"); generateChatOptions(2); } 
+        else if (chatStage === 3) { addChatBubble('emily', "👩🏻‍🏫 Emily: 太棒了！現在驗收你的口說發音吧！"); setTimeout(startSpeechPractice, 1500); }
+    }
+    function startSpeechPractice() {
+        showStep(6); typeWriter("語音評分測驗 (Speaking Test)：聽例句，換你唸，60 分過關！", "dialogue-text");
+        initSpeechRecognition();
+        const area = document.getElementById('speech-tasks-area'); area.innerHTML = ""; passedTasks = 0;
+        sentences.forEach((sentence, index) => {
+            const taskDiv = document.createElement('div'); taskDiv.className = 'speak-task'; taskDiv.id = `task-${index}`;
+            taskDiv.innerHTML = `
+                <div class="target-sentence">${sentence}</div>
+                <div class="action-buttons">
+                    <div class="btn-group"><button class="play-btn" onclick="speakText('${sentence}')">🔊</button><div class="btn-label">聽 Listen</div></div>
+                    <div class="btn-group"><button class="mic-btn" id="mic-${index}" onclick="recordSpeech(${index}, '${sentence}')">🎙️</button><div class="btn-label">說 Speak</div></div>
+                </div>
+                <div class="feedback-area" id="feedback-${index}"><div class="score-text" style="color:#CCC;">等待錄音...</div><div class="recognized-text"></div></div>`;
+            area.appendChild(taskDiv);
+        });
+    }
+    function recordSpeech(index, targetSentence) {
+        if (!speechRecognition) { alert("瀏覽器不支援。"); document.getElementById('btn-unlock-card').style.display = 'block'; return; }
+        const taskDiv = document.getElementById(`task-${index}`); if (taskDiv.classList.contains('passed')) return;
+        if (isRecording) return;
+        const micBtn = document.getElementById(`mic-${index}`); const feedback = document.getElementById(`feedback-${index}`);
+        const recognizedDiv = feedback.querySelector('.recognized-text'); const scoreDiv = feedback.querySelector('.score-text');
+        speechRecognition.onstart = function() {
+            isRecording = true; micBtn.classList.add('recording'); scoreDiv.innerHTML = "聆聽中..."; scoreDiv.style.color = "#E74C3C"; recognizedDiv.innerHTML = "";
+        };
+        speechRecognition.onresult = function(event) {
+            const transcript = event.results[0][0].transcript; recognizedDiv.innerHTML = `你唸了：${transcript}`;
+            const score = calculateSimilarity(targetSentence, transcript);
+            if (score >= 60) {
+                scoreDiv.innerHTML = `🌟 ${score} 分！`; scoreDiv.style.color = "#27AE60";
+                taskDiv.classList.add('passed'); micBtn.innerHTML = "✅"; micBtn.onclick = null;
+                passedTasks++; if(passedTasks === 3) { document.getElementById('btn-unlock-card').style.display = 'block'; speakText("恭喜通過！"); }
+            } else { scoreDiv.innerHTML = `⚠️ ${score} 分。再試一次！`; scoreDiv.style.color = "#E67E22"; }
+        };
+        speechRecognition.onerror = function() { scoreDiv.innerHTML = "無法辨識。"; scoreDiv.style.color = "#7F8C8D"; };
+        speechRecognition.onend = function() { isRecording = false; micBtn.classList.remove('recording'); };
+        speechRecognition.start();
+    }
+    function calculateSimilarity(target, recognized) {
+        const cleanTarget = target.replace(/[，。！？、\s]/g, '').toLowerCase();
+        const cleanRec = recognized.replace(/[，.！？、\s]/g, '').toLowerCase();
+        let matchCount = 0;
+        for (let i = 0; i < cleanRec.length; i++) { if (cleanTarget.includes(cleanRec[i])) matchCount++; }
+        let rawScore = Math.floor((matchCount / cleanTarget.length) * 100);
+        if(rawScore > 0) rawScore += 15; if (rawScore > 100) rawScore = 100; return rawScore;
+    }
+
+    // --- ✨ 升級版 Step 7：最終名片與兜底圖案生成 ✨ ---
+    function finishGame() {
+        showStep(7); typeWriter("發音完美！任務完成！領取專屬名片吧！", "dialogue-text");
+        
+        // 渲染名片文字內容
+        document.getElementById("bc-foreign").innerText = userData.foreignName;
+        document.getElementById("bc-chinese").innerText = userData.chineseName;
+        document.getElementById("bc-meaning").innerText = userData.meaning; // 顯示意義標籤
+        
+        // 渲染教學區
+        document.getElementById("teach-py-foreign").innerText = userData.foreignName;
+        document.getElementById("teach-zh-foreign").innerText = userData.foreignName;
+        document.getElementById("teach-py-chinese").innerText = userData.pinyin;
+        document.getElementById("teach-zh-chinese").innerText = userData.chineseName;
+        document.getElementById("teach-py-meaning").innerText = `"${userData.meaning}"`;
+        document.getElementById("teach-zh-meaning").innerText = userData.meaning;
+
+        // 生成印章
+        drawSeal();
+        
+        // 生成背景裝飾圖案
+        generateCardDecorations();
+    }
+
+    // --- ✨ 新增：智慧圖案生成系統 (Meaning to Patterns) ✨ ---
+    function generateCardDecorations() {
+        const decorLayer = document.getElementById('bc-decorations');
+        decorLayer.innerHTML = ""; // 清空
+
+        const meaningLower = userData.meaning.toLowerCase();
+        let addedKeywords = [];
+
+        // 1. 掃描關鍵字並植入對應 SVG
+        Object.keys(decorSvgMap).forEach(keyword => {
+            if (keyword !== 'fallback' && meaningLower.includes(keyword)) {
+                // 將 SVG 字串轉為 DOM
+                let parser = new DOMParser();
+                let doc = parser.parseFromString(decorSvgMap[keyword], "image/svg+xml");
+                decorLayer.appendChild(decorLayer.ownerDocument.importNode(doc.documentElement, true));
+                addedKeywords.push(keyword);
+            }
+        });
+
+        // 2. 兜底機制：如果沒有命中關鍵字，或空白太多，植入文化兜底圖案 (祥雲紋)
+        if (addedKeywords.length === 0 || userData.meaning.length < 10) {
+            // 在不同位置植入 2-3 個兜底圖案，增加豐富度
+            let fallbackSvg = decorSvgMap['fallback'];
+            
+            // 右上角 (預設)
+            decorLayer.innerHTML += fallbackSvg;
+            
+            // 左下角 (微調位置和透明度)
+            let parser = new DOMParser();
+            let doc = parser.parseFromString(fallbackSvg, "image/svg+xml");
+            let svgEl = doc.documentElement;
+            svgEl.setAttribute("style", "bottom: -40px; left: -60px; opacity:0.3; transform: scale(1.2) rotate(180deg);");
+            decorLayer.appendChild(decorLayer.ownerDocument.importNode(svgEl, true));
+        }
+    }
+
+    function drawSeal() {
+        const canvas = document.getElementById("seal-canvas"); const ctx = canvas.getContext("2d");
+        const name = userData.chineseName;
+        canvas.width = 320; canvas.height = 320; ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.strokeStyle = "#C1121F"; ctx.lineWidth = 14; ctx.lineJoin = "miter";
+        ctx.strokeRect(20, 20, 280, 280); ctx.lineWidth = 4; ctx.strokeRect(36, 36, 248, 248); 
+        ctx.fillStyle = "#C1121F"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+        const sealFont = '"Long Cang", "Noto Serif TC", serif';
+        const totalChars = name.length;
+        if (totalChars === 1) { ctx.font = `bold 180px ${sealFont}`; ctx.fillText(name, 160, 160); } 
+        else if (totalChars === 2) { ctx.font = `bold 140px ${sealFont}`; ctx.fillText(name[0], 215, 160); ctx.fillText(name[1], 105, 160); }
+        else if (totalChars === 3) {
+            ctx.font = `bold 150px ${sealFont}`; ctx.fillText(name[0], 215, 160);
+            ctx.font = `bold 110px ${sealFont}`; ctx.fillText(name[1], 105, 95); ctx.fillText(name[2], 105, 225);
+        } else if (totalChars >= 4) {
+            ctx.font = `bold 120px ${sealFont}`; ctx.fillText(name[0], 220, 95); ctx.fillText(name[1], 220, 225); ctx.fillText(name[2], 100, 95); ctx.fillText(name[3], 100, 225);
+        }
+        ctx.fillStyle = "#FFFFFF"; 
+        for(let i=0; i<150; i++) { ctx.beginPath(); ctx.arc(Math.random() * 280 + 20, Math.random() * 280 + 20, Math.random() * 2.5, 0, Math.PI*2); ctx.fill(); }
+        canvas.style.width = "85px"; canvas.style.height = "85px";
+    }
+
+    function downloadCard() {
+        speakText("準備中。");
+        const cardElement = document.getElementById('business-card-wrapper');
+        html2canvas(cardElement, { scale: 3, backgroundColor: "#FFFFFF", logging: false, useCORS: true }).then(canvas => {
+            const link = document.createElement('a'); link.download = `NTNU_Card_${userData.foreignName}.png`; link.href = canvas.toDataURL("image/png"); link.click();
+        });
+    }
+</script>
+
+</body>
+</html>
