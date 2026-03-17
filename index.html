@@ -3,211 +3,534 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>師大華語學園 - 專屬中文名</title>
-    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+TC:wght@500;700&family=Noto+Serif+TC:wght@600;900&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+    <title>師大華語學園 - 新生報到</title>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+TC:wght@400;700&family=Noto+Serif+TC:wght@700&display=swap" rel="stylesheet">
     <style>
-        /* --- 基礎設定與變數 --- */
         :root {
-            --ntnu-red: #8A1D22; /* 師大經典紅 */
-            --ntnu-gold: #D4AF37;
-            --bg-color: #f4f1ea; /* 紙張質感背景 */
+            --ntnu-red: #8A1538; /* 師大紅 */
+            --bg-color: #FDFBF7; /* 米白色背景 */
             --text-main: #333333;
-            --white: #ffffff;
+            --card-bg: #FFFFFF;
+            --accent: #D4A373;
         }
 
-        * { box-sizing: border-box; font-family: 'Noto Sans TC', sans-serif; }
-        
         body {
-            margin: 0; padding: 0;
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Sans TC', sans-serif;
             background-color: var(--bg-color);
-            background-image: linear-gradient(rgba(244, 241, 234, 0.9), rgba(244, 241, 234, 0.9)), repeating-linear-gradient(45deg, #e5e0d8 0, #e5e0d8 2px, transparent 0, transparent 50px);
-            color: var(--text-main);
-            display: flex; justify-content: center; align-items: center;
+            background-image: radial-gradient(var(--accent) 1px, transparent 1px);
+            background-size: 20px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             min-height: 100vh;
+            color: var(--text-main);
         }
 
-        /* --- 遊戲主容器 --- */
         #game-container {
-            width: 100%; max-width: 600px;
-            background: var(--white);
+            width: 100%;
+            max-width: 600px;
+            background: var(--card-bg);
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(138, 21, 56, 0.1);
             overflow: hidden;
-            border-top: 8px solid var(--ntnu-red);
+            display: flex;
+            flex-direction: column;
+            min-height: 80vh;
             position: relative;
         }
 
-        /* --- 標題列 --- */
-        header {
-            background: var(--ntnu-red); color: var(--white);
-            padding: 15px 20px; text-align: center;
-            font-size: 1.2rem; font-weight: bold; letter-spacing: 2px;
+        /* 頂部場景 */
+        #scene-area {
+            background: linear-gradient(135deg, var(--ntnu-red), #A32A4C);
+            height: 200px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            border-bottom: 5px solid var(--accent);
         }
 
-        /* --- 教師與對話區 --- */
-        .teacher-section {
-            display: flex; padding: 20px;
-            background: #fafafa; border-bottom: 2px solid #eee;
-            align-items: flex-start;
+        .campus-bg {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: rgba(255,255,255,0.2);
+            font-size: 80px;
+            font-weight: bold;
+            font-family: 'Noto Serif TC', serif;
+            letter-spacing: 5px;
+            pointer-events: none;
         }
-        .avatar {
-            width: 60px; height: 60px;
-            background: var(--ntnu-red); color: white;
+
+        /* 老師頭像 */
+        #avatar {
+            width: 100px;
+            height: 100px;
+            background-color: #FFF;
             border-radius: 50%;
-            display: flex; justify-content: center; align-items: center;
-            font-size: 24px; font-weight: bold; margin-right: 15px;
-            box-shadow: 0 4px 10px rgba(138, 29, 34, 0.3);
-        }
-        .dialog-box {
-            background: var(--white); padding: 15px;
-            border-radius: 0 15px 15px 15px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            flex-grow: 1; min-height: 80px;
-            line-height: 1.6; border: 1px solid #eee;
+            border: 4px solid var(--accent);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 50px;
+            transform: translateY(30px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 10;
         }
 
-        /* --- 互動操作區 --- */
-        .interaction-area { padding: 30px 20px; text-align: center; }
-        
-        .stage { display: none; animation: fadeIn 0.5s; }
-        .stage.active { display: block; }
+        /* 對話與互動區 */
+        #interaction-area {
+            padding: 50px 30px 30px 30px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
 
+        .dialogue-box {
+            background-color: #F0F4F8;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--ntnu-red);
+            font-size: 1.1em;
+            line-height: 1.6;
+            min-height: 60px;
+        }
+
+        .step-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .step-section.active {
+            display: block;
+        }
+
+        /* 表單與按鈕 */
         input[type="text"] {
-            width: 80%; padding: 12px; margin: 10px 0;
-            border: 2px solid #ddd; border-radius: 8px;
-            font-size: 16px; transition: 0.3s; text-align: center;
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #DDD;
+            border-radius: 8px;
+            font-size: 1em;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
         }
-        input[type="text"]:focus { border-color: var(--ntnu-red); outline: none; }
+
+        input[type="text"]:focus {
+            border-color: var(--ntnu-red);
+            outline: none;
+        }
 
         button {
-            background: var(--ntnu-red); color: white;
-            border: none; padding: 12px 24px; border-radius: 8px;
-            font-size: 16px; cursor: pointer; transition: 0.2s; margin-top: 10px;
+            background-color: var(--ntnu-red);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+            width: 100%;
+            margin-top: 10px;
+            font-family: 'Noto Sans TC', sans-serif;
         }
-        button:hover { background: #6b1419; transform: translateY(-2px); }
-        button.secondary { background: #f0f0f0; color: #333; border: 1px solid #ccc; }
-        button.secondary:hover { background: #e0e0e0; }
 
-        /* --- 第三關：點擊填空 --- */
-        .sentence-container { font-size: 18px; line-height: 2.5; text-align: left; margin-bottom: 20px; }
-        .blank-space {
-            display: inline-block; min-width: 80px; height: 35px;
-            border-bottom: 2px dashed var(--ntnu-red);
-            margin: 0 5px; vertical-align: middle; text-align: center;
-            cursor: pointer; background: #fff5f5; color: var(--ntnu-red); font-weight: bold; transition: 0.3s;
+        button:hover {
+            background-color: #A32A4C;
         }
-        .blank-space.selected { background: #ffe0e0; border-bottom: 2px solid var(--ntnu-red); }
-        .blank-space.filled { border-bottom: 2px solid #4CAF50; background: #e8f5e9; color: #2E7D32; cursor: default; }
 
-        .cards-container { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            background-color: #FFF;
+            color: var(--ntnu-red);
+            border: 2px solid var(--ntnu-red);
+        }
+
+        .btn-secondary:hover {
+            background-color: #FFF0F0;
+        }
+
+        /* 字卡解謎區 */
+        .sentence-container {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+
+        .sentence {
+            margin-bottom: 15px;
+            line-height: 2;
+        }
+
+        .drop-slot {
+            display: inline-block;
+            width: 120px;
+            height: 35px;
+            border-bottom: 2px dashed #999;
+            vertical-align: middle;
+            text-align: center;
+            color: var(--ntnu-red);
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .drop-slot.selected {
+            background-color: #FFF0F0;
+            border-bottom: 2px solid var(--ntnu-red);
+        }
+
+        .drop-slot.filled {
+            border-bottom: 2px solid #4CAF50;
+            color: #4CAF50;
+        }
+
+        .cards-container {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
         .word-card {
-            background: var(--white); border: 2px solid #ddd;
-            padding: 10px 20px; border-radius: 8px; cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1); font-weight: bold; transition: 0.2s;
+            background-color: #FFF;
+            border: 2px solid var(--accent);
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
         }
-        .word-card.selected { border-color: var(--ntnu-gold); background: #fffdf5; transform: scale(1.05); }
-        .word-card.hidden { visibility: hidden; }
 
-        /* --- 第四關：名片與印章 --- */
-        .name-card {
-            background: linear-gradient(135deg, #fff 0%, #f9f9f9 100%);
-            border: 1px solid #ddd; border-radius: 10px; padding: 30px;
-            position: relative; text-align: left; margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        .word-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--ntnu-red);
         }
-        .name-card h2 { margin: 0 0 10px 0; color: var(--ntnu-red); border-bottom: 2px solid var(--ntnu-gold); padding-bottom: 5px; display: inline-block;}
-        .name-card p { font-size: 16px; color: #555; margin: 8px 0; }
-        
-        #stamp-canvas { position: absolute; right: 20px; bottom: 20px; opacity: 0.85; transform: rotate(-5deg); }
-        
-        .font-selector { margin-bottom: 15px; }
-        .font-selector select { padding: 8px; font-size: 16px; border-radius: 5px; }
+
+        .word-card.used {
+            opacity: 0.5;
+            pointer-events: none;
+            background-color: #EEE;
+            border-color: #CCC;
+        }
+
+        /* 名片與印章區 */
+        .id-card {
+            background: linear-gradient(to right bottom, #FFFFFF, #F8F9FA);
+            border: 1px solid #E0E0E0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .id-header {
+            color: var(--ntnu-red);
+            font-weight: bold;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            font-family: 'Noto Serif TC', serif;
+        }
+
+        .seal-container {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 80px;
+            height: 80px;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #CCC;
+            font-family: 'Noto Sans TC', sans-serif;
+        }
 
         /* 動畫 */
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
-        .shake { animation: shake 0.3s; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-        /* 彩帶特效 Canvas */
-        #confetti-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 999; }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        .shake { animation: shake 0.3s ease; }
     </style>
 </head>
 <body>
 
-    <canvas id="confetti-canvas"></canvas>
-
-    <div id="game-container">
-        <header>國立臺灣師範大學 - 虛擬華語教室</header>
-        
-        <div class="teacher-section">
-            <div class="avatar">E</div>
-            <div class="dialog-box" id="dialog-text">歡迎來到華語課！</div>
-        </div>
-
-        <div class="interaction-area">
-            
-            <div id="stage-1" class="stage active">
-                <input type="text" id="input-native" placeholder="e.g. David, 櫻木, สมชาย..." autocomplete="off">
-                <br>
-                <button onclick="nextStage(1)">確認</button>
-            </div>
-
-            <div id="stage-2" class="stage">
-                <button class="secondary" onclick="window.open('https://translate.google.com/?hl=zh-TW&sl=auto&tl=zh-TW', '_blank')">
-                    🔍 打開 Google 翻譯找發音
-                </button>
-                <p style="font-size: 14px; color: #666;">(查好後，請把中文複製貼在下方)</p>
-                <input type="text" id="input-chinese" placeholder="請輸入你的中文名字" autocomplete="off">
-                <br>
-                <button onclick="nextStage(2)">這就是我的中文名！</button>
-            </div>
-
-            <div id="stage-3" class="stage">
-                <input type="text" id="input-meaning" placeholder="e.g. Brave and bright" autocomplete="off">
-                <br>
-                <button onclick="nextStage(3)">確認意義</button>
-            </div>
-
-            <div id="stage-4" class="stage">
-                <div class="sentence-container">
-                    你好，我叫 <span class="blank-space" data-target="native" onclick="selectBlank(this)"></span>。<br>
-                    我的中文名字是 <span class="blank-space" data-target="chinese" onclick="selectBlank(this)"></span>。<br>
-                    它的意思是 <span class="blank-space" data-target="meaning" onclick="selectBlank(this)"></span>。
-                </div>
-                <div class="cards-container" id="cards-area">
-                    </div>
-            </div>
-
-            <div id="stage-5" class="stage">
-                <div class="font-selector">
-                    <label>選擇印章字型：</label>
-                    <select id="font-select" onchange="drawStamp()">
-                        <option value="'Noto Serif TC', serif">古典明體 (預設)</option>
-                        <option value="'Noto Sans TC', sans-serif">現代黑體</option>
-                        <option value="'Ma Shan Zheng', cursive">豪放毛筆</option>
-                        <option value="'Zhi Mang Xing', cursive">瀟灑行書</option>
-                    </select>
-                </div>
-                
-                <div class="name-card" id="final-card">
-                    <h2 id="card-chinese">中文名</h2>
-                    <p><strong>Original Name:</strong> <span id="card-native"></span></p>
-                    <p><strong>Meaning:</strong> <span id="card-meaning"></span></p>
-                    <canvas id="stamp-canvas" width="80" height="80"></canvas>
-                </div>
-                <button onclick="location.reload()">重新報到</button>
-            </div>
-
-        </div>
+<div id="game-container">
+    <div id="scene-area">
+        <div class="campus-bg">NTNU</div>
+        <div id="avatar">👩🏻‍🏫</div>
     </div>
+    
+    <div id="interaction-area">
+        <div class="dialogue-box" id="dialogue-text">
+            </div>
 
-    <script>
-        /* --- 遊戲狀態與資料 --- */
-        let userData = { native: '', chinese: '', meaning: '' };
-        let activeCard = null;
-        let activeBlank = null;
-        let correctCount = 0;
+        <div id="step-0" class="step-section active">
+            <h2 style="color: var(--ntnu-red); text-align: center;">國立台灣師範大學<br>華語文新生報到</h2>
+            <button onclick="startGame()">開始報到 Start</button>
+        </div>
 
-        /* --- Emily老師的對話劇本 --- */
-        const script = {
-            1: "你好！我是 Emily 老師，歡迎來到師大華語課。
+        <div id="step-1" class="step-section">
+            <button class="btn-secondary" onclick="window.open('https://translate.google.com/?sl=auto&tl=zh-TW', '_blank')">
+                🔍 去 Google 翻譯聽聽看發音
+            </button>
+            <br><br>
+            <label>你的本國名字 (Your Name)：</label>
+            <input type="text" id="input-foreign-name" placeholder="e.g. David, サクラ, สมชาย">
+            <label>你的中文名字 (Chinese Name)：</label>
+            <input type="text" id="input-chinese-name" placeholder="e.g. 大衛, 櫻, 頌猜">
+            <button onclick="submitNames()">下一步 Next</button>
+        </div>
+
+        <div id="step-2" class="step-section">
+            <label>這個名字代表什麼意義？(Meaning in English)：</label>
+            <input type="text" id="input-meaning" placeholder="e.g. Brave, Beautiful flower, Strong">
+            <button onclick="submitMeaning()">下一步 Next</button>
+        </div>
+
+        <div id="step-3" class="step-section">
+            <div class="sentence-container">
+                <div class="sentence">你好，我叫 <span class="drop-slot" data-type="foreign" onclick="selectSlot(this)">[ 點擊填空 ]</span>。</div>
+                <div class="sentence">我的中文名字是 <span class="drop-slot" data-type="chinese" onclick="selectSlot(this)">[ 點擊填空 ]</span>。</div>
+                <div class="sentence">它的意思是 <span class="drop-slot" data-type="meaning" onclick="selectSlot(this)">[ 點擊填空 ]</span>。</div>
+            </div>
+            <div class="cards-container" id="cards-area">
+                </div>
+        </div>
+
+        <div id="step-4" class="step-section">
+            <div class="id-card">
+                <div class="id-header">國立台灣師範大學 華語學園學生證</div>
+                <p id="final-intro"></p>
+                <div class="seal-container">
+                    <canvas id="seal-canvas" width="160" height="160" style="width:80px; height:80px;"></canvas>
+                </div>
+            </div>
+            <div style="margin-top: 20px;">
+                <label>選擇你的專屬印章字體：</label>
+                <select id="font-selector" onchange="drawSeal()">
+                    <option value="'Noto Serif TC', serif">古典明體 (Classic Serif)</option>
+                    <option value="'Noto Sans TC', sans-serif">現代黑體 (Modern Sans)</option>
+                    <option value="'Ma Shan Zheng', cursive">豪放毛筆 (Brush Cursive)</option>
+                </select>
+                <button onclick="drawSeal()">蓋上印章 Stamp It!</button>
+                <button class="btn-secondary" onclick="location.reload()">重新開始 Restart</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // 遊戲狀態變數
+    let userData = {
+        foreignName: "",
+        chineseName: "",
+        meaning: ""
+    };
+    
+    let currentSlot = null;
+    let correctCount = 0;
+
+    // 對話打字機功能
+    let typeWriterTimeout;
+    function typeWriter(text, elementId, speed = 40) {
+        clearTimeout(typeWriterTimeout);
+        const el = document.getElementById(elementId);
+        el.innerHTML = "";
+        let i = 0;
+        function type() {
+            if (i < text.length) {
+                el.innerHTML += text.charAt(i);
+                i++;
+                typeWriterTimeout = setTimeout(type, speed);
+            }
+        }
+        type();
+    }
+
+    // 切換步驟視圖
+    function showStep(stepNumber) {
+        document.querySelectorAll('.step-section').forEach(el => el.classList.remove('active'));
+        document.getElementById(`step-${stepNumber}`).classList.add('active');
+    }
+
+    // 步驟控制邏輯
+    function startGame() {
+        showStep(1);
+        typeWriter("你好！我是 Emily 老師。歡迎來到師大！中文名字通常會根據你原本名字的發音來取。點擊按鈕去聽聽發音，然後把名字告訴我吧！", "dialogue-text");
+    }
+
+    function submitNames() {
+        const fn = document.getElementById("input-foreign-name").value.trim();
+        const cn = document.getElementById("input-chinese-name").value.trim();
+        if(!fn || !cn) {
+            alert("請輸入你的名字喔！ Please enter your names.");
+            return;
+        }
+        userData.foreignName = fn;
+        userData.chineseName = cn;
+        
+        showStep(2);
+        typeWriter(`太棒了！「${cn}」是個好名字。在中文字裡，每個字都有意思。你希望這個名字代表什麼意義呢？請用英文寫下來。`, "dialogue-text");
+    }
+
+    function submitMeaning() {
+        const mn = document.getElementById("input-meaning").value.trim();
+        if(!mn) {
+            alert("請輸入名字的意義喔！ Please enter the meaning.");
+            return;
+        }
+        userData.meaning = mn;
+        
+        showStep(3);
+        setupCards();
+        typeWriter("現在，我們來練習自我介紹。請先點擊句子裡的 [空格]，然後點擊下方的 [字卡] 來完成句子！", "dialogue-text");
+    }
+
+    // 字卡互動邏輯
+    function setupCards() {
+        const container = document.getElementById("cards-area");
+        container.innerHTML = "";
+        // 打亂陣列順序
+        const cardsData = [
+            { id: "foreign", text: userData.foreignName },
+            { id: "chinese", text: userData.chineseName },
+            { id: "meaning", text: userData.meaning }
+        ].sort(() => Math.random() - 0.5);
+
+        cardsData.forEach(data => {
+            const btn = document.createElement("div");
+            btn.className = "word-card";
+            btn.innerText = data.text;
+            btn.onclick = () => selectCard(btn, data.id, data.text);
+            container.appendChild(btn);
+        });
+    }
+
+    function selectSlot(slotElement) {
+        if(slotElement.classList.contains('filled')) return;
+        
+        document.querySelectorAll('.drop-slot').forEach(el => el.classList.remove('selected'));
+        slotElement.classList.add('selected');
+        currentSlot = slotElement;
+    }
+
+    function selectCard(cardElement, cardType, text) {
+        if (!currentSlot) {
+            alert("請先點擊上面的 [空格]！ Please click a blank space first!");
+            return;
+        }
+
+        const expectedType = currentSlot.getAttribute("data-type");
+        
+        if (cardType === expectedType) {
+            // 答對了
+            currentSlot.innerText = text;
+            currentSlot.classList.remove('selected');
+            currentSlot.classList.add('filled');
+            cardElement.classList.add('used');
+            currentSlot = null;
+            correctCount++;
+
+            if(correctCount === 3) {
+                setTimeout(finishGame, 800);
+            }
+        } else {
+            // 答錯了
+            currentSlot.classList.add('shake');
+            setTimeout(() => currentSlot.classList.remove('shake'), 300);
+        }
+    }
+
+    // 最終名片與印章生成
+    function finishGame() {
+        showStep(4);
+        typeWriter("恭喜你完成報到！這是你的專屬學生證。請選擇字體，為它蓋上專屬的姓名印章吧！", "dialogue-text");
+        
+        document.getElementById("final-intro").innerHTML = `
+            你好，我叫 <b>${userData.foreignName}</b>。<br>
+            我的中文名字是 <b>${userData.chineseName}</b>。<br>
+            它的意思是 <b>${userData.meaning}</b>。
+        `;
+        drawSeal();
+    }
+
+    function drawSeal() {
+        const canvas = document.getElementById("seal-canvas");
+        const ctx = canvas.getContext("2d");
+        const fontStr = document.getElementById("font-selector").value;
+        const name = userData.chineseName;
+        
+        // 清空畫布
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // 畫印章邊框 (帶點粗糙感)
+        ctx.strokeStyle = "#C1121F";
+        ctx.lineWidth = 8;
+        ctx.strokeRect(10, 10, 140, 140);
+        ctx.lineWidth = 3;
+        ctx.strokeRect(16, 16, 128, 128); // 雙框
+
+        // 設定文字
+        ctx.fillStyle = "#C1121F";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        
+        // 根據字數決定排版
+        if (name.length <= 2) {
+            ctx.font = `bold 50px ${fontStr}`;
+            for(let i=0; i<name.length; i++) {
+                ctx.fillText(name[i], 80, 50 + (i * 60));
+            }
+        } else if (name.length === 3) {
+            ctx.font = `bold 40px ${fontStr}`;
+            for(let i=0; i<3; i++) {
+                ctx.fillText(name[i], 80, 40 + (i * 40));
+            }
+        } else {
+            // 4個字以上，採用 2x2 排版 (右到左，上到下)
+            ctx.font = `bold 45px ${fontStr}`;
+            ctx.fillText(name[0] || "", 110, 50);
+            ctx.fillText(name[1] || "", 110, 110);
+            ctx.fillText(name[2] || "", 50, 50);
+            ctx.fillText(name[3] || "", 50, 110);
+        }
+        
+        // 加入一點斑駁效果讓它像印泥
+        ctx.fillStyle = "#FDFBF7"; // 背景色
+        for(let i=0; i<30; i++) {
+            let x = Math.random() * 160;
+            let y = Math.random() * 160;
+            let r = Math.random() * 2;
+            ctx.beginPath();
+            ctx.arc(x, y, r, 0, Math.PI*2);
+            ctx.fill();
+        }
+    }
+
+    // 初始對話
+    typeWriter("點擊下方的按鈕，開始你的華語文學習之旅吧！", "dialogue-text");
+</script>
+
+</body>
+</html>
