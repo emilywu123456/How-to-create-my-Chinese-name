@@ -19,19 +19,18 @@
         .dialogue-box::after { content: ''; position: absolute; top: -9px; left: 50%; transform: translateX(-50%); border-width: 0 10px 10px 10px; border-style: solid; border-color: transparent transparent #FFFFFF transparent; }
         .step-section { display: none; animation: fadeIn 0.4s; } .step-section.active { display: block; }
         input[type="text"] { width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #DDD; border-radius: 8px; font-size: 1em; box-sizing: border-box; }
-        input[type="text"]:focus { border-color: var(--ntnu-red); outline: none; }
         button { background: var(--ntnu-red); color: white; border: none; padding: 14px 20px; border-radius: 8px; font-size: 1.05em; cursor: pointer; transition: 0.2s; width: 100%; margin-top: 15px; font-weight: bold; box-shadow: 0 4px 10px rgba(138,21,56,0.2);}
-        button:hover { background: #A32A4C; transform: translateY(-2px); } .btn-secondary { background: #FFF; color: var(--ntnu-red); border: 2px solid var(--ntnu-red); } .btn-success { background: #27AE60; } .btn-prize { background: #F39C12; color: white; font-size: 1.2em; border: none; margin-top: 20px; animation: pulse 1.5s infinite;}
+        button:hover { background: #A32A4C; transform: translateY(-2px); } 
+        .btn-secondary { background: #FFF; color: var(--ntnu-red); border: 2px solid var(--ntnu-red); } 
+        .btn-prize { background: #F39C12; color: white; font-size: 1.2em; border: none; margin-top: 20px; animation: pulse 1.5s infinite;}
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
         .char-selection-block { background: #FFF; border: 2px solid #EEE; border-radius: 8px; padding: 15px; margin-bottom: 15px; }
         .char-title { color: var(--ntnu-red); font-weight: bold; margin-bottom: 10px; border-bottom: 1px solid #EEE; padding-bottom: 5px; }
         .radio-option { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; cursor: pointer; padding: 10px 15px; border-radius: 8px; border: 1px solid #EEE; background: #FAFAFA; } 
-        .radio-option:hover { background: #FFF0F0; border-color: var(--ntnu-red); }
         .radio-label-text { display: flex; align-items: center; flex-grow: 1; }
         .speaker-icon { font-size: 1.2em; width: 36px; height: 36px; display: flex; justify-content: center; align-items: center; border-radius: 50%; background: #FFF; border: 1px solid #DDD; margin-left: 10px; }
         .sentence-container { margin-top: 20px; font-size: 1.2em; background: #FFF; padding: 15px; border-radius: 10px; border: 1px dashed #CCC;} .sentence { margin-bottom: 15px; line-height: 2; }
         .drop-slot { display: inline-block; min-width: 120px; height: 35px; border-bottom: 2px dashed #999; vertical-align: middle; text-align: center; color: var(--ntnu-red); font-weight: bold; cursor: pointer; }
-        .drop-slot.filled { border-bottom: 2px solid #4CAF50; color: #4CAF50; }
         .word-card { background: #FFF; border: 2px solid var(--accent); padding: 12px 20px; border-radius: 10px; cursor: pointer; font-weight: bold; margin: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
         .word-card.used { opacity: 0.3; pointer-events: none; }
         .chat-container { background: #F8F9FA; border: 1px solid #E0E0E0; border-radius: 12px; padding: 15px; height: 280px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; margin-bottom: 15px; }
@@ -39,7 +38,6 @@
         .chat-emily { background: var(--chat-emily); align-self: flex-start; border-bottom-left-radius: 0; color: #1A73E8; font-weight: bold; }
         .chat-student { background: var(--chat-student); align-self: flex-end; border-bottom-right-radius: 0; color: var(--ntnu-red); font-weight: bold; }
         .chat-btn { background: #FFF; border: 2px solid #DDD; color: #555; text-align: left; padding: 12px 15px; border-radius: 10px; display: flex; justify-content: space-between; margin-bottom: 10px; }
-        #business-card-wrapper { background: #FFF; padding: 15px; border-radius: 12px; display: flex; justify-content: center; }
         .business-card { width: 100%; max-width: 450px; background: #FFF; border: 1px solid #E0E0E0; box-shadow: 0 4px 20px rgba(0,0,0,0.08); padding: 30px; box-sizing: border-box; position: relative; overflow: hidden; border-left: 12px solid var(--ntnu-red); min-height: 250px; text-align: left;}
         .bc-header { font-family: 'Noto Serif TC', serif; color: #666; font-size: 0.95em; letter-spacing: 1px; margin-bottom: 25px; border-bottom: 1px solid #EEE; padding-bottom: 10px; line-height: 1.6; }
         .bc-name-foreign { font-size: 1.3em; color: #555; margin-bottom: 5px; }
@@ -47,8 +45,7 @@
         .bc-meaning-tag { display: inline-block; background: var(--ntnu-red); color: white; padding: 5px 12px; border-radius: 6px; font-size: 0.85em; font-weight: bold; margin-bottom: 20px; }
         .seal-container { position: absolute; bottom: 25px; right: 30px; width: 85px; height: 85px; }
         .teaching-section { background: #2C3E50; color: #FFF; padding: 20px; border-radius: 12px; margin-top: 15px; text-align: left;}
-        .teaching-title { color: #F39C12; font-weight: bold; border-bottom: 1px solid #555; padding-bottom: 10px; margin-bottom: 15px; }
-        .zh-text { font-size: 1.25em; font-weight: bold; } .highlight { color: #F1C40F; }
+        .highlight { color: #F1C40F; font-weight: bold; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
@@ -58,31 +55,80 @@
         <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;"><path d="M20 100 C20 70, 80 70, 80 100" fill="#8A1538" /><path d="M25 40 C15 60, 20 90, 25 100 L75 100 C80 90, 85 60, 75 40 Z" fill="#2C3E50" /><circle cx="50" cy="45" r="20" fill="#FFE0BD" /><path d="M30 45 C30 15, 70 15, 70 45 C65 30, 50 30, 30 45 Z" fill="#2C3E50" /><circle cx="42" cy="45" r="2.5" fill="#333" /><circle cx="58" cy="45" r="2.5" fill="#333" /><path d="M46 52 Q50 57 54 52" stroke="#333" stroke-width="2" fill="none" stroke-linecap="round" /><circle cx="37" cy="49" r="3" fill="#FFB6C1" opacity="0.8"/><circle cx="63" cy="49" r="3" fill="#FFB6C1" opacity="0.8"/><path d="M70 35 C75 30, 80 35, 75 40 C80 45, 75 50, 70 45 C65 50, 60 45, 65 40 C60 35, 65 30, 70 35 Z" fill="#F1C40F" /><circle cx="70" cy="40" r="2" fill="#E67E22" /></svg>
     </div></div>
     <div id="interaction-area">
-        <div class="dialogue-box" id="dialogue-text"></div>
-        <div id="step-0" class="step-section active"><h2 style="color:var(--ntnu-red);text-align:center;">國立台灣師範大學<br>華語文新生報到</h2><button onclick="startGame()">開始報到 Start</button></div>
-        <div id="step-1" class="step-section"><label>你的本國名字 (Your Name)：</label><input type="text" id="input-foreign-name" placeholder="e.g. Emily"><button onclick="submitForeignName()">下一步 Next</button></div>
-        <div id="step-2" class="step-section"><button class="btn-secondary" onclick="window.open('https://translate.google.com/?sl=auto&tl=zh-TW', '_blank')">🔍 Google 翻譯聽發音</button><br><br><label>貼上中文名字：</label><input type="text" id="input-google-name" placeholder="e.g. 艾蜜莉"><button onclick="submitGoogleName()">為名字選擇意義 Next</button></div>
-        <div id="step-3" class="step-section"><div id="suggestions-area"></div><button onclick="submitChosenName()">確認我的名字 Confirm</button></div>
-        <div id="step-4" class="step-section"><div class="sentence-container"><div class="sentence">你好，我叫 <span class="drop-slot" data-type="foreign" id="slot-f" onclick="selectSlot(this)">[ 點擊填空 ]</span>。</div><div class="sentence">我的中文名字是 <span class="drop-slot" data-type="chinese" id="slot-c" onclick="selectSlot(this)">[ 點擊填空 ]</span>。</div><div class="sentence">它的意思是 <span class="drop-slot" data-type="meaning" id="slot-m" onclick="selectSlot(this)">[ 點擊填空 ]</span>。</div></div><div class="cards-container" id="cards-area"></div></div>
-        <div id="step-5" class="step-section"><div class="chat-container" id="chat-history"></div><div id="chat-options-area"></div><div id="final-prize-container" style="display:none;"><button class="btn-prize" onclick="triggerCelebration()">🎆 領取我的專屬名片 🎆</button></div></div>
-        <div id="step-6" class="step-section"><div id="business-card-wrapper"><div class="business-card" id="final-business-card"><div class="card-content-layer"><div class="bc-header">National Taiwan Normal University<br>國立台灣師範大學</div><div class="bc-name-foreign" id="bc-foreign"></div><div class="bc-name-chinese" id="bc-chinese"></div><div class="bc-meaning-tag" id="bc-meaning"></div></div><div class="seal-container"><canvas id="seal-canvas" width="320" height="320" style="width:85px; height:85px;"></canvas></div></div></div><button class="btn-success" onclick="downloadCard()" style="margin-top:20px;">📥 下載專屬名片 Download</button><button class="btn-secondary" onclick="replayComputerSpeech()" style="margin-top:10px;">🔊 聽老師唸名片 Read Aloud</button><div class="teaching-section"><div class="teaching-title">📝 發音 Review</div><div class="zh-text">你好，我叫 <span class="highlight" id="teach-zh-f"></span>。</div><div class="zh-text">我的中文名字是 <span class="highlight" id="teach-zh-c"></span>。</div><div class="zh-text">它的意思是 <span class="highlight" id="teach-zh-m"></span>。</div></div><button class="btn-secondary" onclick="location.reload()" style="margin-top:20px;">🔄 重新開始 Restart</button></div>
+        <div class="dialogue-box" id="dialogue-text">歡迎來到師大華語學園！</div>
+        <div id="step-0" class="step-section active">
+            <h2 style="color:var(--ntnu-red);text-align:center;">國立台灣師範大學<br>華語文新生報到</h2>
+            <button onclick="startGame()">開始報到 Start</button>
+        </div>
+        <div id="step-1" class="step-section">
+            <label>你的本國名字 (Your Name)：</label>
+            <input type="text" id="input-foreign-name" placeholder="e.g. Emily">
+            <button onclick="submitForeignName()">下一步 Next</button>
+        </div>
+        <div id="step-2" class="step-section">
+            <button class="btn-secondary" onclick="window.open('https://translate.google.com/?sl=auto&tl=zh-TW', '_blank')">🔍 Google 翻譯聽發音</button><br><br>
+            <label>貼上翻譯後的中文名字：</label>
+            <input type="text" id="input-google-name" placeholder="e.g. 艾蜜莉">
+            <button onclick="submitGoogleName()">下一步 Next</button>
+        </div>
+        <div id="step-3" class="step-section"><div id="suggestions-area"></div><button onclick="submitChosenName()">確認名字 Confirm</button></div>
+        <div id="step-4" class="step-section">
+            <div class="sentence-container">
+                <div class="sentence">你好，我叫 <span class="drop-slot" data-type="foreign" onclick="selectSlot(this)">[ 點擊填空 ]</span>。</div>
+                <div class="sentence">我的中文名字是 <span class="drop-slot" data-type="chinese" onclick="selectSlot(this)">[ 點擊填空 ]</span>。</div>
+                <div class="sentence">它的意思是 <span class="drop-slot" data-type="meaning" onclick="selectSlot(this)">[ 點擊填空 ]</span>。</div>
+            </div>
+            <div class="cards-container" id="cards-area"></div>
+        </div>
+        <div id="step-5" class="step-section">
+            <div class="chat-container" id="chat-history"></div>
+            <div id="chat-options-area"></div>
+            <div id="final-prize-container" style="display:none; text-align:center;">
+                <button class="btn-prize" onclick="triggerCelebration()">🎆 領取專屬名片 🎆</button>
+            </div>
+        </div>
+        <div id="step-6" class="step-section">
+            <div id="business-card-wrapper">
+                <div class="business-card" id="final-business-card">
+                    <div class="bc-header">National Taiwan Normal University<br>國立台灣師範大學</div>
+                    <div class="bc-name-foreign" id="bc-foreign"></div>
+                    <div class="bc-name-chinese" id="bc-chinese"></div>
+                    <div class="bc-meaning-tag" id="bc-meaning"></div>
+                    <div class="seal-container"><canvas id="seal-canvas" width="320" height="320" style="width:85px; height:85px;"></canvas></div>
+                </div>
+            </div>
+            <button style="background:#27AE60;" onclick="downloadCard()">📥 下載名片 Download</button>
+            <button class="btn-secondary" onclick="replaySpeech()">🔊 聽老師唸名片 Read Aloud</button>
+            <div class="teaching-section">
+                <div style="color:#F39C12; font-weight:bold; margin-bottom:10px;">📝 Review</div>
+                <div>你好，我叫 <span class="highlight" id="t-f"></span>。</div>
+                <div>我的中文名字是 <span class="highlight" id="t-c"></span>。</div>
+                <div>它的意思是 <span class="highlight" id="t-m"></span>。</div>
+            </div>
+            <button class="btn-secondary" onclick="location.reload()">🔄 重新開始 Restart</button>
+        </div>
     </div>
 </div>
 <script>
     const originalCharMap={'艾':{m:'Mugwort',p:'ài'},'蜜':{m:'Honey',p:'mì'},'莉':{m:'Jasmine',p:'lì'},'大':{m:'Big',p:'dà'},'衛':{m:'Guard',p:'wèi'},'瑪':{m:'Agate',p:'mǎ'},'麗':{m:'Beautiful',p:'lì'},'傑':{m:'Outstanding',p:'jié'},'克':{m:'Overcome',p:'kè'},'斯':{m:'This',p:'sī'},'丁':{m:'Man',p:'dīng'},'湯':{m:'Soup',p:'tāng'},'姆':{m:'Nanny',p:'mǔ'},'約':{m:'Agreement',p:'yuē'},'翰':{m:'Pen',p:'hàn'}};
-    const phoneticMap={'艾':[{c:'愛',m:'Love',p:'ài'},{c:'安',p:'Peace',p:'ān'}],'蜜':[{c:'米',m:'Rice',p:'mǐ'},{c:'明',m:'Bright',p:'míng'}],'莉':[{c:'麗',m:'Beautiful',p:'lì'},{c:'立',p:'Stand',p:'lì'}],'大':[{c:'達',m:'Reach',p:'dá'},{c:'德',m:'Virtue',p:'dé'}],'衛':[{c:'偉',m:'Great',p:'wěi'},{c:'威',m:'Power',p:'wēi'}]};
-    let userData={foreignName:"",googleName:"",chineseName:"",meaning:"",pinyin:""}, currentSlot=null, correctCount=0, sentences=[];
-    function speakText(t,r=0.85){if('speechSynthesis'in window){window.speechSynthesis.cancel();let clean=t.replace(/👩🏻‍🏫 Emily 老師: /g,'');let u=new SpeechSynthesisUtterance(clean);u.lang='zh-TW';u.rate=r;window.speechSynthesis.speak(u);}}
-    function speakChar(e,c){e.preventDefault();e.stopPropagation();speakText(c,0.9);}
-    function typeWriter(t,id){document.getElementById(id).innerText=t;}
+    let userData={fName:"",gName:"",cName:"",meaning:""}, currentSlot=null, correctCount=0, chatStage=0, sentences=[];
+    function speak(t, r=0.85){if('speechSynthesis'in window){window.speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(t.replace(/👩🏻‍🏫 Emily: /g,''));u.lang='zh-TW';u.rate=r;window.speechSynthesis.speak(u);}}
     function showStep(n){document.querySelectorAll('.step-section').forEach(s=>s.classList.remove('active'));document.getElementById(`step-${n}`).classList.add('active');}
-    function startGame(){showStep(1);speakText("你好！我是 Emily 老師。請告訴我你的本國名字是什麼？");typeWriter("你好！我是 Emily 老師。很高興認識你，請告訴我你的本國名字是什麼？","dialogue-text");}
-    function submitForeignName(){let fn=document.getElementById("input-foreign-name").value.trim();if(!fn)return;userData.foreignName=fn;showStep(2);speakText(`太好了，${fn}！去 Google 翻譯聽聽發音，把查到的中文名字貼給我吧！`);typeWriter(`太好了，${fn}！去 Google 翻譯聽聽發音，把查到的中文名字貼給我吧！`,"dialogue-text");}
-    function submitGoogleName(){let gn=document.getElementById("input-google-name").value.trim();if(!gn)return;userData.googleName=gn;let area=document.getElementById("suggestions-area");area.innerHTML="";for(let i=0;i<gn.length;i++){let c=gn[i],ops=phoneticMap[c]||[{c:'佳',m:'Excellent',p:'jiā'},{c:'宇',m:'Universe',p:'yǔ'}],orig=originalCharMap[c]||{m:'Sound',p:'?'};area.innerHTML+=`<div class="char-selection-block"><div class="char-title">字 ${i+1}：【${c}】</div><label class="radio-option"><div class="radio-label-text"><input type="radio" name="char${i}" value="${c}" data-m="${orig.m}" checked><span><b>${c}</b> - 原字 (${orig.m})</span></div><div class="speaker-icon" onclick="speakChar(event,'${c}')">🔊</div></label><label class="radio-option"><div class="radio-label-text"><input type="radio" name="char${i}" value="${ops[0].c}" data-m="${ops[0].m}"><span><b>${ops[0].c}</b> - ${ops[0].m}</span></div><div class="speaker-icon" onclick="speakChar(event,'${ops[0].c}')">🔊</div></label></div>`;}showStep(3);speakText("推薦了幾個相似音的字，聽聽看發音，挑選你喜歡的意義吧！");typeWriter("推薦了幾個相似音的字，聽聽看發音，挑選你最喜歡的組合吧！","dialogue-text");}
-    function submitChosenName(){let fName="",fMean=[];for(let i=0;i<userData.googleName.length;i++){let radios=document.getElementsByName(`char${i}`);for(let r of radios){if(r.checked){fName+=r.value;fMean.push(r.getAttribute('data-m'));break;}}}userData.chineseName=fName;userData.meaning=fMean.join(", ");sentences=[`你好，我叫${userData.foreignName}。`,`我的中文名字是${userData.chineseName}。`,`它的意思是${userData.meaning}。`];showStep(4);setupCards();speakText("熟悉一下句子：請點擊空格，再點擊字卡進行配對。");typeWriter("熟悉一下句子：請點擊 [空格]，再點擊下方的 [字卡] 進行配對。","dialogue-text");}
-    function setupCards(){let area=document.getElementById("cards-area");area.innerHTML="";let data=[{id:"foreign",t:userData.foreignName},{id:"chinese",t:userData.chineseName},{id:"meaning",t:userData.meaning}].sort(()=>Math.random()-0.5);data.forEach(d=>{let b=document.createElement("div");b.className="word-card";b.innerText=d.t;b.onclick=()=>selectCard(b,d.id,d.t);area.appendChild(b);});}
-    function selectSlot(el){document.querySelectorAll('.drop-slot').forEach(s=>s.style.backgroundColor="transparent");el.style.backgroundColor="#FFF0F0";currentSlot=el;}
-    function selectCard(card,type,text){if(!currentSlot)return;speakText(text);if(type===currentSlot.getAttribute("data-type")){currentSlot.innerText=text;currentSlot.classList.add('filled');card.classList.add('used');currentSlot=null;correctCount++;if(correctCount===3)setTimeout(startChat,800);}else{currentSlot.style.color="red";setTimeout(()=>currentSlot.style.color="var(--ntnu-red)",500);}}
-    function startChat(){showStep(5);speakText("最後一關：跟 Emily 老師對話！點選正確的回答喔！");typeWriter("最後一關：跟 Emily 老師對話！點選正確的回答喔！","dialogue-text");chatStage=0;nextChat();}
-    let chatStage=0;
-    function addBubble(s,t){let h=document.getElementById('chat-history');let b=document.createElement('div');b.className=`chat-bubble ${s==='emily'?'
+    function startGame(){showStep(1);speak("你好！我是 Emily 老師。請告訴我你的本國名字是什麼？");document.getElementById("dialogue-text").innerText="你好！我是 Emily 老師。很高興認識你，請告訴我你的本國名字是什麼？";}
+    function submitForeignName(){userData.fName=document.getElementById("input-foreign-name").value.trim();if(!userData.fName)return;showStep(2);speak(`太好了！去 Google 翻譯聽聽發音，把查到的中文名字貼給我吧！`);document.getElementById("dialogue-text").innerText="太好了！去 Google 翻譯聽聽發音，把查到的中文名字貼給我吧！";}
+    function submitGoogleName(){userData.gName=document.getElementById("input-google-name").value.trim();if(!userData.gName)return;let area=document.getElementById("suggestions-area");area.innerHTML="";for(let i=0;i<userData.gName.length;i++){let c=userData.gName[i],orig=originalCharMap[c]||{m:'Sound',p:'?'};area.innerHTML+=`<div class="char-selection-block"><div class="char-title">字 ${i+1}：【${c}】</div><label class="radio-option"><div class="radio-label-text"><input type="radio" name="char${i}" value="${c}" data-m="${orig.m}" checked><span><b>${c}</b> - 原字 (${orig.m})</span></div><div class="speaker-icon" onclick="event.stopPropagation();speak('${c}',0.9)">🔊</div></label></div>`;}showStep(3);speak("請挑選你喜歡的組合吧！");document.getElementById("dialogue-text").innerText="針對每一個字，我推薦了相似的字，請點選小喇叭聽聽看，再挑選你最喜歡的組合！";}
+    function submitChosenName(){let name="",mean=[];for(let i=0;i<userData.gName.length;i++){let r=document.querySelector(`input[name="char${i}"]:checked`);name+=r.value;mean.push(r.getAttribute('data-m'));}userData.cName=name;userData.meaning=mean.join(", ");sentences=[`你好，我叫${userData.fName}。`,`我的中文名字是${userData.cName}。`,`它的意思是${userData.meaning}。`];showStep(4);setupCards();speak("請點擊空格，再點擊字卡進行配對。");document.getElementById("dialogue-text").innerText="熟悉一下句子：請點擊 [空格]，再點擊下方的 [字卡] 進行配對。";}
+    function setupCards(){let area=document.getElementById("cards-area");area.innerHTML="";let data=[{id:"foreign",t:userData.fName},{id:"chinese",t:userData.cName},{id:"meaning",t:userData.meaning}].sort(()=>Math.random()-0.5);data.forEach(d=>{let b=document.createElement("div");b.className="word-card";b.innerText=d.t;b.onclick=()=>{if(!currentSlot)return;speak(d.t);if(d.id===currentSlot.getAttribute("data-type")){currentSlot.innerText=d.t;currentSlot.classList.add('filled');b.classList.add('used');currentSlot=null;correctCount++;if(correctCount===3)setTimeout(startChat,1000);}else{currentSlot.style.color="red";setTimeout(()=>currentSlot.style.color="var(--ntnu-red)",500);}};area.appendChild(b);});}
+    function selectSlot(el){document.querySelectorAll('.drop-slot').forEach(s=>s.style.background="transparent");el.style.background="#FFF0F0";currentSlot=el;}
+    function startChat(){showStep(5);chatStage=0;nextChat();speak("最後一關：跟 Emily 老師對話！點選正確的回答喔！");document.getElementById("dialogue-text").innerText="最後一關：跟 Emily 老師對話！請點選正確的回答喔！";}
+    function addBubble(s,t){let h=document.getElementById('chat-history');let b=document.createElement('div');b.className=`chat-bubble ${s==='emily'?'chat-emily':'chat-student'}`;b.innerText=t;h.appendChild(b);h.scrollTop=h.scrollHeight;if(s==='emily')speak(t);}
+    function nextChat(){let opt=document.getElementById('chat-options-area');opt.innerHTML="";if(chatStage===0){addBubble('emily',"👩🏻‍🏫 Emily: 你好！很高興認識你。");showOptions(0);}else if(chatStage===1){addBubble('emily',"👩🏻‍🏫 Emily: 你的中文名字是什麼？");showOptions(1);}else if(chatStage===2){addBubble('emily',"👩🏻‍🏫 Emily: 這名字真好聽！它的意思是什麼？");showOptions(2);}else{addBubble('emily',"👩🏻‍🏫 Emily: 太棒了！你的中文真的非常好喔！");document.getElementById('final-prize-container').style.display="block";}}
+    function showOptions(idx){let area=document.getElementById('chat-options-area');[0,1,2].sort(()=>Math.random()-0.5).forEach(i=>{let b=document.createElement('button');b.className="chat-btn";b.innerHTML=`<span>${sentences[i]}</span> 🔊`;b.onclick=()=>{if(i===idx){addBubble('student',sentences[i]);chatStage++;setTimeout(nextChat,1000);}else{speak(sentences[i]);}};area.appendChild(b);});}
+    function triggerCelebration(){new Audio('https://actions.google.com/sounds/v1/weapons/fireworks_with_whistle.ogg').play().catch(e=>{});showStep(6);document.getElementById("bc-foreign").innerText=userData.fName;document.getElementById("bc-chinese").innerText=userData.cName;document.getElementById("bc-meaning").innerText=userData.meaning;document.getElementById("t-f").innerText=userData.fName;document.getElementById("t-c").innerText=userData.cName;document.getElementById("t-m").innerText=userData.meaning;drawSeal();startFW();setTimeout(replaySpeech,1000);}
+    function replaySpeech(){speak(`這是你的中文名字，太棒了！！你好，我叫${userData.fName}。我的中文名字是${userData.cName}。它的意思是${userData.meaning}。`);}
+    function startFW(){let c=document.createElement('canvas');c.style.position='fixed';c.style.top=0;c.style.left=0;c.style.width='100vw';c.style.height='100vh';c.style.pointerEvents='none';c.style.zIndex=9999;document.body.appendChild(c);let ctx=c.getContext('2d');c.width=window.innerWidth;c.height=window.innerHeight;let p=[];function create(x,y){for(let i=0;i<40;i++)p.push({x:x,y:y,vx:(Math.random()-0.5)*12,vy:(Math.random()-0.5)*12,l:1.0,d:Math.random()*0.02+0.01,c:`hsl(${Math.random()*360},100%,50%)`});}create(c.width*0.5,c.height*0.4);create(c.width*0.2,c.height*0.5);create(c.width*0.8,c.height*0.3);function anim(){ctx.clearRect(0,0,c.width,c.height);let alive=false;p.forEach(particle=>{if(particle.l>0){particle.x+=particle.vx;particle.y+=particle.vy;particle.vy+=0.1;particle.l-=particle.d;ctx.fillStyle=particle.c;ctx.globalAlpha=particle.l;ctx.beginPath();ctx.arc(particle.x,particle.y,3,0,Math.PI*2);ctx.fill();alive=true;}});if(alive)requestAnimationFrame(anim);else c.remove();}anim();}
+    function drawSeal(){let c=document.getElementById("seal-canvas"),ctx=c.getContext("2d"),n=userData.cName;c.width=320;c.height=320;ctx.strokeStyle="#C1121F";ctx.lineWidth=14;ctx.strokeRect(20,20,280,280);ctx.lineWidth=4;ctx.strokeRect(36,36,248,248);ctx.fillStyle="#C1121F";ctx.textAlign="center";ctx.textBaseline="middle";let f='"Long Cang", serif';if(n.length===2){ctx.font=`bold 140px ${f}`;ctx.fillText(n[0],215,160);ctx.fillText(n[1],105,160);}else if(n.length===3){ctx.font=`bold 150px ${f}`;ctx.fillText(n[0],215,160);ctx.font=`bold 110px ${f}`;ctx.fillText(n[1],105,95);ctx.fillText(n[2],105,225);}else{ctx.font=`bold 180px ${f}`;ctx.fillText(n[0]||"",160,160);}ctx.fillStyle="#FFF";for(let i=0;i<80;i++){ctx.beginPath();ctx.arc(Math.random()*280+20,Math.random()*280+20,Math.random()*2,0,Math.PI*2);ctx.fill();}}
+    function downloadCard(){speak("名片下載中。");html2canvas(document.getElementById('business-card-wrapper'),{scale:3,backgroundColor:"#FFFFFF"}).then(c=>{let l=document.createElement('a');l.download=`MyCard.png`;l.href=c.toDataURL();l.click();});}
+</script>
+</body>
+</html>
