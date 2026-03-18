@@ -11,12 +11,11 @@
         body { margin: 0; font-family: 'Noto Sans TC', sans-serif; background: var(--bg-color); display: flex; justify-content: center; align-items: center; min-height: 100vh; color: var(--text-main); overflow-x: hidden; }
         #game-container { width: 100%; max-width: 600px; background: #FFF; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); display: flex; flex-direction: column; min-height: 85vh; position: relative; z-index: 10; overflow: hidden;}
         #scene-area { background: linear-gradient(135deg, var(--ntnu-red), #5c0e25); height: 180px; position: relative; display: flex; justify-content: center; align-items: flex-end; border-bottom: 6px solid var(--accent); }
-        .campus-bg { position: absolute; top: 20px; left: 20px; color: rgba(255,255,255,0.1); font-size: 65px; font-weight: bold; pointer-events: none; }
         #avatar-container { width: 110px; height: 110px; background: #FFF; border-radius: 50%; border: 5px solid var(--accent); display: flex; justify-content: center; align-items: center; transform: translateY(40px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); z-index: 10; background-color: #FCE8E6; }
         #interaction-area { padding: 60px 30px 30px 30px; flex-grow: 1; display: flex; flex-direction: column; background: #faf8f5;}
         .dialogue-box { background: #FFFFFF; border-radius: 15px; padding: 20px; margin-bottom: 25px; border: 2px solid var(--ntnu-red); font-size: 1.1em; font-weight: bold; text-align: center; min-height: 50px; line-height: 1.5; position: relative;}
         .dialogue-box::before { content: ''; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); border-width: 0 12px 12px 12px; border-style: solid; border-color: transparent transparent var(--ntnu-red) transparent; }
-        .step-section { display: none; } .step-section.active { display: block; animation: fadeIn 0.5s; }
+        .step-section { display: none; } .step-section.active { display: block; }
         input[type="text"] { width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #DDD; border-radius: 8px; font-size: 1.1em; box-sizing: border-box; text-align: center;}
         button { background: var(--ntnu-red); color: white; border: none; padding: 14px 20px; border-radius: 8px; font-size: 1.1em; cursor: pointer; width: 100%; margin-top: 15px; font-weight: bold; }
         .btn-secondary { background: #FFF; color: var(--ntnu-red); border: 2px solid var(--ntnu-red); }
@@ -26,24 +25,24 @@
         .drop-slot { display: inline-block; min-width: 100px; border-bottom: 2px dashed #999; text-align: center; color: var(--ntnu-red); font-weight: bold; cursor: pointer; margin: 0 5px; }
         .word-card { display: inline-block; background: #FFF; border: 2px solid var(--accent); padding: 10px 15px; border-radius: 10px; cursor: pointer; font-weight: bold; margin: 5px; }
         .word-card.used { opacity: 0.3; pointer-events: none; }
-        .chat-container { background: #F8F9FA; border: 1px solid #E0E0E0; border-radius: 12px; padding: 15px; height: 230px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; text-align: left; }
-        .chat-bubble { max-width: 80%; padding: 10px 15px; border-radius: 15px; clear: both; margin-bottom: 5px;}
+        .chat-container { background: #F8F9FA; border: 1px solid #E0E0E0; border-radius: 12px; padding: 15px; height: 250px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; text-align: left; }
+        .chat-bubble { max-width: 80%; padding: 10px 15px; border-radius: 15px; clear: both; margin-bottom: 8px; font-size: 0.95em; line-height: 1.4;}
         .chat-emily { background: var(--chat-emily); align-self: flex-start; color: #1A73E8; font-weight: bold; }
         .chat-student { background: var(--chat-student); align-self: flex-end; color: var(--ntnu-red); font-weight: bold; float: right;}
-        .chat-btn { background: #FFF; border: 2px solid #DDD; color: #555; text-align: left; padding: 10px 15px; border-radius: 10px; margin-bottom: 8px; width: 100%; cursor: pointer;}
-        
-        /* 名片樣式 */
+        .chat-btn { background: #FFF; border: 2px solid #DDD; color: #555; text-align: left; padding: 12px 15px; border-radius: 10px; margin-bottom: 8px; width: 100%; cursor: pointer;}
         .business-card { width: 100%; max-width: 450px; background: #FFF; border: 1px solid #E0E0E0; box-shadow: 0 4px 20px rgba(0,0,0,0.08); padding: 30px; box-sizing: border-box; position: relative; overflow: hidden; border-left: 12px solid var(--ntnu-red); min-height: 250px; text-align: left;}
-        .card-decoration-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; opacity: 0.15; pointer-events: none; }
-        .card-content-layer { position: relative; z-index: 5; }
+        .card-decoration-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; opacity: 0.2; pointer-events: none; }
         .bc-header { color: #666; font-size: 0.85em; margin-bottom: 20px; border-bottom: 1px solid #EEE; padding-bottom: 10px; font-family: serif; }
         .bc-name-chinese { font-size: 2.6em; font-weight: bold; color: var(--text-main); margin-bottom: 15px; font-family: serif; }
         .bc-meaning-tag { display: inline-block; background: var(--ntnu-red); color: white; padding: 4px 10px; border-radius: 6px; font-size: 0.85em; font-weight: bold; }
         .seal-container { position: absolute; bottom: 20px; right: 20px; width: 85px; height: 85px; z-index: 10; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 <div id="game-container">
-    <div id="scene-area"><div class="campus-bg">NTNU</div><div id="avatar-container">
-        <svg viewBox="0
+    <div id="scene-area"><div id="avatar-container">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;"><path d="M20 100 C20 70, 80 70, 80 100" fill="#8A1538" /><path d="M25 40 C15 60, 20 90, 25 100 L75 100 C80 90, 85 60, 75 40 Z" fill="#2C3E50" /><circle cx="50" cy="45" r="20" fill="#FFE0BD" /><circle cx="42" cy="45" r="2.5" fill="#333" /><circle cx="58" cy="45" r="2.5" fill="#333" /><path d="M46 52 Q50 57 54 52" stroke="#333" stroke-width="2" fill="none" /><circle cx="37" cy="49" r="3" fill="#FFB6C1" opacity="0.8"/><circle cx="63" cy="49" r="3" fill="#FFB6C1" opacity="0.8"/><path d="M70 35 C75 30, 80 35, 75 40 C80 45, 75 50, 70 45 C65 50, 60 45, 65 40 C60 35, 65 30, 70 35 Z" fill="#F1C40F" /></svg>
+    </div></div>
+    <div id="interaction-area">
+        <div class="dialogue-box" id="msg">歡迎來到師大華語學園！</div>
+        <div
