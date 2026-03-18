@@ -21,24 +21,75 @@
         button { background: var(--ntnu-red); color: white; border: none; padding: 14px 20px; border-radius: 8px; font-size: 1.1em; cursor: pointer; transition: 0.2s; width: 100%; margin-top: 15px; font-weight: bold; box-shadow: 0 4px 10px rgba(138,21,56,0.2);}
         button:hover { background: #A32A4C; transform: translateY(-2px); } .btn-secondary { background: #FFF; color: var(--ntnu-red); border: 2px solid var(--ntnu-red); }
         .char-selection-block { background: #FFF; border: 2px solid #EEE; border-radius: 8px; padding: 15px; margin-bottom: 15px; }
-        .radio-option { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; cursor: pointer; padding: 10px 15px; border-radius: 8px; border: 1px solid #EEE; background: #FAFAFA; text-align: left;}
+        .radio-option { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; cursor: pointer; padding: 10px 15px; border-radius: 8px; border: 1px solid #EEE; background: #FAFAFA; transition: 0.2s;}
+        .radio-option:hover { background: #FFF0F0; border-color: var(--ntnu-red); }
         .speaker-icon { font-size: 1.2em; width: 36px; height: 36px; display: flex; justify-content: center; align-items: center; border-radius: 50%; background: #FFF; border: 1px solid #DDD; }
-        .drop-slot { display: inline-block; min-width: 120px; border-bottom: 2px dashed #999; text-align: center; color: var(--ntnu-red); font-weight: bold; cursor: pointer; padding: 0 5px;}
+        .drop-slot { display: inline-block; min-width: 120px; border-bottom: 2px dashed #999; text-align: center; color: var(--ntnu-red); font-weight: bold; cursor: pointer; }
         .drop-slot.filled { border-bottom: 2px solid #4CAF50; color: #4CAF50; }
         .word-card { display: inline-block; background: #FFF; border: 2px solid var(--accent); padding: 10px 15px; border-radius: 10px; cursor: pointer; font-weight: bold; margin: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
         .word-card.used { opacity: 0.3; pointer-events: none; }
         .chat-container { background: #F8F9FA; border: 1px solid #E0E0E0; border-radius: 12px; padding: 15px; height: 250px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; text-align: left;}
         .chat-bubble { max-width: 80%; padding: 10px 15px; border-radius: 15px; font-size: 1em; line-height: 1.4; clear: both; margin-bottom: 5px;}
-        .chat-emily { background: var(--chat-emily); align-self: flex-start; color: #1A73E8; font-weight: bold; }
-        .chat-student { background: var(--chat-student); align-self: flex-end; color: var(--ntnu-red); font-weight: bold; float: right;}
+        .chat-emily { background: var(--chat-emily); align-self: flex-start; color: #1A73E8; font-weight: bold; position: relative; }
+        .chat-student { background: var(--chat-student); align-self: flex-end; color: var(--ntnu-red); font-weight: bold; float: right; position: relative;}
         .chat-btn { background: #FFF; border: 2px solid #DDD; color: #555; text-align: left; padding: 10px 15px; border-radius: 10px; margin-bottom: 8px; width: 100%;}
         
-        /* 📸 ✨ 名片空白處圖案區 ✨ 📸 */
+        /* 名片區域加強 */
         .business-card { width: 100%; max-width: 450px; background: #FFF; border: 1px solid #E0E0E0; box-shadow: 0 4px 20px rgba(0,0,0,0.08); padding: 30px; box-sizing: border-box; position: relative; overflow: hidden; border-left: 12px solid var(--ntnu-red); min-height: 250px; text-align: left;}
-        .card-decoration-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; opacity: 0.15; pointer-events: none; }
-        .card-content-layer { position: relative; z-index: 2; }
+        .card-decoration-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; opacity: 0.2; pointer-events: none; }
+        .card-content-layer { position: relative; z-index: 5; }
         
         .bc-header { font-family: 'Noto Serif TC', serif; color: #666; font-size: 0.9em; letter-spacing: 1px; margin-bottom: 20px; border-bottom: 1px solid #EEE; padding-bottom: 10px; line-height: 1.6; }
         .bc-name-chinese { font-size: 2.8em; font-weight: bold; font-family: 'Noto Serif TC', serif; color: var(--text-main); letter-spacing: 5px; margin-bottom: 15px; }
         .bc-meaning-tag { display: inline-block; background: var(--ntnu-red); color: white; padding: 5px 12px; border-radius: 6px; font-size: 0.85em; font-weight: bold; }
-        .seal-container { position: absolute; bottom: 25px; right:
+        .seal-container { position: absolute; bottom: 25px; right: 30px; width: 85px; height: 85px; z-index: 10; }
+        
+        .teaching-section { background: #2C3E50; color: #FFF; padding: 20px; border-radius: 12px; margin-top: 15px; text-align: left;}
+        .highlight { color: #F1C40F; font-weight: bold; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+<div id="game-container">
+    <div id="scene-area"><div class="campus-bg">NTNU</div><div id="avatar-container">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
+            <path d="M20 100 C20 70, 80 70, 80 100" fill="#8A1538" /><path d="M25 40 C15 60, 20 90, 25 100 L75 100 C80 90, 85 60, 75 40 Z" fill="#2C3E50" /><circle cx="50" cy="45" r="20" fill="#FFE0BD" /><path d="M30 45 C30 15, 70 15, 70 45 C65 30, 50 30, 30 45 Z" fill="#2C3E50" /><circle cx="42" cy="45" r="2.5" fill="#333" /><circle cx="58" cy="45" r="2.5" fill="#333" /><path d="M46 52 Q50 57 54 52" stroke="#333" stroke-width="2" fill="none" /><circle cx="37" cy="49" r="3" fill="#FFB6C1" opacity="0.8"/><circle cx="63" cy="49" r="3" fill="#FFB6C1" opacity="0.8"/><path d="M70 35 C75 30, 80 35, 75 40 C80 45, 75 50, 70 45 C65 50, 60 45, 65 40 C60 35, 65 30, 70 35 Z" fill="#F1C40F" />
+        </svg>
+    </div></div>
+    <div id="interaction-area">
+        <div class="dialogue-box" id="dialogue-text">歡迎來到師大華語學園！</div>
+        <div id="step-0" class="step-section active"><h2>華語文新生報到</h2><button onclick="startGame()">開始報到 Start</button></div>
+        <div id="step-1" class="step-section"><label>你的本國名字 (Your Name)：</label><input type="text" id="fn-input" placeholder="e.g. Emily"><button onclick="toS2()">下一步 Next</button></div>
+        <div id="step-2" class="step-section"><button class="btn-secondary" onclick="window.open('https://translate.google.com/?sl=auto&tl=zh-TW', '_blank')">🔍 Google 翻譯聽發音</button><p>貼上翻譯後的中文名字：</p><input type="text" id="gn-input" placeholder="e.g. 艾蜜莉"><button onclick="toS3()">下一步 Next</button></div>
+        <div id="step-3" class="step-section"><div id="choice-area"></div><button onclick="toS4()">確認名字 Confirm</button></div>
+        <div id="step-4" class="step-section"><div class="sentence-container"><p>你好，我叫 <span id="slot-f" class="drop-slot" onclick="selSlot('f')">[點擊填空]</span>。</p><p>我的中文名字是 <span id="slot-c" class="drop-slot" onclick="selSlot('c')">[點擊填空]</span>。</p><p>它的意思是 <span id="slot-m" class="drop-slot" onclick="selSlot('m')">[點擊填空]</span>。</p></div><div id="card-pool"></div></div>
+        <div id="step-5" class="step-section"><div class="chat-container" id="chat-box"></div><div id="chat-opts"></div></div>
+        <div id="step-6" class="step-section">
+            <div id="card-wrap" class="business-card">
+                <div class="card-decoration-layer" id="bc-decorations"></div>
+                <div class="card-content-layer">
+                    <div class="bc-header">National Taiwan Normal University<br>國立台灣師範大學</div>
+                    <div id="bc-f" style="font-size:1.3em;color:#555;margin-bottom:5px;"></div>
+                    <div id="bc-c" class="bc-name-chinese"></div>
+                    <div id="bc-m" class="bc-meaning-tag"></div>
+                </div>
+                <div class="seal-container"><canvas id="seal-canvas" width="320" height="320" style="width:85px; height:85px;"></canvas></div>
+            </div>
+            <button style="background:#27AE60;" onclick="download()">📥 下載名片 Download</button>
+            <button class="btn-secondary" onclick="replaySpeech()">🔊 聽老師唸名片</button>
+            <button class="btn-secondary" onclick="location.reload()" style="margin-top: 20px;">🔄 重新開始 Restart</button>
+        </div>
+    </div>
+</div>
+<script>
+    const pMap={'艾':[{c:'愛',m:'Love'},{c:'安',m:'Peace'}],'蜜':[{c:'米',m:'Rice'},{c:'明',m:'Bright'}],'莉':[{c:'麗',m:'Beautiful'},{c:'立',m:'Stand'}],'大':[{c:'達',m:'Reach'},{c:'德',m:'Virtue'}],'衛':[{c:'偉',m:'Great'},{c:'威',m:'Power'}],'瑪':[{c:'滿',m:'Full'},{c:'美',m:'Fine'}],'麗':[{c:'理',m:'Reason'},{c:'莉',m:'Jasmine'}],'傑':[{c:'捷',m:'Victory'},{c:'界',m:'World'}],'克':[{c:'可',m:'Lovely'},{c:'客',m:'Guest'}],'斯':[{c:'思',m:'Think'},{c:'詩',m:'Poetry'}],'丁':[{c:'頂',m:'Top'},{c:'定',m:'Stable'}],'湯':[{c:'唐',m:'Tang'},{c:'天',m:'Sky'}],'姆':[{c:'慕',m:'Admire'},{c:'沐',m:'Grace'}],'約':[{c:'躍',m:'Leap'},{c:'月',m:'Moon'}],'翰':[{c:'漢',m:'Han'},{c:'浩',m:'Vast'}]};
+    const oDict={'艾':{m:'Mugwort'},'蜜':{m:'Honey'},'莉':{m:'Jasmine'},'大':{m:'Big'},'衛':{m:'Guard'},'瑪':{m:'Agate'},'麗':{m:'Beautiful'},'傑':{m:'Outstanding'}};
+    
+    // 圖案庫
+    const decorSvgMap = {
+        'love': `<svg style="position:absolute; bottom:0px; left:10px; width:180px; height:180px;" viewBox="0 0 100 100" fill="#8A1538"><path d="M50,90 c-20,-20 -45,-35 -45,-60 c0,-20 15,-30 30,-30 c10,0 15,5 15,10 c0,-5 5,-10 15,-10 c15,0 30,10 30,30 c0,25 -25,40 -45,60 Z" /></svg>`,
+        'peace': `<svg style="position:absolute; top:80px; left:-20px; width:220px; height:110px;" viewBox="0 0 100 50" stroke="#8A1538" stroke-width="4" fill="none"><path d="M10,25 c20,-15 60,-15 80,0 M10,30 c20,-10 60,-10 80,0 M20,20 L80,35 M20,35 L80,20" /></svg>`,
+        'jasmine': `<svg style="position:absolute; top:50px; right:0px; width:180px; height:180px;" viewBox="0 0 100 100" fill="#8A1538"><path d="M50,50 c10,-20 30,-20 40,0 c10,20 -10,30 -40,10 M50,50 c20,-10 20,-30 0,-40 c-20,-10 -30,10 -10,40 M50,50 c-10,-20 -30,-20 -40,0 c-10,20 10,30 40,10 M50,50 c-20,-10 -20,-30 0,-40 c20,-10 30,10 10,40 Z" /></svg>`,
+        'beautiful': `<svg style="position:absolute; top:-30px; right:-30px; width:250px; height:180px;" viewBox="0 0 100 70" stroke="#8A1538" stroke-width="3" fill="none"><path d="M10,30 Q30,10 50,30 T90,30 Q70,50 50,30 T10,30 Z M50,30 L50,50 M30,35 L70,35" /></svg>`,
+        'bright': `<svg style="position:absolute; top:10px; right:80px; width:180px; height:180px;" viewBox="0 0 100 100" stroke="#8A1538" stroke-width="5" fill="none"><circle cx="50" cy="50" r="15"/><path d="M50,10 L50,25 M50,75 L50,90 M10,50 L25,50 M75,50 L90,50 M22,22 L32,32 M68,68 L78,78 M22,78 L32,68 M68,22 L78,32" /></svg>`,
+        'excellent': `<svg style="position:absolute; top:-10px; right:0px; width:200px; height:200px;" viewBox="0 0 100 100" fill="#F1C40F" opacity="0.6"><path d="M50,10
