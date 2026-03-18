@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>師大華語學園 - 新生報到</title>
-    <link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Noto+Sans+TC:wght@400;700&family=Noto+Serif+TC:wght@700&display=swap" rel="stylesheet">
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
         :root { --ntnu-red: #8A1538; --bg-color: #FDFBF7; --text-main: #333333; --accent: #D4A373; --chat-emily: #E8F0FE; --chat-student: #FCE8E6; }
@@ -16,10 +16,53 @@
         #interaction-area { padding: 50px 30px 30px 30px; flex-grow: 1; display: flex; flex-direction: column; background: #faf8f5;}
         .dialogue-box { background: #FFFFFF; border-radius: 15px; padding: 20px; margin-bottom: 25px; border: 2px solid var(--ntnu-red); font-size: 1.1em; font-weight: bold; text-align: center; min-height: 50px; position: relative; line-height: 1.5; color: #444;}
         .dialogue-box::before { content: ''; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); border-width: 0 12px 12px 12px; border-style: solid; border-color: transparent transparent var(--ntnu-red) transparent; }
-        .step-section { display: none; } .step-section.active { display: block; }
-        input[type="text"] { width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #DDD; border-radius: 8px; font-size: 1.1em; text-align: center;}
+        .step-section { display: none; } .step-section.active { display: block; animation: fadeIn 0.5s; }
+        input[type="text"] { width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #DDD; border-radius: 8px; font-size: 1.1em; box-sizing: border-box; text-align: center;}
         button { background: var(--ntnu-red); color: white; border: none; padding: 14px 20px; border-radius: 8px; font-size: 1.1em; cursor: pointer; width: 100%; margin-top: 15px; font-weight: bold; }
         .btn-secondary { background: #FFF; color: var(--ntnu-red); border: 2px solid var(--ntnu-red); }
         .char-selection-block { background: #FFF; border: 2px solid #EEE; border-radius: 8px; padding: 15px; margin-bottom: 15px; text-align: left; }
         .radio-option { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; cursor: pointer; padding: 10px; border: 1px solid #EEE; border-radius: 8px; background: #FAFAFA; transition: 0.2s;}
-        .drop-slot { display: inline-block; min-width: 100px; border-bottom: 2px dashed #999; text-align: center; color: var(--ntnu-red); font-
+        .drop-slot { display: inline-block; min-width: 100px; border-bottom: 2px dashed #999; text-align: center; color: var(--ntnu-red); font-weight: bold; cursor: pointer; margin: 0 5px;}
+        .drop-slot.filled { border-bottom: 2px solid #4CAF50; color: #4CAF50; }
+        .word-card { display: inline-block; background: #FFF; border: 2px solid var(--accent); padding: 10px 15px; border-radius: 10px; cursor: pointer; font-weight: bold; margin: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
+        .word-card.used { opacity: 0.3; pointer-events: none; }
+        .chat-container { background: #F8F9FA; border: 1px solid #E0E0E0; border-radius: 12px; padding: 15px; height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; text-align: left; }
+        .chat-bubble { max-width: 80%; padding: 10px 15px; border-radius: 15px; clear: both; font-size: 0.95em; line-height: 1.4;}
+        .chat-emily { background: var(--chat-emily); align-self: flex-start; color: #1A73E8; font-weight: bold; }
+        .chat-student { background: var(--chat-student); align-self: flex-end; color: var(--ntnu-red); font-weight: bold; float: right; margin-bottom: 5px;}
+        .chat-btn { background: #FFF; border: 2px solid #DDD; color: #555; text-align: left; padding: 10px 15px; border-radius: 10px; margin-bottom: 8px; width: 100%; cursor: pointer;}
+        
+        .business-card { width: 100%; max-width: 450px; background: #FFF; border: 1px solid #E0E0E0; box-shadow: 0 4px 20px rgba(0,0,0,0.08); padding: 30px; box-sizing: border-box; position: relative; overflow: hidden; border-left: 12px solid var(--ntnu-red); min-height: 250px; text-align: left;}
+        .card-decoration-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; opacity: 0.2; pointer-events: none; }
+        .card-content-layer { position: relative; z-index: 5; }
+        .bc-header { color: #666; font-size: 0.8em; margin-bottom: 15px; border-bottom: 1px solid #EEE; padding-bottom: 10px; font-family: serif; }
+        .bc-name-chinese { font-size: 2.8em; font-weight: bold; color: var(--text-main); margin-bottom: 10px; font-family: 'Noto Serif TC', serif; letter-spacing: 2px;}
+        .bc-meaning-tag { display: inline-block; background: var(--ntnu-red); color: white; padding: 4px 10px; border-radius: 6px; font-size: 0.85em; font-weight: bold; }
+        .seal-container { position: absolute; bottom: 20px; right: 20px; width: 85px; height: 85px; z-index: 10; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+<div id="game-container">
+    <div id="scene-area"><div class="campus-bg">NTNU</div><div id="avatar-container">
+        <svg viewBox="0 0 100 100" style="width:100%;height:100%;"><path d="M20 100 C20 70, 80 70, 80 100" fill="#8A1538" /><path d="M25 40 C15 60, 20 90, 25 100 L75 100 C80 90, 85 60, 75 40 Z" fill="#2C3E50" /><circle cx="50" cy="45" r="20" fill="#FFE0BD" /><circle cx="42" cy="45" r="2" fill="#333" /><circle cx="58" cy="45" r="2" fill="#333" /><path d="M46 52 Q50 57 54 52" stroke="#333" stroke-width="2" fill="none" /><circle cx="37" cy="49" r="3" fill="#FFB6C1" /><circle cx="63" cy="49" r="3" fill="#FFB6C1" /><path d="M70 35 C75 30, 80 35, 75 40 C80 45, 75 50, 70 45 C65 50, 60 45, 65 40 C60 35, 65 30, 70 35 Z" fill="#F1C40F" /></svg>
+    </div></div>
+    <div id="interaction-area">
+        <div class="dialogue-box" id="main-msg">歡迎來到師大華語學園！</div>
+        
+        <div id="step-0" class="step-section active"><h2>華語文新生報到</h2><button onclick="startGame()">開始報到 Start</button></div>
+        <div id="step-1" class="step-section"><label>本國名字 Your Name：</label><input type="text" id="fn-input" placeholder="e.g. Emily"><button onclick="toS2()">下一步 Next</button></div>
+        <div id="step-2" class="step-section"><button class="btn-secondary" onclick="window.open('https://translate.google.com/?sl=auto&tl=zh-TW','_blank')">🔍 Google 翻譯聽發音</button><p>貼上翻譯後的中文名字：</p><input type="text" id="gn-input" placeholder="e.g. 艾蜜莉"><button onclick="toS3()">下一步 Next</button></div>
+        <div id="step-3" class="step-section"><div id="choice-area"></div><button onclick="toS4()">確認名字 Confirm</button></div>
+        <div id="step-4" class="step-section"><div style="text-align:left"><p>你好，我叫 <span id="slot-f" class="drop-slot" onclick="selSlot('f')">[填空]</span>。</p><p>我的中文名字是 <span id="slot-c" class="drop-slot" onclick="selSlot('c')">[填空]</span>。</p><p>意思是 <span id="slot-m" class="drop-slot" onclick="selSlot('m')">[填空]</span>。</p></div><div id="card-pool"></div></div>
+        <div id="step-5" class="step-section"><div class="chat-container" id="chat-history"></div><div id="chat-opts-area"></div></div>
+        
+        <div id="step-6" class="step-section">
+            <div id="card-wrap" class="business-card">
+                <div class="card-decoration-layer" id="bc-decorations"></div>
+                <div class="card-content-layer">
+                    <div class="bc-header">National Taiwan Normal University<br>國立台灣師範大學</div>
+                    <div id="bc-f" style="font-size:1.2em;color:#555;margin-bottom:5px;"></div>
+                    <div id="bc-c" class="bc-name-chinese"></div>
+                    <div id="bc-m" class="bc-meaning-tag"></div>
+                </div>
