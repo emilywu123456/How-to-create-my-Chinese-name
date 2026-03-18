@@ -92,4 +92,115 @@
         'jasmine': `<svg style="position:absolute; top:50px; right:0px; width:180px; height:180px;" viewBox="0 0 100 100" fill="#8A1538"><path d="M50,50 c10,-20 30,-20 40,0 c10,20 -10,30 -40,10 M50,50 c20,-10 20,-30 0,-40 c-20,-10 -30,10 -10,40 M50,50 c-10,-20 -30,-20 -40,0 c-10,20 10,30 40,10 M50,50 c-20,-10 -20,-30 0,-40 c20,-10 30,10 10,40 Z" /></svg>`,
         'beautiful': `<svg style="position:absolute; top:-30px; right:-30px; width:250px; height:180px;" viewBox="0 0 100 70" stroke="#8A1538" stroke-width="3" fill="none"><path d="M10,30 Q30,10 50,30 T90,30 Q70,50 50,30 T10,30 Z M50,30 L50,50 M30,35 L70,35" /></svg>`,
         'bright': `<svg style="position:absolute; top:10px; right:80px; width:180px; height:180px;" viewBox="0 0 100 100" stroke="#8A1538" stroke-width="5" fill="none"><circle cx="50" cy="50" r="15"/><path d="M50,10 L50,25 M50,75 L50,90 M10,50 L25,50 M75,50 L90,50 M22,22 L32,32 M68,68 L78,78 M22,78 L32,68 M68,22 L78,32" /></svg>`,
-        'excellent': `<svg style="position:absolute; top:-10px; right:0px; width:200px; height:200px;" viewBox="0 0 100 100" fill="#F1C40F" opacity="0.6"><path d="M50,10
+        'excellent': `<svg style="position:absolute; top:-10px; right:0px; width:200px; height:200px;" viewBox="0 0 100 100" fill="#F1C40F" opacity="0.6"><path d="M50,10 L62,38 L90,42 L70,60 L75,88 L50,75 L25,88 L30,60 L10,42 L38,38 Z" /></svg>`,
+        'fallback': `<svg style="position:absolute; top:-30px; right:-50px; width:280px; height:280px;" viewBox="0 0 100 60" fill="#8A1538"><path d="M80,30 c0,-10 -10,-15 -20,-10 c0,-15 -25,-15 -30,-5 c-10,-5 -20,0 -15,15 c-10,10 0,20 15,15 c5,10 20,10 25,0 c10,5 20,0 20,-15 Z"/><path d="M30,50 c0,-8 -8,-12 -16,-8 c0,-12 -20,-12 -24,-4 c-8,-4 -16,0 -12,12 c-8,8 0,16 12,12 c4,8 16,8 20,0 c8,4 16,0 16,-12 Z"/></svg>`
+    };
+
+    let data={f:"",g:"",c:"",m:""}, curSlot="", okCount=0, sentences=[], chatStage=0, typeTimer;
+
+    function speak(t, r=0.85){if('speechSynthesis'in window){window.speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(t.replace(/👩🏻‍🏫 Emily 老師: /g,''));u.lang='zh-TW';u.rate=r;window.speechSynthesis.speak(u);}}
+    function typeEffect(t, id="dialogue-text"){clearTimeout(typeTimer); let el=document.getElementById(id); el.innerText=""; let i=0; function run(){if(i<t.length){el.innerText+=t.charAt(i);i++;typeTimer=setTimeout(run,40);}} run();}
+    function show(n){document.querySelectorAll('.step-section').forEach(s=>s.classList.remove('active'));document.getElementById('step-'+n).classList.add('active');}
+    
+    function startGame(){show(1);typeEffect("你好！我是 Emily 老師。很高興認識你，請告訴我你的本國名字是什麼？");speak("你好！我是 Emily 老師。很高興認識你，請告訴我你的本國名字是什麼？");}
+    function toS2(){data.f=document.getElementById('fn-input').value.trim();if(!data.f)return;show(2);typeEffect(`太好了，${data.f}！去 Google 翻譯聽聽發音，把查到的中文名字貼給我吧！`);speak(`太好了，${data.f}！去 Google 翻譯聽聽發音，把查到的中文名字貼給我吧！`);}
+    
+    function toS3(){
+        data.g=document.getElementById('gn-input').value.trim();if(!data.g)return;
+        let area=document.getElementById('choice-area'); area.innerHTML="";
+        for(let i=0;i<data.g.length;i++){
+            let c=data.g[i], ops=pMap[c]||[{c:'佳',m:'Excellent'},{c:'安',m:'Peace'}], orig=oDict[c]||{m:'Sound'};
+            area.innerHTML+=`<div class="char-selection-block"><div style="color:var(--ntnu-red);font-weight:bold;margin-bottom:10px;">字 ${i+1}：【${c}】</div>
+                <label class="radio-option"><div onclick="speak('${c}',0.9)"><input type="radio" name="char${i}" value="${c}" data-m="${orig.m}" checked> <b>${c}</b> - ${orig.m}</div><div class="speaker-icon" onclick="event.stopPropagation();speak('${c}',0.9)">🔊</div></label>
+                <label class="radio-option"><div onclick="speak('${ops[0].c}',0.9)"><input type="radio" name="char${i}" value="${ops[0].c}" data-m="${ops[0].m}"> <b>${ops[0].c}</b> - ${ops[0].m}</div><div class="speaker-icon" onclick="event.stopPropagation();speak('${ops[0].c}',0.9)">🔊</div></label>
+                <label class="radio-option"><div onclick="speak('${ops[1].c}',0.9)"><input type="radio" name="char${i}" value="${ops[1].c}" data-m="${ops[1].m}"> <b>${ops[1].c}</b> - ${ops[1].m}</div><div class="speaker-icon" onclick="event.stopPropagation();speak('${ops[1].c}',0.9)">🔊</div></label>
+            </div>`;
+        }
+        show(3);typeEffect("聽聽發音，挑選你最喜歡的字義組合吧！");speak("聽聽發音，挑選你最喜歡的組合！");
+    }
+
+    function toS4(){
+        let name="",mean=[];for(let i=0;i<data.g.length;i++){let r=document.querySelector(`input[name="char${i}"]:checked`);name+=r.value;mean.push(r.getAttribute('data-m'));}
+        data.c=name; data.m=mean.join(", "); sentences=[`你好，我叫${data.f}。`,`我的中文名字是${data.c}。`,`它的意思是${data.m}。`];
+        let pool=document.getElementById('card-pool'); pool.innerHTML="";
+        [{id:'foreign',t:data.f},{id:'chinese',t:data.c},{id:'meaning',t:data.m}].sort(()=>Math.random()-0.5).forEach(o=>{
+            let b=document.createElement('div'); b.className="word-card"; b.innerText=o.t;
+            b.onclick=()=>{if(!curSlot)return;speak(o.t);if(o.id===curSlot){document.getElementById('slot-'+curSlot.charAt(0)).innerText=o.t;document.getElementById('slot-'+curSlot.charAt(0)).classList.add('filled');b.classList.add('used');curSlot="";okCount++;if(okCount===3)setTimeout(startChat,1000);}else{document.getElementById('slot-'+curSlot.charAt(0)).style.color="red";setTimeout(()=>document.getElementById('slot-'+curSlot.charAt(0)).style.color="var(--ntnu-red)",500);}};
+            pool.appendChild(b);
+        });
+        show(4);typeEffect("熟悉一下句子：請點擊 [空格]，再點擊下方的 [字卡] 進行配對。");speak("熟悉一下句子：請點擊空格，再點擊下方的字卡進行配對。");
+    }
+
+    function selSlot(t){curSlot=t==='f'?'foreign':(t==='c'?'chinese':'meaning');document.querySelectorAll('.drop-slot').forEach(s=>s.style.background="transparent");document.getElementById('slot-'+t).style.background="#FFF0F0";}
+    function startChat(){show(5);chatStage=0;nextChat();typeEffect("最後一關：跟 Emily 老師對話！點選正確回答喔！");speak("最後一關：跟 Emily 老師對話！請點選正確的回答喔！");}
+    
+    function nextChat(){
+        let box=document.getElementById('chat-box');let opts=document.getElementById('chat-opts');opts.innerHTML="";
+        if(chatStage===0){box.innerHTML=`<div class="chat-bubble chat-emily">👩🏻‍🏫 Emily: 你好！很高興認識你。</div>`;speak("你好！很高興認識你。");showChatOpts(0);}
+        else if(chatStage===1){box.innerHTML+=`<div class="chat-bubble chat-emily">👩🏻‍🏫 Emily: 你的中文名字是什麼？</div>`;speak("你的中文名字是什麼？");showChatOpts(1);}
+        else if(chatStage===2){box.innerHTML+=`<div class="chat-bubble chat-emily">👩🏻‍🏫 Emily: 它的意思是什麼？</div>`;speak("它的意思是什麼？");showChatOpts(2);}
+        else{box.innerHTML+=`<div class="chat-bubble chat-emily">👩🏻‍🏫 Emily: 太棒了！你的中文真的非常好喔！任務大成功！</div>`;speak("太棒了！你的中文真的非常好喔！任務大成功！");setTimeout(triggerEnd,1500);}
+    }
+
+    function showChatOpts(idx){
+        [0,1,2].sort(()=>Math.random()-0.5).forEach(i=>{
+            let b=document.createElement('button');b.className="chat-btn";b.innerHTML=`<span>${sentences[i]}</span> 🔊`;
+            b.onclick=()=>{
+                // ✨ 修正：學生點擊時也要自動朗讀 ✨
+                speak(sentences[i]);
+                if(i===idx){
+                    document.getElementById('chat-box').innerHTML+=`<div class="chat-bubble chat-student">${sentences[i]}</div>`;
+                    chatStage++;setTimeout(nextChat,1000);
+                }
+            };
+            document.getElementById('chat-opts').appendChild(b);
+        });
+    }
+
+    function triggerEnd(){
+        new Audio('https://actions.google.com/sounds/v1/weapons/fireworks_with_whistle.ogg').play().catch(e=>{});
+        show(6);
+        document.getElementById('bc-f').innerText=data.f;
+        document.getElementById('bc-c').innerText=data.c;
+        document.getElementById('bc-m').innerText=data.m;
+        drawSeal(); 
+        startFW(); 
+        generateCardDecorations(); // 生成圖案
+        setTimeout(replaySpeech, 800); // 自動朗讀名片
+    }
+    
+    function generateCardDecorations() {
+        const layer = document.getElementById('bc-decorations'); layer.innerHTML = ""; 
+        const m = data.m.toLowerCase(); let ad = false;
+        if (m.includes('love')) { layer.innerHTML += decorSvgMap['love']; ad = true; }
+        if (m.includes('peace')) { layer.innerHTML += decorSvgMap['peace']; ad = true; }
+        if (m.includes('jasmine')) { layer.innerHTML += decorSvgMap['jasmine']; ad = true; }
+        if (m.includes('beautiful')) { layer.innerHTML += decorSvgMap['beautiful']; ad = true; }
+        if (m.includes('bright')) { layer.innerHTML += decorSvgMap['bright']; ad = true; }
+        if (m.includes('excellent')) { layer.innerHTML += decorSvgMap['excellent']; ad = true; }
+        if (!ad) { layer.innerHTML += decorSvgMap['fallback']; }
+    }
+
+    function replaySpeech(){speak(`你好，我叫${data.f}。我的中文名字是${data.c}。它的意思是${data.m}。`);}
+    function startFW(){
+        let c=document.createElement('canvas');c.style.position='fixed';c.style.top=0;c.style.left=0;c.style.width='100vw';c.style.height='100vh';c.style.pointerEvents='none';c.style.zIndex=99999;document.body.appendChild(c);
+        let ctx=c.getContext('2d');c.width=window.innerWidth;c.height=window.innerHeight;
+        let p=[];function create(x,y){for(let i=0;i<60;i++)p.push({x:x,y:y,vx:(Math.random()-0.5)*15,vy:(Math.random()-0.5)*15,l:1.0,d:Math.random()*0.02+0.015,c:`hsl(${Math.random()*360},100%,50%)`});}
+        create(c.width*0.5,c.height*0.4); create(c.width*0.3,c.height*0.5); create(c.width*0.7,c.height*0.3);
+        function anim(){ctx.clearRect(0,0,c.width,c.height);let alive=false;p.forEach(particle=>{if(particle.l>0){particle.x+=particle.vx;particle.y+=particle.vy;particle.vy+=0.15;particle.l-=particle.d;ctx.fillStyle=particle.c;ctx.globalAlpha=particle.l;ctx.beginPath();ctx.arc(particle.x,particle.y,4,0,Math.PI*2);ctx.fill();alive=true;}});if(alive)requestAnimationFrame(anim);else c.remove();}anim();
+    }
+    function drawSeal(){
+        let c=document.getElementById("seal-canvas"),ctx=c.getContext("2d"),n=data.c;
+        c.width=320;c.height=320;ctx.clearRect(0,0,320,320);
+        ctx.strokeStyle="#C1121F";ctx.lineWidth=14;ctx.strokeRect(20,20,280,280);ctx.lineWidth=4;ctx.strokeRect(36,36,248,248);
+        ctx.fillStyle="#C1121F";ctx.textAlign="center";ctx.textBaseline="middle";let f='"Long Cang", serif';
+        if(n.length===2){ctx.font=`bold 140px ${f}`;ctx.fillText(n[0],215,160);ctx.fillText(n[1],105,160);}
+        else if(n.length===3){ctx.font=`bold 150px ${f}`;ctx.fillText(n[0],215,160);ctx.font=`bold 110px ${f}`;ctx.fillText(n[1],105,95);ctx.fillText(n[2],105,225);}
+        else if(n.length>=4){ctx.font=`bold 120px ${f}`;ctx.fillText(n[0],220,95);ctx.fillText(n[1],220,225);ctx.fillText(n[2],100,95);ctx.fillText(n[3],100,225);}
+        else{ctx.font=`bold 180px ${f}`;ctx.fillText(n[0]||"", 160, 160);}
+        ctx.fillStyle="#FFF";for(let i=0;i<60;i++){ctx.beginPath();ctx.arc(Math.random()*280+20,Math.random()*280+20,Math.random()*2,0,Math.PI*2);ctx.fill();}
+    }
+    function download(){html2canvas(document.getElementById('card-wrap')).then(c=>{let l=document.createElement('a');l.download=`MyNameCard.png`;l.href=c.toDataURL();l.click();});}
+</script>
+</body>
+</html>
