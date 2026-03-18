@@ -9,22 +9,21 @@
     <style>
         :root { --ntnu-red: #8A1538; --bg-color: #FDFBF7; --text-main: #333333; --card-bg: #FFFFFF; --accent: #D4A373; --chat-emily: #E8F0FE; --chat-student: #FCE8E6; }
         body { margin: 0; font-family: 'Noto Sans TC', sans-serif; background: var(--bg-color); display: flex; justify-content: center; align-items: center; min-height: 100vh; color: var(--text-main); overflow-x: hidden; }
-        #game-container { width: 100%; max-width: 600px; background: var(--card-bg); border-radius: 15px; box-shadow: 0 10px 30px rgba(138,21,56,0.1); display: flex; flex-direction: column; min-height: 85vh; position: relative; z-index: 10; overflow: hidden;}
+        #game-container { width: 100%; max-width: 600px; background: var(--card-bg); border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); display: flex; flex-direction: column; min-height: 85vh; position: relative; z-index: 10; overflow: hidden;}
         #scene-area { background: linear-gradient(135deg, var(--ntnu-red), #5c0e25); height: 180px; position: relative; display: flex; justify-content: center; align-items: flex-end; border-bottom: 6px solid var(--accent); }
         .campus-bg { position: absolute; top: 20px; left: 20px; color: rgba(255,255,255,0.15); font-size: 65px; font-weight: bold; font-family: 'Noto Serif TC', serif; letter-spacing: 5px; pointer-events: none; }
         #avatar-container { width: 110px; height: 110px; background: #FFF; border-radius: 50%; border: 5px solid var(--accent); display: flex; justify-content: center; align-items: center; transform: translateY(40px); box-shadow: 0 6px 20px rgba(0,0,0,0.25); z-index: 10; overflow: hidden; background-color: #FCE8E6; }
         #interaction-area { padding: 60px 30px 30px 30px; flex-grow: 1; display: flex; flex-direction: column; background: #faf8f5;}
         .dialogue-box { background: #FFFFFF; border-radius: 15px; padding: 20px; margin-bottom: 25px; border: 2px solid var(--ntnu-red); font-size: 1.1em; line-height: 1.6; min-height: 60px; position: relative; box-shadow: 0 4px 15px rgba(138,21,56,0.08); font-weight: bold; color: #444; text-align: center;}
         .dialogue-box::before { content: ''; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); border-width: 0 12px 12px 12px; border-style: solid; border-color: transparent transparent var(--ntnu-red) transparent; }
-        .step-section { display: none; } .step-section.active { display: block; }
+        .step-section { display: none; } .step-section.active { display: block; animation: fadeIn 0.5s; }
         input[type="text"] { width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #DDD; border-radius: 8px; font-size: 1.1em; box-sizing: border-box; text-align: center;}
         button { background: var(--ntnu-red); color: white; border: none; padding: 14px 20px; border-radius: 8px; font-size: 1.1em; cursor: pointer; transition: 0.2s; width: 100%; margin-top: 15px; font-weight: bold; box-shadow: 0 4px 10px rgba(138,21,56,0.2);}
         button:hover { background: #A32A4C; transform: translateY(-2px); } .btn-secondary { background: #FFF; color: var(--ntnu-red); border: 2px solid var(--ntnu-red); }
         .char-selection-block { background: #FFF; border: 2px solid #EEE; border-radius: 8px; padding: 15px; margin-bottom: 15px; }
-        .radio-option { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; cursor: pointer; padding: 10px 15px; border-radius: 8px; border: 1px solid #EEE; background: #FAFAFA; transition: 0.2s; text-align: left;}
-        .radio-option:hover { background: #FFF0F0; border-color: var(--ntnu-red); }
+        .radio-option { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; cursor: pointer; padding: 10px 15px; border-radius: 8px; border: 1px solid #EEE; background: #FAFAFA; text-align: left;}
         .speaker-icon { font-size: 1.2em; width: 36px; height: 36px; display: flex; justify-content: center; align-items: center; border-radius: 50%; background: #FFF; border: 1px solid #DDD; }
-        .drop-slot { display: inline-block; min-width: 120px; border-bottom: 2px dashed #999; text-align: center; color: var(--ntnu-red); font-weight: bold; cursor: pointer; }
+        .drop-slot { display: inline-block; min-width: 120px; border-bottom: 2px dashed #999; text-align: center; color: var(--ntnu-red); font-weight: bold; cursor: pointer; padding: 0 5px;}
         .drop-slot.filled { border-bottom: 2px solid #4CAF50; color: #4CAF50; }
         .word-card { display: inline-block; background: #FFF; border: 2px solid var(--accent); padding: 10px 15px; border-radius: 10px; cursor: pointer; font-weight: bold; margin: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
         .word-card.used { opacity: 0.3; pointer-events: none; }
@@ -47,20 +46,66 @@
 <div id="game-container">
     <div id="scene-area"><div class="campus-bg">NTNU</div><div id="avatar-container">
         <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
-            <path d="M20 100 C20 70, 80 70, 80 100" fill="#8A1538" /><path d="M25 40 C15 60, 20 90, 25 100 L75 100 C80 90, 85 60, 75 40 Z" fill="#2C3E50" /><circle cx="50" cy="45" r="20" fill="#FFE0BD" /><path d="M30 45 C30 15, 70 15, 70 45 C65 30, 50 30, 30 45 Z" fill="#2C3E50" /><circle cx="42" cy="45" r="2.5" fill="#333" /><circle cx="58" cy="45" r="2.5" fill="#333" /><path d="M46 52 Q50 57 54 52" stroke="#333" stroke-width="2" fill="none" /><circle cx="37" cy="49" r="3" fill="#FFB6C1" /><circle cx="63" cy="49" r="3" fill="#FFB6C1" /><path d="M70 35 C75 30, 80 35, 75 40 C80 45, 75 50, 70 45 C65 50, 60 45, 65 40 C60 35, 65 30, 70 35 Z" fill="#F1C40F" />
+            <path d="M20 100 C20 70, 80 70, 80 100" fill="#8A1538" /><path d="M25 40 C15 60, 20 90, 25 100 L75 100 C80 90, 85 60, 75 40 Z" fill="#2C3E50" /><circle cx="50" cy="45" r="20" fill="#FFE0BD" /><path d="M30 45 C30 15, 70 15, 70 45 C65 30, 50 30, 30 45 Z" fill="#2C3E50" /><circle cx="42" cy="45" r="2.5" fill="#333" /><circle cx="58" cy="45" r="2.5" fill="#333" /><path d="M46 52 Q50 57 54 52" stroke="#333" stroke-width="2" fill="none" /><circle cx="37" cy="49" r="3" fill="#FFB6C1" opacity="0.8"/><circle cx="63" cy="49" r="3" fill="#FFB6C1" opacity="0.8"/><path d="M70 35 C75 30, 80 35, 75 40 C80 45, 75 50, 70 45 C65 50, 60 45, 65 40 C60 35, 65 30, 70 35 Z" fill="#F1C40F" />
         </svg>
     </div></div>
     <div id="interaction-area">
         <div class="dialogue-box" id="dialogue-text">歡迎來到師大華語學園！</div>
-        <div id="step-0" class="step-section active"><h2 style="color:var(--ntnu-red);text-align:center;">華語文新生報到</h2><button onclick="startGame()">開始報到 Start</button></div>
-        <div id="step-1" class="step-section"><label>你的本國名字 (Your Name)：</label><input type="text" id="fn-input" placeholder="e.g. Emily"><button onclick="toS2()">下一步 Next</button></div>
-        <div id="step-2" class="step-section"><button class="btn-secondary" onclick="window.open('https://translate.google.com/?sl=auto&tl=zh-TW', '_blank')">🔍 Google 翻譯聽發音</button><p>貼上翻譯後的中文名字：</p><input type="text" id="gn-input" placeholder="e.g. 艾蜜莉"><button onclick="toS3()">下一步 Next</button></div>
-        <div id="step-3" class="step-section"><div id="choice-area"></div><button onclick="toS4()">確認名字 Confirm</button></div>
-        <div id="step-4" class="step-section"><div class="sentence-container"><p>你好，我叫 <span id="slot-f" class="drop-slot" onclick="selSlot('f')">[點擊填空]</span>。</p><p>我的中文名字是 <span id="slot-c" class="drop-slot" onclick="selSlot('c')">[點擊填空]</span>。</p><p>它的意思是 <span id="slot-m" class="drop-slot" onclick="selSlot('m')">[點擊填空]</span>。</p></div><div id="card-pool"></div></div>
-        <div id="step-5" class="step-section"><div class="chat-container" id="chat-box"></div><div id="chat-opts"></div></div>
-        <div id="step-6" class="step-section"><div id="card-wrap" class="business-card"><div class="bc-header">National Taiwan Normal University<br>國立台灣師範大學</div><div id="bc-f" style="font-size:1.3em;color:#555;"></div><div id="bc-c" class="bc-name-chinese"></div><div id="bc-m" class="bc-meaning-tag"></div><div class="seal-container"><canvas id="seal-canvas" width="320" height="320" style="width:85px; height:85px;"></canvas></div></div><button style="background:#27AE60;" onclick="download()">📥 下載名片 Download</button><button class="btn-secondary" onclick="replaySpeech()">🔊 聽老師唸名片</button><button class="btn-secondary" onclick="location.reload()" style="margin-top: 20px;">🔄 重新開始 Restart</button></div>
+        
+        <div id="step-0" class="step-section active">
+            <h2 style="color:var(--ntnu-red);text-align:center;">華語文新生報到</h2>
+            <button onclick="startGame()">開始報到 Start</button>
+        </div>
+
+        <div id="step-1" class="step-section">
+            <label>你的本國名字 (Your Name)：</label>
+            <input type="text" id="fn-input" placeholder="e.g. Emily">
+            <button onclick="toS2()">下一步 Next</button>
+        </div>
+
+        <div id="step-2" class="step-section">
+            <button class="btn-secondary" onclick="window.open('https://translate.google.com/?sl=auto&tl=zh-TW', '_blank')">🔍 Google 翻譯聽發音</button>
+            <p>貼上翻譯後的中文名字：</p>
+            <input type="text" id="gn-input" placeholder="e.g. 艾蜜莉">
+            <button onclick="toS3()">下一步 Next</button>
+        </div>
+
+        <div id="step-3" class="step-section">
+            <div id="choice-area"></div>
+            <button onclick="toS4()">確認名字 Confirm</button>
+        </div>
+
+        <div id="step-4" class="step-section">
+            <div class="sentence-container">
+                <p>你好，我叫 <span id="slot-f" class="drop-slot" onclick="selSlot('f')">[點擊填空]</span>。</p>
+                <p>我的中文名字是 <span id="slot-c" class="drop-slot" onclick="selSlot('c')">[點擊填空]</span>。</p>
+                <p>它的意思是 <span id="slot-m" class="drop-slot" onclick="selSlot('m')">[點擊填空]</span>。</p>
+            </div>
+            <div id="card-pool"></div>
+        </div>
+
+        <div id="step-5" class="step-section">
+            <div class="chat-container" id="chat-box"></div>
+            <div id="chat-opts"></div>
+        </div>
+
+        <div id="step-6" class="step-section">
+            <div id="business-card-wrapper">
+                <div class="business-card" id="final-business-card">
+                    <div class="bc-header">National Taiwan Normal University<br>國立台灣師範大學</div>
+                    <div id="bc-f" style="font-size:1.3em;color:#555;"></div>
+                    <div id="bc-c" class="bc-name-chinese"></div>
+                    <div id="bc-m" class="bc-meaning-tag"></div>
+                    <div class="seal-container"><canvas id="seal-canvas" width="320" height="320" style="width:85px; height:85px;"></canvas></div>
+                </div>
+            </div>
+            <button style="background:#27AE60;" onclick="download()">📥 下載名片 Download</button>
+            <button class="btn-secondary" onclick="replaySpeech()">🔊 聽老師唸名片</button>
+            <button class="btn-secondary" onclick="location.reload()" style="margin-top: 20px;">🔄 重新開始 Restart</button>
+        </div>
     </div>
 </div>
+
 <script>
     const phoneticMap={'艾':[{c:'愛',m:'Love'},{c:'安',m:'Peace'}],'蜜':[{c:'米',m:'Rice'},{c:'明',m:'Bright'}],'莉':[{c:'麗',m:'Beautiful'},{c:'立',m:'Stand'}],'大':[{c:'達',m:'Reach'},{c:'德',m:'Virtue'}],'衛':[{c:'偉',m:'Great'},{c:'威',m:'Power'}],'瑪':[{c:'滿',m:'Full'},{c:'美',m:'Fine'}],'麗':[{c:'理',m:'Reason'},{c:'莉',m:'Jasmine'}],'傑':[{c:'捷',m:'Victory'},{c:'界',m:'World'}],'克':[{c:'可',m:'Lovely'},{c:'客',m:'Guest'}],'斯':[{c:'思',m:'Think'},{c:'詩',m:'Poetry'}],'丁':[{c:'頂',m:'Top'},{c:'定',m:'Stable'}],'湯':[{c:'唐',m:'Tang'},{c:'天',m:'Sky'}],'姆':[{c:'慕',m:'Admire'},{c:'沐',m:'Grace'}],'約':[{c:'躍',m:'Leap'},{c:'月',m:'Moon'}],'翰':[{c:'漢',m:'Han'},{c:'浩',m:'Vast'}]};
     const origDict={'艾':{m:'Mugwort'},'蜜':{m:'Honey'},'莉':{m:'Jasmine'},'大':{m:'Big'},'衛':{m:'Guard'},'瑪':{m:'Agate'},'麗':{m:'Beautiful'},'傑':{m:'Outstanding'}};
@@ -69,17 +114,8 @@
     function speak(t, r=0.85){if('speechSynthesis'in window){window.speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(t.replace(/👩🏻‍🏫 Emily 老師: /g,''));u.lang='zh-TW';u.rate=r;window.speechSynthesis.speak(u);}}
     function typeEffect(t, id="dialogue-text"){
         clearTimeout(typeTimer); 
-        let el=document.getElementById(id);
-        el.innerText=""; 
-        let i=0;
-        function run(){
-            if(i<t.length){
-                el.innerText+=t.charAt(i);
-                i++;
-                typeTimer=setTimeout(run,40);
-            }
-        }
-        run();
+        let el=document.getElementById(id); el.innerText=""; let i=0;
+        function run(){if(i<t.length){el.innerText+=t.charAt(i);i++;typeTimer=setTimeout(run,40);}} run();
     }
     function show(n){document.querySelectorAll('.step-section').forEach(s=>s.classList.remove('active'));document.getElementById('step-'+n).classList.add('active');}
     
@@ -125,7 +161,7 @@
         if(chatStage===0){box.innerHTML=`<div class="chat-bubble chat-emily">👩🏻‍🏫 Emily: 你好！很高興認識你。</div>`;speak("你好！很高興認識你。");showChatOpts(0);}
         else if(chatStage===1){box.innerHTML+=`<div class="chat-bubble chat-emily">👩🏻‍🏫 Emily: 你的中文名字是什麼？</div>`;speak("你的中文名字是什麼？");showChatOpts(1);}
         else if(chatStage===2){box.innerHTML+=`<div class="chat-bubble chat-emily">👩🏻‍🏫 Emily: 它的意思是什麼？</div>`;speak("它的意思是什麼？");showChatOpts(2);}
-        else{box.innerHTML+=`<div class="chat-bubble chat-emily">👩🏻‍🏫 Emily: 太棒了！你的中文真的非常好喔！</div>`;speak("太棒了！你的中文真的非常好喔！任務大成功！");setTimeout(triggerEnd,1500);}
+        else{box.innerHTML+=`<div class="chat-bubble chat-emily">👩🏻‍🏫 Emily: 太棒了！你的中文真的非常好喔！任務大成功！</div>`;speak("太棒了！你的中文真的非常好喔！任務大成功！");setTimeout(triggerEnd,1500);}
     }
 
     function showChatOpts(idx){
@@ -136,13 +172,45 @@
         });
     }
 
+    // ✨ 核心回歸：名片、印章、煙火、自動朗讀 ✨
     function triggerEnd(){
         new Audio('https://actions.google.com/sounds/v1/weapons/fireworks_with_whistle.ogg').play().catch(e=>{});
-        show(6);document.getElementById('bc-f').innerText=data.f;document.getElementById('bc-c').innerText=data.c;document.getElementById('bc-m').innerText=data.m;drawSeal();setTimeout(replaySpeech,1000);
+        show(6);
+        document.getElementById('bc-f').innerText=data.f;
+        document.getElementById('bc-c').innerText=data.c;
+        document.getElementById('bc-m').innerText=data.m;
+        drawSeal(); // 繪製印章
+        startFW();  // 噴發煙火
+        setTimeout(replaySpeech, 800); // 🚨 自動朗讀 🚨
     }
+
     function replaySpeech(){speak(`這是你的中文名字，太棒了！！你好，我叫${data.f}。我的中文名字是${data.c}。它的意思是${data.m}。`);}
-    function drawSeal(){let c=document.getElementById("seal-canvas"),ctx=c.getContext("2d"),n=data.c;c.width=320;c.height=320;ctx.strokeStyle="#C1121F";ctx.lineWidth=14;ctx.strokeRect(20,20,280,280);ctx.lineWidth=4;ctx.strokeRect(36,36,248,248);ctx.fillStyle="#C1121F";ctx.textAlign="center";ctx.textBaseline="middle";let f='"Long Cang", serif';if(n.length>=2){ctx.font=`bold 140px ${f}`;ctx.fillText(n[0],215,160);ctx.fillText(n[1],105,160);}else{ctx.font=`bold 180px ${f}`;ctx.fillText(n[0]||"",160,160);}ctx.fillStyle="#FFF";for(let i=0;i<60;i++){ctx.beginPath();ctx.arc(Math.random()*280+20,Math.random()*280+20,Math.random()*2,0,Math.PI*2);ctx.fill();}}
-    function download(){html2canvas(document.getElementById('card-wrap')).then(c=>{let l=document.createElement('a');l.download=`MyCard.png`;l.href=c.toDataURL();l.click();});}
+
+    function startFW(){
+        let c=document.createElement('canvas');c.style.position='fixed';c.style.top=0;c.style.left=0;c.style.width='100vw';c.style.height='100vh';c.style.pointerEvents='none';c.style.zIndex=9999;document.body.appendChild(c);
+        let ctx=c.getContext('2d');c.width=window.innerWidth;c.height=window.innerHeight;
+        let p=[];function create(x,y){for(let i=0;i<60;i++)p.push({x:x,y:y,vx:(Math.random()-0.5)*15,vy:(Math.random()-0.5)*15,l:1.0,d:Math.random()*0.02+0.015,c:`hsl(${Math.random()*360},100%,50%)`});}
+        create(c.width*0.5,c.height*0.4); create(c.width*0.3,c.height*0.5); create(c.width*0.7,c.height*0.3);
+        function anim(){
+            ctx.clearRect(0,0,c.width,c.height);let alive=false;
+            p.forEach(particle=>{if(particle.l>0){particle.x+=particle.vx;particle.y+=particle.vy;particle.vy+=0.12;particle.l-=particle.d;ctx.fillStyle=particle.c;ctx.globalAlpha=particle.l;ctx.beginPath();ctx.arc(particle.x,particle.y,4,0,Math.PI*2);ctx.fill();alive=true;}});
+            if(alive)requestAnimationFrame(anim);else c.remove();
+        } anim();
+    }
+
+    function drawSeal(){
+        let c=document.getElementById("seal-canvas"),ctx=c.getContext("2d"),n=data.c;
+        c.width=320;c.height=320;ctx.clearRect(0,0,320,320);
+        ctx.strokeStyle="#C1121F";ctx.lineWidth=14;ctx.strokeRect(20,20,280,280);ctx.lineWidth=4;ctx.strokeRect(36,36,248,248);
+        ctx.fillStyle="#C1121F";ctx.textAlign="center";ctx.textBaseline="middle";let f='"Long Cang", serif';
+        // ✨ 印章字數邏輯修復 ✨
+        if(n.length===2){ctx.font=`bold 140px ${f}`;ctx.fillText(n[0],215,160);ctx.fillText(n[1],105,160);}
+        else if(n.length===3){ctx.font=`bold 150px ${f}`;ctx.fillText(n[0],215,160);ctx.font=`bold 110px ${f}`;ctx.fillText(n[1],105,95);ctx.fillText(n[2],105,225);}
+        else{ctx.font=`bold 180px ${f}`;ctx.fillText(n[0]||"",160,160);}
+        ctx.fillStyle="#FFF";for(let i=0;i<60;i++){ctx.beginPath();ctx.arc(Math.random()*280+20,Math.random()*280+20,Math.random()*2,0,Math.PI*2);ctx.fill();}
+    }
+
+    function download(){html2canvas(document.getElementById('card-wrap')).then(c=>{let l=document.createElement('a');l.download=`NTNU_NameCard.png`;l.href=c.toDataURL();l.click();});}
 </script>
 </body>
 </html>
