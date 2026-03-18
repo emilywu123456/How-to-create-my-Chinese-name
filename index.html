@@ -215,7 +215,6 @@
     function speakText(text, rate = 0.85) { 
         if ('speechSynthesis' in window) { 
             window.speechSynthesis.cancel(); 
-            // 過濾掉對話前綴，讓語音更自然
             let cleanText = text.replace(/👩🏻‍🏫 Emily 老師: /g, '').replace(/[^\u4e00-\u9fa5a-zA-Z0-9，。！？、]/g, '');
             let u = new SpeechSynthesisUtterance(cleanText); 
             u.lang = 'zh-TW'; 
@@ -384,7 +383,8 @@
         else if (chatStage === 2) { addChatBubble('emily', "👩🏻‍🏫 Emily 老師: 這名字真好聽！它的意思是什麼？"); generateChatOptions(2); } 
         else if (chatStage === 3) { 
             addChatBubble('emily', "👩🏻‍🏫 Emily 老師: 太棒了！你的中文真的非常好喔！"); 
-            // 🚨 就是這裡！修復了原本漏掉的煙火與名片觸發機制 🚨
+            // 🚨 就是這行！已經把錯誤當機的語法移除，並確實啟動大獎機制 🚨
+            speakText("太棒了！任務大成功！");
             setTimeout(triggerCelebration, 1500); 
         }
     }
@@ -420,4 +420,21 @@
         showStep(6); 
         typeWriter("恭喜完成所有挑戰！這是為你準備的專屬名片，快點擊下載保存吧！", "dialogue-text");
         
-        document.getElementById("bc-foreign").innerText = userData.foreignName; document.getElementById("bc-chinese").innerText =
+        document.getElementById("bc-foreign").innerText = userData.foreignName; document.getElementById("bc-chinese").innerText = userData.chineseName; document.getElementById("bc-meaning").innerText = userData.meaning;
+        document.getElementById("teach-py-foreign").innerText = userData.foreignName; document.getElementById("teach-zh-foreign").innerText = userData.foreignName; document.getElementById("teach-py-chinese").innerText = userData.pinyin; document.getElementById("teach-zh-chinese").innerText = userData.chineseName; document.getElementById("teach-py-meaning").innerText = `"${userData.meaning}"`; document.getElementById("teach-zh-meaning").innerText = userData.meaning;
+        
+        drawSeal(); generateCardDecorations();
+    }
+
+    function generateCardDecorations() {
+        const layer = document.getElementById('bc-decorations'); layer.innerHTML = ""; const ml = userData.meaning.toLowerCase(); let added = false;
+        Object.keys(decorSvgMap).forEach(k => { if (k !== 'fallback' && ml.includes(k)) { layer.innerHTML += decorSvgMap[k]; added = true; } });
+        if (!added) layer.innerHTML += decorSvgMap['fallback'];
+    }
+
+    function drawSeal() {
+        const c = document.getElementById("seal-canvas"); const ctx = c.getContext("2d"); const n = userData.chineseName;
+        c.width = 320; c.height = 320; ctx.clearRect(0,0,c.width,c.height);
+        ctx.strokeStyle = "#C1121F"; ctx.lineWidth = 14; ctx.lineJoin = "miter"; ctx.strokeRect(20,20,280,280); ctx.lineWidth = 4; ctx.strokeRect(36,36,248,248); 
+        ctx.fillStyle = "#C1121F"; ctx.textAlign = "center"; ctx.textBaseline = "middle"; const f = '"Long Cang", "Noto Serif TC", serif'; const t = n.length;
+        if (t === 1) { ctx.font = `bold 180px ${f}`; ctx.fillText(n, 160, 160); } else if (t === 2) { ctx.font = `bold 140px ${f}`; ctx.fillText(n[0], 215, 160); ctx.fillText(n[1], 105, 160); } else if (t === 3) { ctx.font = `bold 150px ${f}`; ctx.fillText(n[0], 215, 160); ctx.font = `bold 110px ${f}`; ctx.fillText(n[1], 105, 95); ctx.fillText
