@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>師大華語學園 - 新生報到</title>
     <link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Noto+Sans+TC:wght@400;700&family=Noto+Serif+TC:wght@700&display=swap" rel="stylesheet">
-    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root { --ntnu-red: #8A1538; --bg-color: #FDFBF7; --text-main: #333333; --accent: #D4A373; --chat-emily: #E8F0FE; --chat-student: #FCE8E6; }
         body { margin: 0; font-family: 'Noto Sans TC', sans-serif; background: var(--bg-color); display: flex; justify-content: center; align-items: center; min-height: 100vh; color: var(--text-main); overflow-x: hidden; }
@@ -69,95 +69,4 @@
         <div class="dialogue-box" id="msg-box">歡迎來到師大華語學園！</div>
         
         <div id="step-0" class="step-section active">
-            <h2 style="text-align:center; color:var(--ntnu-red);">華語文新生報到</h2>
-            <button onclick="startGame()">開始報到 Start</button>
-        </div>
-        
-        <div id="step-1" class="step-section">
-            <label style="font-weight:bold; color:#555;">本國名字 (Your Name)：</label>
-            <input type="text" id="fn-in" placeholder="e.g. Emily">
-            <button onclick="toS2()">下一步 Next</button>
-        </div>
-        
-        <div id="step-2" class="step-section">
-            <button class="btn-secondary" onclick="window.open('https://translate.google.com/?sl=auto&tl=zh-TW','_blank')">🔍 Google 翻譯聽發音</button>
-            <p style="font-weight:bold; color:#555; margin-top:20px;">貼上查到的中文名字：</p>
-            <input type="text" id="gn-in" placeholder="e.g. 艾蜜莉">
-            <button onclick="toS3()">下一步 Next</button>
-        </div>
-        
-        <div id="step-3" class="step-section">
-            <div id="choice-area"></div>
-            <button onclick="toS4()">確認名字 Confirm</button>
-        </div>
-        
-        <div id="step-4" class="step-section">
-            <div style="text-align:left; font-size:1.1em; line-height:2;">
-                <p>你好，我叫 <span id="slot-f" class="drop-slot" onclick="selSlot('f')">[填空]</span>。</p>
-                <p>我的中文名字是 <span id="slot-c" class="drop-slot" onclick="selSlot('c')">[填空]</span>。</p>
-                <p>意思是 <span id="slot-m" class="drop-slot" onclick="selSlot('m')">[填空]</span>。</p>
-            </div>
-            <div id="card-pool" style="margin-top:20px; text-align:center;"></div>
-        </div>
-        
-        <div id="step-5" class="step-section">
-            <div class="chat-container" id="chat-history"></div>
-            <div id="chat-opts-area"></div>
-        </div>
-        
-        <div id="step-6" class="step-section">
-            <div id="card-wrap" class="business-card">
-                <div class="card-decor" id="bc-decor"></div>
-                <div class="card-content">
-                    <div class="bc-header">National Taiwan Normal University<br>國立台灣師範大學</div>
-                    <div id="bc-f" style="font-size:1.2em; color:#666; margin-bottom:5px; font-weight:bold;"></div>
-                    <div id="bc-c" class="bc-name-chinese"></div>
-                    <div id="bc-m" class="bc-meaning-tag"></div>
-                </div>
-                <div class="seal-container"><canvas id="seal-canvas" width="320" height="320" style="width:100%;height:100%;"></canvas></div>
-            </div>
-            <button style="background:#27AE60" onclick="downloadCard()">📥 下載名片 Download</button>
-            <button class="btn-secondary" onclick="replayEnd()">🔊 再聽一次名片</button>
-        </div>
-    </div>
-</div>
-
-<script>
-/**
- * 📚 全新豪華字典：包含所有名單與納豆
- */
-const Dict = {
-    '艾': { m: 'Mugwort', ops: [{c:'愛',m:'Love'},{c:'安',m:'Peace'}] },
-    '蜜': { m: 'Honey', ops: [{c:'米',m:'Rice'},{c:'明',m:'Bright'}] },
-    '莉': { m: 'Jasmine', ops: [{c:'麗',m:'Beautiful'},{c:'立',m:'Stand'}] },
-    '愛': { m: 'Love', ops: [{c:'艾',m:'Mugwort'},{c:'安',m:'Peace'}] },
-    '美': { m: 'Beautiful', ops: [{c:'梅',m:'Plum'},{c:'妹',m:'Sister'}] },
-    '麗': { m: 'Elegant', ops: [{c:'理',m:'Reason'},{c:'莉',m:'Jasmine'}] },
-    '安': { m: 'Peace', ops: [{c:'諳',m:'Familiar'},{c:'岸',m:'Shore'}] },
-    '米': { m: 'Rice', ops: [{c:'蜜',m:'Honey'},{c:'秘',m:'Secret'}] },
-    '明': { m: 'Bright', ops: [{c:'名',m:'Name'},{c:'鳴',m:'Sing'}] },
-    '立': { m: 'Stand', ops: [{c:'力',m:'Power'},{c:'利',m:'Benefit'}] },
-    '大': { m: 'Big', ops: [{c:'達',m:'Reach'},{c:'德',m:'Virtue'}] },
-    '衛': { m: 'Guard', ops: [{c:'偉',m:'Great'},{c:'威',m:'Power'}] },
-    '瑪': { m: 'Agate', ops: [{c:'馬',m:'Horse'},{c:'美',m:'Beautiful'}] },
-    '傑': { m: 'Hero', ops: [{c:'捷',m:'Victory'},{c:'界',m:'World'}] },
-    '達': { m: 'Reach', ops: [{c:'大',m:'Big'},{c:'答',m:'Answer'}] },
-    '德': { m: 'Virtue', ops: [{c:'得',m:'Get'},{c:'的',m:'Of'}] },
-    '偉': { m: 'Great', ops: [{c:'衛',m:'Guard'},{c:'威',m:'Power'}] },
-    '威': { m: 'Power', ops: [{c:'偉',m:'Great'},{c:'微',m:'Tiny'}] },
-    '馬': { m: 'Horse', ops: [{c:'瑪',m:'Agate'},{c:'碼',m:'Yard'}] },
-    '理': { m: 'Reason', ops: [{c:'禮',m:'Courtesy'},{c:'里',m:'Village'}] },
-    '納': { m: 'Receive', ops: [{c:'娜',m:'Elegant'},{c:'那',m:'That'}] },
-    '豆': { m: 'Bean', ops: [{c:'逗',m:'Tease'},{c:'斗',m:'Fight'}] },
-    '籃': { m: 'Basket', ops: [{c:'藍',m:'Blue'},{c:'蘭',m:'Orchid'}] },
-    '如': { m: 'As/Like', ops: [{c:'茹',m:'Plant'},{c:'儒',m:'Scholar'}] },
-    '晨': { m: 'Morning', ops: [{c:'辰',m:'Dawn'},{c:'陳',m:'Exhibit'}] },
-    '瑋': { m: 'Fine Jade', ops: [{c:'偉',m:'Great'},{c:'威',m:'Power'}] },
-    '陸': { m: 'Land', ops: [{c:'路',m:'Road'},{c:'露',m:'Dew'}] },
-    '永': { m: 'Forever', ops: [{c:'勇',m:'Brave'},{c:'詠',m:'Chant'}] },
-    '強': { m: 'Strong', ops: [{c:'翔',m:'Soar'},{c:'祥',m:'Auspicious'}] },
-    '高': { m: 'High', ops: [{c:'顥',m:'Vast'},{c:'浩',m:'Grand'}] },
-    '橋': { m: 'Bridge', ops: [{c:'喬',m:'Tall'},{c:'巧',m:'Skillful'}] },
-    '空': { m: 'Sky', ops: [{c:'孔',m:'Great'},{c:'康',m:'Health'}] },
-    '矢': { m: 'Arrow', ops: [{c:'石',m:'Solid'},{c:'世',m:'World'}] },
-    '陳': { m: 'Exhibit', ops: [{c:'晨',m:'Morning'},{c:'辰',m:'Dawn'}] },
+            <h2 style="text-align:center; color:var(--nt
