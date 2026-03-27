@@ -82,7 +82,7 @@
         <div id="step-2" class="step-section">
             <button class="btn-secondary" onclick="window.open('https://translate.google.com/?sl=auto&tl=zh-TW','_blank')">🔍 Google 翻譯聽發音</button>
             <p style="font-weight:bold; color:#555; margin-top:20px;">貼上查到的中文名字：</p>
-            <input type="text" id="gn-in" placeholder="e.g. 艾蜜莉, 高橋空矢">
+            <input type="text" id="gn-in" placeholder="e.g. 張納豆">
             <button onclick="Core.toS3()">下一步 Next</button>
         </div>
         
@@ -137,6 +137,10 @@ const Dict = {
     '麗': { m: 'Elegant', ops: [{c:'理',m:'Reason'},{c:'莉',m:'Jasmine'}] },
     '傑': { m: 'Hero', ops: [{c:'捷',m:'Victory'},{c:'界',m:'World'}] },
     
+    // 張納豆專屬！
+    '納': { m: 'Receive', ops: [{c:'娜',m:'Elegant'},{c:'那',m:'That'}] },
+    '豆': { m: 'Bean', ops: [{c:'逗',m:'Tease'},{c:'斗',m:'Fight'}] },
+
     // 新增測試名單
     '籃': { m: 'Basket', ops: [{c:'藍',m:'Blue'},{c:'蘭',m:'Orchid'}] },
     '如': { m: 'As/Like', ops: [{c:'茹',m:'Plant'},{c:'儒',m:'Scholar'}] },
@@ -256,7 +260,7 @@ const Core = {
             setTimeout(() => {
                 this.currentUtterance = new SpeechSynthesisUtterance(text.replace(/👩🏻‍🏫 Emily 老師: /g,''));
                 this.currentUtterance.lang = 'zh-TW'; 
-                this.currentUtterance.rate = 0.9;
+                this.currentUtterance.rate = 0.85;
                 
                 if(callback) {
                     let called = false;
