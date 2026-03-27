@@ -43,7 +43,7 @@
         .chat-container { background: #F8F9FA; border: 1px solid #E0E0E0; border-radius: 12px; padding: 15px; height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; text-align: left; scroll-behavior: smooth;}
         .chat-bubble { max-width: 80%; padding: 10px 15px; border-radius: 15px; clear: both; font-size: 0.95em; line-height: 1.4; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);}
         .chat-emily { background: var(--chat-emily); align-self: flex-start; color: #1A73E8; font-weight: bold; }
-        .chat-student { background: var(--chat-student); align-self: flex-end; color: var(--ntnu-red); font-weight: bold; margin-bottom: 5px;}
+        .chat-student { background: var(--chat-student); align-self: flex-end; color: var(--ntnu-red); font-weight: bold; }
         .chat-btn { background: #FFF; border: 2px solid #DDD; color: #555; text-align: left; padding: 12px 15px; border-radius: 10px; margin-bottom: 8px; width: 100%; cursor: pointer; transition: 0.2s; box-shadow: none;}
         .chat-btn:hover:not(:disabled) { border-color: var(--ntnu-red); background: #FFF8F8; transform: translateX(5px); }
         
@@ -70,32 +70,32 @@
         
         <div id="step-0" class="step-section active">
             <h2 style="text-align:center; color:var(--ntnu-red);">華語文新生報到</h2>
-            <button onclick="startGame()">開始報到 Start</button>
+            <button onclick="Core.startGame()">開始報到 Start</button>
         </div>
         
         <div id="step-1" class="step-section">
             <label style="font-weight:bold; color:#555;">本國名字 (Your Name)：</label>
             <input type="text" id="fn-in" placeholder="e.g. Emily, Kuya">
-            <button onclick="toS2()">下一步 Next</button>
+            <button onclick="Core.toS2()">下一步 Next</button>
         </div>
         
         <div id="step-2" class="step-section">
             <button class="btn-secondary" onclick="window.open('https://translate.google.com/?sl=auto&tl=zh-TW','_blank')">🔍 Google 翻譯聽發音</button>
             <p style="font-weight:bold; color:#555; margin-top:20px;">貼上查到的中文名字：</p>
-            <input type="text" id="gn-in" placeholder="e.g. 張納豆">
-            <button onclick="toS3()">下一步 Next</button>
+            <input type="text" id="gn-in" placeholder="e.g. 愛美麗, 愛蜜莉">
+            <button onclick="Core.toS3()">下一步 Next</button>
         </div>
         
         <div id="step-3" class="step-section">
             <div id="choice-area"></div>
-            <button onclick="toS4()">確認名字 Confirm</button>
+            <button onclick="Core.toS4()">確認名字 Confirm</button>
         </div>
         
         <div id="step-4" class="step-section">
             <div style="text-align:left; font-size:1.1em; line-height:2;">
-                <p>你好，我叫 <span id="slot-f" class="drop-slot" onclick="selSlot('f')">[填空]</span>。</p>
-                <p>我的中文名字是 <span id="slot-c" class="drop-slot" onclick="selSlot('c')">[填空]</span>。</p>
-                <p>意思是 <span id="slot-m" class="drop-slot" onclick="selSlot('m')">[填空]</span>。</p>
+                <p>你好，我叫 <span id="slot-f" class="drop-slot" onclick="Core.selSlot('f')">[填空]</span>。</p>
+                <p>我的中文名字是 <span id="slot-c" class="drop-slot" onclick="Core.selSlot('c')">[填空]</span>。</p>
+                <p>意思是 <span id="slot-m" class="drop-slot" onclick="Core.selSlot('m')">[填空]</span>。</p>
             </div>
             <div id="card-pool" style="margin-top:20px; text-align:center;"></div>
         </div>
@@ -116,15 +116,15 @@
                 </div>
                 <div class="seal-container"><canvas id="seal-canvas" width="320" height="320" style="width:100%;height:100%;"></canvas></div>
             </div>
-            <button style="background:#27AE60" onclick="downloadCard()">📥 下載名片 Download</button>
-            <button class="btn-secondary" onclick="replayEnd()">🔊 再聽一次名片</button>
+            <button style="background:#27AE60" onclick="Core.downloadCard()">📥 下載名片 Download</button>
+            <button class="btn-secondary" onclick="Core.replayEnd()">🔊 再聽一次名片</button>
         </div>
     </div>
 </div>
 
 <script>
 /**
- * 📚 全新豪華字典：包含所有名單與納豆
+ * 📚 字典庫初始化
  */
 const Dict = {
     '艾': { m: 'Mugwort', ops: [{c:'愛',m:'Love'},{c:'安',m:'Peace'}] },
@@ -214,6 +214,7 @@ const Dict = {
     '后': { m: 'Queen', ops: [{c:'厚',m:'Thick'},{c:'候',m:'Wait'}] },
     '鄧': { m: 'Deng', ops: [{c:'登',m:'Ascend'},{c:'等',m:'Wait'}] },
     '草': { m: 'Grass', ops: [{c:'早',m:'Early'},{c:'造',m:'Create'}] },
+    '蔡': { m: 'Herb', ops: [{c:'彩',m:'Color'},{c:'財',m:'Wealth'}] },
     '沛': { m: 'Abundant', ops: [{c:'配',m:'Match'},{c:'佩',m:'Admire'}] },
     '辰': { m: 'Dawn', ops: [{c:'晨',m:'Morning'},{c:'沉',m:'Sink'}] },
     '俊': { m: 'Handsome', ops: [{c:'駿',m:'Steed'},{c:'峻',m:'High'}] },
@@ -222,178 +223,303 @@ const Dict = {
 
 // 隨機干擾池
 const Decoys = [
-    {c:'佳', m:'Excellent'}, {c:'安', m:'Peace'}, {c:'明', m:'Bright'}, {c:'智', m:'Smart'},
-    {c:'勇', m:'Brave'}, {c:'真', m:'True'}, {c:'善', m:'Kind'}, {c:'平', m:'Peace'},
-    {c:'星', m:'Star'}, {c:'誠', m:'Sincere'}, {c:'信', m:'Honest'}, {c:'樂', m:'Joy'},
-    {c:'和', m:'Harmony'}, {c:'康', m:'Health'}, {c:'富', m:'Wealth'}, {c:'貴', m:'Noble'}
+    {c:'佳', m:'Excellent'}, {c:'平', m:'Peace'}, {c:'星', m:'Star'}, {c:'誠', m:'Sincere'}, 
+    {c:'信', m:'Honest'}, {c:'樂', m:'Joy'}, {c:'和', m:'Harmony'}, {c:'康', m:'Health'}, 
+    {c:'富', m:'Wealth'}, {c:'貴', m:'Noble'}, {c:'真', m:'True'}, {c:'善', m:'Kind'}
 ];
 
-let data={f:"",g:"",c:"",m:""}, curSl="", okC=0, chatStage=0;
-let sentences=[], availableOpts=[];
-let currentUtterance=null, fallbackTimer=null;
-
-function speak(t, callback = null){
-    if('speechSynthesis' in window){
-        window.speechSynthesis.cancel();
-        clearTimeout(fallbackTimer);
-        setTimeout(() => {
-            currentUtterance = new SpeechSynthesisUtterance(t.replace(/👩🏻‍🏫 Emily 老師: /g,''));
-            currentUtterance.lang = 'zh-TW'; 
-            currentUtterance.rate = 0.9;
-            
-            if(callback){
-                let called = false;
-                let safeCb = () => { if(!called) { called=true; callback(); } };
-                currentUtterance.onend = safeCb;
-                currentUtterance.onerror = safeCb;
-                fallbackTimer = setTimeout(safeCb, (t.length * 350) + 1500); 
-            }
-            window.speechSynthesis.speak(currentUtterance);
-        }, 50);
-    } else {
-        if(callback) setTimeout(callback, 1500);
-    }
-}
-
-function show(n){ document.querySelectorAll('.step-section').forEach(s=>s.classList.remove('active')); document.getElementById('step-'+n).classList.add('active'); }
-
-function startGame(){ show(1); speak("你好！我是 Emily 老師。很高興認識你，請告訴我你的本國名字是什麼？"); }
-
-function toS2(){ data.f=document.getElementById('fn-in').value.trim(); if(data.f){ show(2); speak("太好了，請貼上翻譯後的中文名字貼給我吧！"); } }
-
-function toS3(){
-    data.g=document.getElementById('gn-in').value.trim(); if(!data.g)return;
-    let area=document.getElementById('choice-area'); area.innerHTML="";
-    
-    for(let i=0; i<data.g.length; i++) {
-        let char = data.g[i];
-        let meaning = "Name Character";
-        let ops = [];
-
-        // 🟢 徹底修正：正確套用 Dict 與隨機干擾
-        if(Dict[char]) {
-            meaning = Dict[char].m;
-            ops = Dict[char].ops;
-        } else {
-            // 隨機抽取兩個不同的干擾字
-            let shuffledDecoys = [...Decoys].filter(d => d.c !== char).sort(() => Math.random() - 0.5);
-            ops = [shuffledDecoys[0], shuffledDecoys[1]];
+// ✨ 自動擴充字典：將所有出現過的干擾字、選項都註冊成主角，避免 Name Character
+Object.keys(Dict).forEach(key => {
+    Dict[key].ops.forEach(opt => {
+        if(!Dict[opt.c]) {
+            let shuffledDecoys = [...Decoys].filter(d => d.c !== opt.c).sort(() => Math.random() - 0.5);
+            Dict[opt.c] = { m: opt.m, ops: [shuffledDecoys[0], shuffledDecoys[1]] };
         }
-        
-        // 隨機打亂正確答案與干擾項的位置
-        let finalOptions = [
-            { c: char, m: meaning, isCorrect: true },
-            { c: ops[0].c, m: ops[0].m, isCorrect: false },
-            { c: ops[1].c, m: ops[1].m, isCorrect: false }
-        ].sort(() => Math.random() - 0.5);
-        
-        let htmlStr = `<div class="char-selection-block"><div style="color:var(--ntnu-red); font-weight:bold; margin-bottom:8px;">字 ${i+1}：【${char}】</div>`;
-        
-        finalOptions.forEach(opt => {
-            let checkAttr = opt.isCorrect ? "checked" : "";
-            htmlStr += `
-                <label class="radio-option" onclick="speak('${opt.c}')">
-                    <input type="radio" name="char${i}" value="${opt.c}" data-m="${opt.m}" ${checkAttr}> 
-                    <b>${opt.c}</b> (${opt.m}) <div style="font-size:1.2em">🔊</div>
-                </label>`;
-        });
-        htmlStr += `</div>`;
-        area.innerHTML += htmlStr;
-    }
-    show(3); speak("針對每一個字，聽聽看發音，挑選最正確的組合！");
-}
-
-function toS4(){
-    let n="",m=[];for(let i=0;i<data.g.length;i++){let r=document.querySelector(`input[name="char${i}"]:checked`);n+=r.value;m.push(r.getAttribute('data-m'));}
-    data.c=n; data.m=m.join(", "); 
-    sentences=["你好，我叫 " + data.f, "我的中文名字是 " + data.c, "它的意思是 " + data.m];
-    let pool=document.getElementById('card-pool'); pool.innerHTML="";
-    [{id:'f',t:data.f},{id:'c',t:data.c},{id:'m',t:data.m}].sort(()=>Math.random()-0.5).forEach(o=>{
-        let b=document.createElement('div'); b.className="word-card"; b.innerText=o.t;
-        b.onclick=()=>{if(!curSl)return; speak(o.t); if(o.id===curSl){document.getElementById('slot-'+curSl).innerText=o.t;document.getElementById('slot-'+curSl).classList.add('filled');b.classList.add('used');curSl="";okC++;if(okC===3)setTimeout(startChat,1500);}else{speak("不對喔");}};
-        pool.appendChild(b);
     });
-    show(4); speak("請點擊空格，再點選下方的字卡進行配對。");
-}
+});
+Decoys.forEach(dec => {
+    if(!Dict[dec.c]) {
+        let shuffledDecoys = [...Decoys].filter(d => d.c !== dec.c).sort(() => Math.random() - 0.5);
+        Dict[dec.c] = { m: dec.m, ops: [shuffledDecoys[0], shuffledDecoys[1]] };
+    }
+});
 
-function selSlot(t){curSl=t;document.querySelectorAll('.drop-slot').forEach(s=>s.style.background="transparent");document.getElementById('slot-'+t).style.background="#FFF0F0";}
+const Core = {
+    data: { f: "", g: "", c: "", m: "" },
+    sentences: [],
+    chatStage: 0,
+    availableOpts: [],
+    curSlot: "",
+    matchedCount: 0,
+    currentUtterance: null,
+    fallbackTimer: null,
 
-function startChat(){ show(5); chatStage=0; availableOpts = [0, 1, 2]; renderNextTurn(); }
+    show: function(stepNum) {
+        document.querySelectorAll('.step-section').forEach(s => s.classList.remove('active'));
+        document.getElementById('step-' + stepNum).classList.add('active');
+    },
 
-function renderNextTurn(){
-    const box = document.getElementById('chat-history'); 
-    const opts = document.getElementById('chat-opts-area'); opts.innerHTML="";
-    
-    let teacherText = "";
-    if(chatStage === 0) teacherText = "你好！很高興認識你。";
-    else if(chatStage === 1) teacherText = "你的中文名字是什麼？";
-    else if(chatStage === 2) teacherText = "這名字真好聽！它的意思是什麼？";
-    
-    if(chatStage < 3){
-        box.innerHTML += `<div class="chat-bubble chat-emily">👩🏻‍🏫 Emily: ${teacherText}</div>`;
-        box.scrollTop = box.scrollHeight;
-        speak(teacherText);
+    speak: function(text, callback = null) {
+        if('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            clearTimeout(this.fallbackTimer);
+            
+            setTimeout(() => {
+                this.currentUtterance = new SpeechSynthesisUtterance(text.replace(/👩🏻‍🏫 Emily 老師: /g,''));
+                this.currentUtterance.lang = 'zh-TW'; 
+                this.currentUtterance.rate = 0.85;
+                
+                if(callback) {
+                    let called = false;
+                    let safeCb = () => { if(!called) { called=true; callback(); } };
+                    this.currentUtterance.onend = safeCb;
+                    this.currentUtterance.onerror = safeCb;
+                    this.fallbackTimer = setTimeout(safeCb, (text.length * 350) + 1500); 
+                }
+                window.speechSynthesis.speak(this.currentUtterance);
+            }, 50);
+        } else {
+            if(callback) setTimeout(callback, 1500);
+        }
+    },
+
+    startGame: function() {
+        this.show(1);
+        document.getElementById("msg-box").innerText = "很高興認識你！請問你的本國名字是什麼？";
+        this.speak("你好！我是 Emily 老師。很高興認識你，請告訴我你的本國名字是什麼？");
+    },
+
+    toS2: function() {
+        this.data.f = document.getElementById('fn-in').value.trim();
+        if(this.data.f) {
+            this.show(2);
+            document.getElementById("msg-box").innerText = "太好了！請查出並貼上你的中文名字。";
+            this.speak("太好了，請貼上翻譯後的中文名字貼給我吧！");
+        }
+    },
+
+    toS3: function() {
+        this.data.g = document.getElementById('gn-in').value.trim();
+        if(!this.data.g) return;
         
-        let shuffled = [...availableOpts].sort(() => Math.random() - 0.5);
-        shuffled.forEach(idx => {
-            let btn = document.createElement('button'); btn.className="chat-btn";
-            btn.innerHTML = `<span>${sentences[idx]}</span> 🔊`;
+        const area = document.getElementById('choice-area');
+        area.innerHTML = "";
+        
+        for(let i=0; i<this.data.g.length; i++) {
+            let char = this.data.g[i];
+            let meaning = "Name Character";
+            let ops = [];
+
+            // 抓取擴充後的字典
+            if(Dict[char]) {
+                meaning = Dict[char].m;
+                ops = Dict[char].ops;
+            } else {
+                let shuffledDecoys = [...Decoys].filter(d => d.c !== char).sort(() => Math.random() - 0.5);
+                ops = [shuffledDecoys[0], shuffledDecoys[1]];
+            }
+            
+            let finalOptions = [
+                { c: char, m: meaning, isCorrect: true },
+                { c: ops[0].c, m: ops[0].m, isCorrect: false },
+                { c: ops[1].c, m: ops[1].m, isCorrect: false }
+            ].sort(() => Math.random() - 0.5);
+            
+            let htmlStr = `<div class="char-selection-block"><div style="color:var(--ntnu-red); font-weight:bold; margin-bottom:8px;">字 ${i+1}：【${char}】</div>`;
+            finalOptions.forEach(opt => {
+                let checkAttr = opt.isCorrect ? "checked" : "";
+                htmlStr += `
+                    <label class="radio-option" onclick="Core.speak('${opt.c}')">
+                        <input type="radio" name="char${i}" value="${opt.c}" data-m="${opt.m}" ${checkAttr}> 
+                        <b>${opt.c}</b> (${opt.m}) <div style="font-size:1.2em">🔊</div>
+                    </label>`;
+            });
+            htmlStr += `</div>`;
+            area.innerHTML += htmlStr;
+        }
+        this.show(3);
+        document.getElementById("msg-box").innerText = "聽聽看發音，挑選最正確的組合！";
+        this.speak("針對每一個字，聽聽看發音，挑選最正確的組合！");
+    },
+
+    toS4: function() {
+        let nameStr = "", meaningArr = [];
+        for(let i=0; i<this.data.g.length; i++){
+            let r = document.querySelector(`input[name="char${i}"]:checked`);
+            nameStr += r.value;
+            meaningArr.push(r.getAttribute('data-m'));
+        }
+        this.data.c = nameStr;
+        this.data.m = meaningArr.join(", ");
+        
+        this.sentences = [
+            "你好，我叫 " + this.data.f, 
+            "我的中文名字是 " + this.data.c, 
+            "它的意思是 " + this.data.m
+        ];
+        
+        const pool = document.getElementById('card-pool');
+        pool.innerHTML = "";
+        
+        let cards = [ {id:'f', t:this.data.f}, {id:'c', t:this.data.c}, {id:'m', t:this.data.m} ];
+        cards.sort(() => Math.random() - 0.5).forEach(obj => {
+            let btn = document.createElement('div');
+            btn.className = "word-card"; btn.innerText = obj.t;
             btn.onclick = () => {
-                document.querySelectorAll('.chat-btn').forEach(b => b.disabled = true);
-                if(idx === chatStage){
-                    box.innerHTML += `<div class="chat-bubble chat-student">${sentences[idx]}</div>`;
-                    box.scrollTop = box.scrollHeight;
-                    availableOpts = availableOpts.filter(o => o !== idx);
-                    chatStage++;
-                    speak(sentences[idx], () => renderNextTurn());
+                if(!this.curSlot) return;
+                this.speak(obj.t);
+                if(obj.id === this.curSlot) {
+                    document.getElementById('slot-'+this.curSlot).innerText = obj.t;
+                    document.getElementById('slot-'+this.curSlot).classList.add('filled');
+                    btn.classList.add('used');
+                    this.curSlot = ""; this.matchedCount++;
+                    if(this.matchedCount === 3) setTimeout(() => this.startChat(), 1500);
                 } else {
-                    btn.style.borderColor="red"; setTimeout(()=>btn.style.borderColor="#DDD", 500);
-                    speak(sentences[idx], () => { document.querySelectorAll('.chat-btn').forEach(b => b.disabled = false); });
+                    this.speak("不對喔，再試一次");
                 }
             };
-            opts.appendChild(btn);
+            pool.appendChild(btn);
         });
-    } else {
-        box.innerHTML += `<div class="chat-bubble chat-emily">👩🏻‍🏫 Emily: 太棒了！任務大成功！</div>`;
-        box.scrollTop = box.scrollHeight;
-        speak("太棒了！你的中文真的非常好喔！任務大成功！", () => triggerEnd());
+        
+        this.show(4);
+        document.getElementById("msg-box").innerText = "請點擊空格，再點選字卡進行配對。";
+        this.speak("請點擊空格，再點選下方的字卡進行配對。");
+    },
+
+    selSlot: function(type) {
+        this.curSlot = type;
+        document.querySelectorAll('.drop-slot').forEach(s => s.style.background = "transparent");
+        document.getElementById('slot-'+type).style.background = "#FFF0F0";
+    },
+
+    startChat: function() {
+        this.show(5);
+        document.getElementById("msg-box").innerText = "最後一關：跟老師對話！";
+        this.chatStage = 0;
+        this.availableOpts = [0, 1, 2];
+        this.renderChatTurn();
+    },
+
+    renderChatTurn: function() {
+        const box = document.getElementById('chat-history');
+        const optsArea = document.getElementById('chat-opts-area');
+        optsArea.innerHTML = "";
+        
+        let teacherText = "";
+        if(this.chatStage === 0) teacherText = "你好！很高興認識你。";
+        else if(this.chatStage === 1) teacherText = "你的中文名字是什麼？";
+        else if(this.chatStage === 2) teacherText = "這名字真好聽！它的意思是什麼？";
+        
+        if(this.chatStage < 3) {
+            box.innerHTML += `<div class="chat-bubble chat-emily">👩🏻‍🏫 Emily: ${teacherText}</div>`;
+            box.scrollTop = box.scrollHeight;
+            this.speak(teacherText);
+            
+            let shuffled = [...this.availableOpts].sort(() => Math.random() - 0.5);
+            shuffled.forEach(idx => {
+                let btn = document.createElement('button');
+                btn.className = "chat-btn";
+                btn.innerHTML = `<span>${this.sentences[idx]}</span> 🔊`;
+                btn.onclick = () => {
+                    document.querySelectorAll('.chat-btn').forEach(b => b.disabled = true);
+                    
+                    if(idx === this.chatStage) {
+                        box.innerHTML += `<div class="chat-bubble chat-student">${this.sentences[idx]}</div>`;
+                        box.scrollTop = box.scrollHeight;
+                        this.availableOpts = this.availableOpts.filter(o => o !== idx);
+                        this.chatStage++;
+                        this.speak(this.sentences[idx], () => this.renderChatTurn());
+                    } else {
+                        btn.style.borderColor = "red";
+                        setTimeout(() => btn.style.borderColor = "#DDD", 500);
+                        this.speak(this.sentences[idx], () => {
+                            document.querySelectorAll('.chat-btn').forEach(b => b.disabled = false);
+                        });
+                    }
+                };
+                optsArea.appendChild(btn);
+            });
+        } else {
+            box.innerHTML += `<div class="chat-bubble chat-emily">👩🏻‍🏫 Emily: 太棒了！任務大成功！</div>`;
+            box.scrollTop = box.scrollHeight;
+            this.speak("太棒了！你的中文真的非常好喔！任務大成功！", () => this.triggerEnd());
+        }
+    },
+
+    triggerEnd: function() {
+        new Audio('https://actions.google.com/sounds/v1/weapons/fireworks_with_whistle.ogg').play().catch(e=>{});
+        this.show(6);
+        document.getElementById("msg-box").innerText = "報到完成！這是你的專屬名片。";
+        
+        document.getElementById('bc-f').innerText = this.data.f;
+        document.getElementById('bc-c').innerText = this.data.c;
+        document.getElementById('bc-m').innerText = this.data.m;
+        
+        this.drawSeal();
+        this.startFW();
+        this.genDecor();
+        
+        setTimeout(() => this.replayEnd(), 500);
+    },
+
+    genDecor: function() {
+        let layer = document.getElementById('bc-decor');
+        let mStr = this.data.m.toLowerCase();
+        let svg = `<svg style="position:absolute;top:-20px;right:-30px;width:220px;height:220px;" viewBox="0 0 100 100" fill="#8A1538" opacity="0.1"><path d="M80,30 c0,-10 -10,-15 -20,-10 c0,-15 -25,-15 -30,-5 c-10,-5 -20,0 -15,15 Z"/></svg>`;
+        if(mStr.includes('love')) svg = `<svg style="position:absolute;bottom:0;left:10px;width:150px;height:150px;" viewBox="0 0 100 100" fill="#8A1538" opacity="0.15"><path d="M50,90 c-20,-20 -45,-35 -45,-60 c0,-20 15,-30 30,-30 c10,0 15,5 15,10 c0,-5 5,-10 15,-10 c15,0 30,10 30,30 c0,25 -25,40 -45,60 Z"/></svg>`;
+        if(mStr.includes('jasmine') || mStr.includes('beautiful') || mStr.includes('elegant')) svg = `<svg style="position:absolute;top:50px;right:0;width:150px;height:150px;" viewBox="0 0 100 100" fill="#8A1538" opacity="0.15"><path d="M50,50 c10,-20 30,-20 40,0 c10,20 -10,30 -40,10 M50,50 c20,-10 20,-30 0,-40 c-20,-10 -30,10 -10,40 Z"/></svg>`;
+        layer.innerHTML = svg;
+    },
+
+    startFW: function() {
+        let c = document.createElement('canvas');
+        c.style.cssText = "position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:99999";
+        document.body.appendChild(c);
+        let ctx = c.getContext('2d');
+        c.width = window.innerWidth; c.height = window.innerHeight;
+        let p = [];
+        for(let i=0;i<50;i++) p.push({x:c.width/2, y:c.height/2, vx:(Math.random()-0.5)*18, vy:(Math.random()-0.5)*18, l:1.0, d:0.02, c:`hsl(${Math.random()*360},100%,60%)`});
+        function anim() {
+            ctx.clearRect(0,0,c.width,c.height); let active = false;
+            p.forEach(i => {
+                if(i.l > 0){ i.x+=i.vx; i.y+=i.vy; i.vy+=0.15; i.l-=i.d; ctx.fillStyle=i.c; ctx.globalAlpha=i.l; ctx.beginPath(); ctx.arc(i.x,i.y,4,0,Math.PI*2); ctx.fill(); active=true; }
+            });
+            if(active) requestAnimationFrame(anim); else c.remove();
+        } anim();
+    },
+
+    drawSeal: function() {
+        let c = document.getElementById("seal-canvas"), ctx = c.getContext("2d"), n = this.data.c;
+        c.width = 320; c.height = 320;
+        ctx.strokeStyle = "#C1121F"; ctx.lineWidth = 14; ctx.strokeRect(20,20,280,280); 
+        ctx.lineWidth = 4; ctx.strokeRect(36,36,248,248);
+        ctx.fillStyle = "#C1121F"; ctx.textAlign = "center"; ctx.textBaseline = "middle"; 
+        let f = '"Long Cang", cursive';
+        
+        if(n.length === 2) {
+            ctx.font = `bold 140px ${f}`; ctx.fillText(n[0], 215, 160); ctx.fillText(n[1], 105, 160);
+        } else if(n.length === 3) {
+            ctx.font = `bold 150px ${f}`; ctx.fillText(n[0], 215, 160); 
+            ctx.font = `bold 110px ${f}`; ctx.fillText(n[1], 105, 95); ctx.fillText(n[2], 105, 225);
+        } else if(n.length >= 4) {
+            ctx.font = `bold 110px ${f}`; 
+            ctx.fillText(n[0], 215, 95); ctx.fillText(n[1], 215, 225); 
+            ctx.fillText(n[2], 105, 95); ctx.fillText(n[3], 105, 225); 
+        } else {
+            ctx.font = `bold 180px ${f}`; ctx.fillText(n[0] || "印", 160, 160);
+        }
+    },
+
+    replayEnd: function() {
+        this.speak(`你好，我叫${this.data.f}。我的中文名字是${this.data.c}。它的意思是${this.data.m}。`);
+    },
+
+    downloadCard: function() {
+        html2canvas(document.getElementById('card-wrap')).then(c => {
+            let a = document.createElement('a'); a.download = 'MyNTNUCard.png'; a.href = c.toDataURL(); a.click();
+        });
     }
-}
-
-function triggerEnd(){
-    new Audio('https://actions.google.com/sounds/v1/weapons/fireworks_with_whistle.ogg').play().catch(e=>{});
-    show(6); document.getElementById('bc-f').innerText=data.f; document.getElementById('bc-c').innerText=data.c; document.getElementById('bc-m').innerText=data.m;
-    drawSeal(); startFW(); generateDecor(); 
-    setTimeout(()=>speak(`你好，我叫${data.f}。我的中文名字是${data.c}。它的意思是${data.m}。`), 600);
-}
-
-function generateDecor(){
-    let l=document.getElementById('bc-decorations'), m=data.m.toLowerCase();
-    let svg = `<svg style="position:absolute;top:-20px;right:-30px;width:220px;height:220px;" viewBox="0 0 100 100" fill="#8A1538" opacity="0.1"><path d="M80,30 c0,-10 -10,-15 -20,-10 c0,-15 -25,-15 -30,-5 c-10,-5 -20,0 -15,15 Z"/></svg>`;
-    if(m.includes('love')) svg = `<svg style="position:absolute;bottom:0;left:10px;width:150px;height:150px;" viewBox="0 0 100 100" fill="#8A1538" opacity="0.15"><path d="M50,90 c-20,-20 -45,-35 -45,-60 c0,-20 15,-30 30,-30 c10,0 15,5 15,10 c0,-5 5,-10 15,-10 c15,0 30,10 30,30 c0,25 -25,40 -45,60 Z"/></svg>`;
-    if(m.includes('jasmine') || m.includes('beautiful') || m.includes('elegant')) svg = `<svg style="position:absolute;top:50px;right:0;width:150px;height:150px;" viewBox="0 0 100 100" fill="#8A1538" opacity="0.15"><path d="M50,50 c10,-20 30,-20 40,0 c10,20 -10,30 -40,10 M50,50 c20,-10 20,-30 0,-40 c-20,-10 -30,10 -10,40 Z"/></svg>`;
-    l.innerHTML = svg;
-}
-
-function startFW(){
-    let c=document.createElement('canvas'); c.style.cssText="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:99999"; document.body.appendChild(c);
-    let ctx=c.getContext('2d'); c.width=window.innerWidth; c.height=window.innerHeight;
-    let p=[]; function cr(x,y){for(let i=0;i<40;i++)p.push({x:x,y:y,vx:(Math.random()-0.5)*18,vy:(Math.random()-0.5)*18,l:1.0,d:0.02,c:`hsl(${Math.random()*360},100%,60%)`});}
-    cr(c.width/2,c.height/2); function am(){ctx.clearRect(0,0,c.width,c.height);let al=false;p.forEach(i=>{if(i.l>0){i.x+=i.vx;i.y+=i.vy;i.vy+=0.15;i.l-=i.d;ctx.fillStyle=i.c;ctx.globalAlpha=i.l;ctx.beginPath();ctx.arc(i.x,i.y,4,0,Math.PI*2);ctx.fill();al=true;}});if(al)requestAnimationFrame(am);else c.remove();} am();
-}
-
-function drawSeal(){
-    let c=document.getElementById("seal-canvas"),ctx=c.getContext("2d"),n=data.c;
-    c.width=320;c.height=320;ctx.strokeStyle="#C1121F";ctx.lineWidth=14;ctx.strokeRect(20,20,280,280);ctx.lineWidth=4;ctx.strokeRect(36,36,248,248);
-    ctx.fillStyle="#C1121F";ctx.textAlign="center";ctx.textBaseline="middle";let f='"Long Cang", cursive';
-    if(n.length===2){ctx.font=`bold 140px ${f}`;ctx.fillText(n[0],215,160);ctx.fillText(n[1],105,160);}
-    else if(n.length===3){ctx.font=`bold 150px ${f}`;ctx.fillText(n[0],215,160);ctx.font=`bold 110px ${f}`;ctx.fillText(n[1],105,95);ctx.fillText(n[2],105,225);}
-    else if(n.length>=4){ctx.font=`bold 110px ${f}`;ctx.fillText(n[0],215,95);ctx.fillText(n[1],215,225);ctx.fillText(n[2],105,95);ctx.fillText(n[3],105,225);}
-    else{ctx.font=`bold 180px ${f}`;ctx.fillText(n[0]||"印",160,160);}
-}
-
-function replayEnd(){ speak(`你好，我叫${data.f}。我的中文名字是${data.c}。它的意思是${data.m}。`); }
-function downloadCard(){ html2canvas(document.getElementById('card-wrap')).then(c=>{let a=document.createElement('a');a.download='MyNTNUCard.png';a.href=c.toDataURL();a.click();});}
+};
 </script>
 </body>
 </html>
