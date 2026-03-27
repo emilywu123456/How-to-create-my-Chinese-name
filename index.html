@@ -35,13 +35,19 @@
         .chat-emily { background: var(--chat-emily); align-self: flex-start; color: #1A73E8; font-weight: bold; }
         .chat-student { background: var(--chat-student); align-self: flex-end; color: var(--ntnu-red); font-weight: bold; margin-bottom: 5px;}
         .chat-btn { background: #FFF; border: 2px solid #DDD; color: #555; text-align: left; padding: 12px 15px; border-radius: 10px; margin-bottom: 8px; width: 100%; cursor: pointer; transition: 0.2s; box-shadow: none;}
-        .business-card { width: 100%; max-width: 450px; background: #FFF; border: 1px solid #E0E0E0; box-shadow: 0 8px 25px rgba(0,0,0,0.1); padding: 30px; box-sizing: border-box; position: relative; overflow: hidden; border-left: 12px solid var(--ntnu-red); min-height: 250px; text-align: left; border-radius: 8px;}
+        .business-card { width: 100%; max-width: 450px; background: #FFF; border: 1px solid #E0E0E0; box-shadow: 0 8px 25px rgba(0,0,0,0.1); padding: 30px; box-sizing: border-box; position: relative; overflow: hidden; border-left: 12px solid var(--ntnu-red); min-height: 250px; text-align: left; border-radius: 8px; margin: 0 auto;}
         .card-decor { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; opacity: 0.15; pointer-events: none; }
         .card-content { position: relative; z-index: 5; }
         .bc-header { color: #666; font-size: 0.8em; margin-bottom: 15px; border-bottom: 1px solid #EEE; padding-bottom: 10px; font-family: 'Noto Serif TC', serif; letter-spacing: 1px;}
         .bc-name-chinese { font-size: 2.8em; font-weight: bold; color: var(--text-main); margin-bottom: 10px; font-family: 'Noto Serif TC', serif; letter-spacing: 3px;}
         .bc-meaning-tag { display: inline-block; background: var(--ntnu-red); color: white; padding: 4px 10px; border-radius: 6px; font-size: 0.85em; font-weight: bold; }
         .seal-container { position: absolute; bottom: 20px; right: 25px; width: 80px; height: 80px; z-index: 10; }
+        
+        /* ✨ 新增：最後對照文字練習區樣式 ✨ */
+        .practice-box { margin-top: 20px; padding: 15px; background: #fffdf9; border: 1px dashed var(--accent); border-radius: 10px; text-align: left; }
+        .practice-line { font-size: 1.1em; margin: 8px 0; color: #555; border-left: 3px solid var(--accent); padding-left: 10px; }
+        .practice-line b { color: var(--ntnu-red); }
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes popIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
     </style>
@@ -92,8 +98,15 @@
                 </div>
                 <div class="seal-container"><canvas id="seal-canvas" width="320" height="320" style="width:100%;height:100%;"></canvas></div>
             </div>
+            
+            <div class="practice-box">
+                <div class="practice-line">你好，我叫 <b><span id="txt-f"></span></b>。</div>
+                <div class="practice-line">我的中文名字是 <b><span id="txt-c"></span></b>。</div>
+                <div class="practice-line">意思是 <b><span id="txt-m"></span></b>。</div>
+            </div>
+
             <button style="background:#27AE60" onclick="Core.downloadCard()">📥 下載名片 Download</button>
-            <button class="btn-secondary" onclick="Core.replayEnd()">🔊 再聽一次名片</button>
+            <button class="btn-secondary" onclick="Core.replayEnd()">🔊 聽讀練習 Listen & Repeat</button>
         </div>
     </div>
 </div>
@@ -144,11 +157,12 @@ const Core = {
             let ops = Dict[char] ? Dict[char].ops : [{c:Decoys[i%Decoys.length].c, m:Decoys[i%Decoys.length].m}, {c:Decoys[(i+1)%Decoys.length].c, m:Decoys[(i+1)%Decoys.length].m}];
             let finalOpts = [{ c: char, m: meaning, isCorrect: true }, { c: ops[0].c, m: ops[0].m, isCorrect: false }, { c: ops[1].c, m: ops[1].m, isCorrect: false }].sort(() => Math.random() - 0.5);
             let html = `<div class="char-selection-block"><div>字 ${i+1}：【${char}】</div>`;
+            finalOptionsHtml = "";
             finalOpts.forEach(opt => {
                 let check = opt.isCorrect ? "checked" : ""; let mDisp = opt.m ? `(${opt.m})` : "";
-                html += `<label class="radio-option" onclick="Core.speak('${opt.c}')"><input type="radio" name="char${i}" value="${opt.c}" data-m="${opt.m}" ${check}> <b>${opt.c}</b> ${mDisp} 🔊</label>`;
+                finalOptionsHtml += `<label class="radio-option" onclick="Core.speak('${opt.c}')"><input type="radio" name="char${i}" value="${opt.c}" data-m="${opt.m}" ${check}> <b>${opt.c}</b> ${mDisp} 🔊</label>`;
             });
-            area.innerHTML += html + `</div>`;
+            area.innerHTML += html + finalOptionsHtml + `</div>`;
         }
         this.show(3); this.speak("聽聽看發音，挑選最正確的組合！");
     },
@@ -207,7 +221,16 @@ const Core = {
     },
     triggerEnd: function() {
         new Audio('https://actions.google.com/sounds/v1/weapons/fireworks_with_whistle.ogg').play().catch(e=>{});
-        this.show(6); document.getElementById('bc-f').innerText = this.data.f; document.getElementById('bc-c').innerText = this.data.c; document.getElementById('bc-m').innerText = this.data.m;
+        this.show(6); 
+        document.getElementById('bc-f').innerText = this.data.f; 
+        document.getElementById('bc-c').innerText = this.data.c; 
+        document.getElementById('bc-m').innerText = this.data.m;
+        
+        // ✨ 同步對照練習區文字 ✨
+        document.getElementById('txt-f').innerText = this.data.f;
+        document.getElementById('txt-c').innerText = this.data.c;
+        document.getElementById('txt-m').innerText = this.data.m;
+
         this.drawSeal(); this.startFW(); this.genDecor();
         setTimeout(() => this.speak(`你好，我叫${this.data.f}。我的中文名字是${this.data.c}。它的意思是${this.data.m}。`), 500);
     },
