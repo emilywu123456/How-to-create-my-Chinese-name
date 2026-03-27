@@ -4,43 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>師大華語學園 - 新生報到</title>
-    <link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Noto+Sans+TC:wght@400;700&family=Noto+Serif+TC:wght@700&display=swap" rel="stylesheet">
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
         :root { --ntnu-red: #8A1538; --bg-color: #FDFBF7; --text-main: #333333; --accent: #D4A373; --chat-emily: #E8F0FE; --chat-student: #FCE8E6; }
         body { margin: 0; font-family: 'Noto Sans TC', sans-serif; background: var(--bg-color); display: flex; justify-content: center; align-items: center; min-height: 100vh; color: var(--text-main); overflow-x: hidden; }
         #game-container { width: 100%; max-width: 600px; background: #FFF; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); display: flex; flex-direction: column; min-height: 85vh; position: relative; z-index: 10; overflow: hidden;}
         #scene-area { background: linear-gradient(135deg, var(--ntnu-red), #5c0e25); height: 160px; position: relative; display: flex; justify-content: center; align-items: flex-end; border-bottom: 6px solid var(--accent); }
-        .campus-bg { position: absolute; top: 20px; left: 20px; color: rgba(255,255,255,0.1); font-size: 60px; font-weight: bold; pointer-events: none; }
-        #avatar-container { width: 100px; height: 100px; background: #FFF; border-radius: 50%; border: 5px solid var(--accent); transform: translateY(35px); z-index: 10; background-color: #FCE8E6; display: flex; justify-content: center; align-items: center; overflow: hidden; }
-        #interaction-area { padding: 50px 30px 30px 30px; flex-grow: 1; display: flex; flex-direction: column; background: #faf8f5;}
-        .dialogue-box { background: #FFFFFF; border-radius: 15px; padding: 20px; margin-bottom: 25px; border: 2px solid var(--ntnu-red); font-size: 1.1em; font-weight: bold; text-align: center; min-height: 50px; position: relative; line-height: 1.5; color: #444;}
-        .dialogue-box::before { content: ''; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); border-width: 0 12px 12px 12px; border-style: solid; border-color: transparent transparent var(--ntnu-red) transparent; }
-        .step-section { display: none; } .step-section.active { display: block; animation: fadeIn 0.4s; }
-        input[type="text"] { width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #DDD; border-radius: 8px; font-size: 1.1em; box-sizing: border-box; text-align: center;}
-        button { background: var(--ntnu-red); color: white; border: none; padding: 14px 20px; border-radius: 8px; font-size: 1.1em; cursor: pointer; width: 100%; margin-top: 15px; font-weight: bold; transition: 0.2s;}
-        button:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(138,21,56,0.2); }
-        button:disabled { opacity: 0.6; cursor: not-allowed; }
-        .btn-secondary { background: #FFF; color: var(--ntnu-red); border: 2px solid var(--ntnu-red); }
-        .char-selection-block { background: #FFF; border: 2px solid #EEE; border-radius: 8px; padding: 15px; margin-bottom: 15px; text-align: left; }
-        .radio-option { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; cursor: pointer; padding: 10px; border: 1px solid #EEE; border-radius: 8px; background: #FAFAFA; transition: 0.2s;}
-        .drop-slot { display: inline-block; min-width: 100px; border-bottom: 2px dashed #999; text-align: center; color: var(--ntnu-red); font-weight: bold; cursor: pointer; margin: 0 5px;}
-        .drop-slot.filled { border-bottom: 2px solid #4CAF50; color: #4CAF50; }
-        .word-card { display: inline-block; background: #FFF; border: 2px solid var(--accent); padding: 10px 15px; border-radius: 10px; cursor: pointer; font-weight: bold; margin: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
-        .word-card.used { opacity: 0.3; pointer-events: none; }
-        .chat-container { background: #F8F9FA; border: 1px solid #E0E0E0; border-radius: 12px; padding: 15px; height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; text-align: left; scroll-behavior: smooth;}
-        .chat-bubble { max-width: 80%; padding: 10px 15px; border-radius: 15px; clear: both; font-size: 0.95em; line-height: 1.4;}
-        .chat-emily { background: var(--chat-emily); align-self: flex-start; color: #1A73E8; font-weight: bold; }
-        .chat-student { background: var(--chat-student); align-self: flex-end; color: var(--ntnu-red); font-weight: bold; float: right; margin-bottom: 5px;}
-        .chat-btn { background: #FFF; border: 2px solid #DDD; color: #555; text-align: left; padding: 10px 15px; border-radius: 10px; margin-bottom: 8px; width: 100%; cursor: pointer; transition: 0.2s;}
+        .campus-bg { position: absolute; top: 15px; left: 20px; color: rgba(255,255,255,0.1); font-size: 55px; font-weight: bold; pointer-events: none; font-family: 'Noto Serif TC', serif; letter-spacing: 2px;}
+        #avatar-container { width: 100px; height: 100px; background: #FFF; border-radius: 50%; border: 4px solid var(--accent); transform: translateY(30px); z-index: 10; background-color: #FCE8E6; display: flex; justify-content: center; align-items: center; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.2);}
+        #interaction-area { padding: 45px 30px 30px 30px; flex-grow: 1; display: flex; flex-direction: column; background: #faf8f5;}
         
-        .business-card { width: 100%; max-width: 450px; background: #FFF; border: 1px solid #E0E0E0; box-shadow: 0 4px 20px rgba(0,0,0,0.08); padding: 30px; box-sizing: border-box; position: relative; overflow: hidden; border-left: 12px solid var(--ntnu-red); min-height: 250px; text-align: left;}
-        .card-decoration-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; opacity: 0.2; pointer-events: none; }
-        .card-content-layer { position: relative; z-index: 5; }
-        .bc-header { color: #666; font-size: 0.8em; margin-bottom: 15px; border-bottom: 1px solid #EEE; padding-bottom: 10px; font-family: serif; }
-        .bc-name-chinese { font-size: 2.8em; font-weight: bold; color: var(--text-main); margin-bottom: 10px; font-family: serif; letter-spacing: 2px;}
+        .dialogue-box { background: #FFFFFF; border-radius: 15px; padding: 20px; margin-bottom: 25px; border: 2px solid var(--ntnu-red); font-size: 1.1em; font-weight: bold; text-align: center; min-height: 50px; position: relative; line-height: 1.5; color: #444; box-shadow: 0 4px 10px rgba(138,21,56,0.05);}
+        .dialogue-box::before { content: ''; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); border-width: 0 12px 12px 12px; border-style: solid; border-color: transparent transparent var(--ntnu-red) transparent; }
+        
+        .step-section { display: none; animation: fadeIn 0.4s ease-out; } 
+        .step-section.active { display: block; }
+        
+        input[type="text"] { width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #DDD; border-radius: 8px; font-size: 1.1em; text-align: center; box-sizing: border-box; transition: 0.2s;}
+        input[type="text"]:focus { border-color: var(--ntnu-red); outline: none; }
+        
+        button { background: var(--ntnu-red); color: white; border: none; padding: 14px 20px; border-radius: 8px; font-size: 1.1em; cursor: pointer; width: 100%; margin-top: 15px; font-weight: bold; transition: 0.2s; box-shadow: 0 4px 10px rgba(138,21,56,0.2);}
+        button:hover:not(:disabled) { transform: translateY(-2px); background: #A32A4C;}
+        button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none;}
+        .btn-secondary { background: #FFF; color: var(--ntnu-red); border: 2px solid var(--ntnu-red); box-shadow: none;}
+        .btn-secondary:hover:not(:disabled) { background: #FFF0F0; }
+        
+        .char-block { background: #FFF; border: 2px solid #EEE; border-radius: 8px; padding: 15px; margin-bottom: 15px; text-align: left; }
+        .radio-option { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; cursor: pointer; padding: 10px; border: 1px solid #EEE; border-radius: 8px; background: #FAFAFA; transition: 0.2s;}
+        .radio-option:hover { border-color: var(--ntnu-red); background: #FFF8F8; }
+        
+        .drop-slot { display: inline-block; min-width: 90px; border-bottom: 2px dashed #999; text-align: center; color: var(--ntnu-red); font-weight: bold; cursor: pointer; margin: 0 5px; padding-bottom: 2px;}
+        .drop-slot.filled { border-bottom: 2px solid #4CAF50; color: #4CAF50; }
+        .word-card { display: inline-block; background: #FFF; border: 2px solid var(--accent); padding: 10px 15px; border-radius: 10px; cursor: pointer; font-weight: bold; margin: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: 0.2s;}
+        .word-card:hover:not(.used) { transform: scale(1.05); }
+        .word-card.used { opacity: 0.3; pointer-events: none; border-color: #CCC; }
+        
+        .chat-container { background: #F8F9FA; border: 1px solid #E0E0E0; border-radius: 12px; padding: 15px; height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; text-align: left; scroll-behavior: smooth;}
+        .chat-bubble { max-width: 80%; padding: 10px 15px; border-radius: 15px; clear: both; font-size: 0.95em; line-height: 1.4; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);}
+        .chat-emily { background: var(--chat-emily); align-self: flex-start; color: #1A73E8; font-weight: bold; }
+        .chat-student { background: var(--chat-student); align-self: flex-end; color: var(--ntnu-red); font-weight: bold; }
+        .chat-btn { background: #FFF; border: 2px solid #DDD; color: #555; text-align: left; padding: 12px 15px; border-radius: 10px; margin-bottom: 8px; width: 100%; cursor: pointer; transition: 0.2s; box-shadow: none;}
+        .chat-btn:hover:not(:disabled) { border-color: var(--ntnu-red); background: #FFF8F8; transform: translateX(5px); }
+        
+        .business-card { width: 100%; max-width: 450px; background: #FFF; border: 1px solid #E0E0E0; box-shadow: 0 8px 25px rgba(0,0,0,0.1); padding: 30px; box-sizing: border-box; position: relative; overflow: hidden; border-left: 12px solid var(--ntnu-red); min-height: 250px; text-align: left; border-radius: 8px;}
+        .card-decor { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; opacity: 0.15; pointer-events: none; }
+        .card-content { position: relative; z-index: 5; }
+        .bc-header { color: #666; font-size: 0.8em; margin-bottom: 15px; border-bottom: 1px solid #EEE; padding-bottom: 10px; font-family: 'Noto Serif TC', serif; letter-spacing: 1px;}
+        .bc-name-chinese { font-size: 2.8em; font-weight: bold; color: var(--text-main); margin-bottom: 10px; font-family: 'Noto Serif TC', serif; letter-spacing: 3px;}
         .bc-meaning-tag { display: inline-block; background: var(--ntnu-red); color: white; padding: 4px 10px; border-radius: 6px; font-size: 0.85em; font-weight: bold; }
-        .seal-container { position: absolute; bottom: 20px; right: 20px; width: 85px; height: 85px; z-index: 10; }
+        .seal-container { position: absolute; bottom: 20px; right: 25px; width: 80px; height: 80px; z-index: 10; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes popIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
     </style>
 </head>
 <body>
@@ -48,180 +64,383 @@
     <div id="scene-area"><div class="campus-bg">NTNU</div><div id="avatar-container">
         <svg viewBox="0 0 100 100" style="width:100%;height:100%;"><path d="M20 100 C20 70, 80 70, 80 100" fill="#8A1538" /><path d="M25 40 C15 60, 20 90, 25 100 L75 100 C80 90, 85 60, 75 40 Z" fill="#2C3E50" /><circle cx="50" cy="45" r="20" fill="#FFE0BD" /><circle cx="42" cy="45" r="2" fill="#333" /><circle cx="58" cy="45" r="2" fill="#333" /><path d="M46 52 Q50 57 54 52" stroke="#333" stroke-width="2" fill="none" /><circle cx="37" cy="49" r="3" fill="#FFB6C1" /><circle cx="63" cy="49" r="3" fill="#FFB6C1" /><path d="M70 35 C75 30, 80 35, 75 40 C80 45, 75 50, 70 45 C65 50, 60 45, 65 40 C60 35, 65 30, 70 35 Z" fill="#F1C40F" /></svg>
     </div></div>
+    
     <div id="interaction-area">
-        <div class="dialogue-box" id="main-msg">歡迎來到師大華語學園！</div>
+        <div class="dialogue-box" id="msg-box">歡迎來到師大華語學園！</div>
         
-        <div id="step-0" class="step-section active"><h2>華語文新生報到</h2><button onclick="startGame()">開始報到 Start</button></div>
-        <div id="step-1" class="step-section"><label>本國名字 Your Name：</label><input type="text" id="fn-input" placeholder="e.g. Emily"><button onclick="toS2()">下一步 Next</button></div>
-        <div id="step-2" class="step-section"><button class="btn-secondary" onclick="window.open('https://translate.google.com/?sl=auto&tl=zh-TW','_blank')">🔍 Google 翻譯聽發音</button><p>貼上翻譯後的中文名字：</p><input type="text" id="gn-input" placeholder="e.g. 艾蜜莉"><button onclick="toS3()">下一步 Next</button></div>
-        <div id="step-3" class="step-section"><div id="choice-area"></div><button onclick="toS4()">確認名字 Confirm</button></div>
-        <div id="step-4" class="step-section"><div style="text-align:left"><p>你好，我叫 <span id="slot-f" class="drop-slot" onclick="selSlot('f')">[填空]</span>。</p><p>我的中文名字是 <span id="slot-c" class="drop-slot" onclick="selSlot('c')">[填空]</span>。</p><p>意思是 <span id="slot-m" class="drop-slot" onclick="selSlot('m')">[填空]</span>。</p></div><div id="card-pool"></div></div>
-        <div id="step-5" class="step-section"><div class="chat-container" id="chat-history"></div><div id="chat-opts-area"></div></div>
+        <div id="step-0" class="step-section active">
+            <h2 style="text-align:center; color:var(--ntnu-red);">華語文新生報到</h2>
+            <button onclick="Core.startGame()">開始報到 Start</button>
+        </div>
+        
+        <div id="step-1" class="step-section">
+            <label style="font-weight:bold; color:#555;">本國名字 (Your Name)：</label>
+            <input type="text" id="fn-in" placeholder="e.g. Emily, Kuya">
+            <button onclick="Core.toS2()">下一步 Next</button>
+        </div>
+        
+        <div id="step-2" class="step-section">
+            <button class="btn-secondary" onclick="window.open('https://translate.google.com/?sl=auto&tl=zh-TW','_blank')">🔍 Google 翻譯聽發音</button>
+            <p style="font-weight:bold; color:#555; margin-top:20px;">貼上查到的中文名字：</p>
+            <input type="text" id="gn-in" placeholder="e.g. 艾蜜莉, 高橋空矢">
+            <button onclick="Core.toS3()">下一步 Next</button>
+        </div>
+        
+        <div id="step-3" class="step-section">
+            <div id="choice-area"></div>
+            <button onclick="Core.toS4()">確認名字 Confirm</button>
+        </div>
+        
+        <div id="step-4" class="step-section">
+            <div style="text-align:left; font-size:1.1em; line-height:2;">
+                <p>你好，我叫 <span id="slot-f" class="drop-slot" onclick="Core.selSlot('f')">[填空]</span>。</p>
+                <p>我的中文名字是 <span id="slot-c" class="drop-slot" onclick="Core.selSlot('c')">[填空]</span>。</p>
+                <p>意思是 <span id="slot-m" class="drop-slot" onclick="Core.selSlot('m')">[填空]</span>。</p>
+            </div>
+            <div id="card-pool" style="margin-top:20px; text-align:center;"></div>
+        </div>
+        
+        <div id="step-5" class="step-section">
+            <div class="chat-container" id="chat-history"></div>
+            <div id="chat-opts-area"></div>
+        </div>
         
         <div id="step-6" class="step-section">
             <div id="card-wrap" class="business-card">
-                <div class="card-decoration-layer" id="bc-decorations"></div>
-                <div class="card-content-layer">
+                <div class="card-decor" id="bc-decor"></div>
+                <div class="card-content">
                     <div class="bc-header">National Taiwan Normal University<br>國立台灣師範大學</div>
-                    <div id="bc-f" style="font-size:1.2em;color:#555;margin-bottom:5px;"></div>
+                    <div id="bc-f" style="font-size:1.2em; color:#666; margin-bottom:5px; font-weight:bold;"></div>
                     <div id="bc-c" class="bc-name-chinese"></div>
                     <div id="bc-m" class="bc-meaning-tag"></div>
                 </div>
-                <div class="seal-container"><canvas id="seal-canvas" width="320" height="320" style="width:85px;height:85px;"></canvas></div>
+                <div class="seal-container"><canvas id="seal-canvas" width="320" height="320" style="width:100%;height:100%;"></canvas></div>
             </div>
-            <button style="background:#27AE60" onclick="download()">📥 下載名片 Download</button>
-            <button class="btn-secondary" onclick="replaySpeech()">🔊 聽老師唸名片</button>
+            <button style="background:#27AE60" onclick="Core.downloadCard()">📥 下載名片 Download</button>
+            <button class="btn-secondary" onclick="Core.replayEnd()">🔊 再聽一次名片</button>
         </div>
     </div>
 </div>
 
 <script>
-    const pMap={'艾':[{c:'愛',m:'Love'},{c:'安',m:'Peace'}],'蜜':[{c:'米',m:'Rice'},{c:'明',m:'Bright'}],'莉':[{c:'麗',m:'Beautiful'},{c:'立',m:'Stand'}],'大':[{c:'達',m:'Reach'},{c:'德',m:'Virtue'}],'衛':[{c:'偉',m:'Great'},{c:'威',m:'Power'}],'瑪':[{c:'馬',m:'Energetic'},{c:'美',m:'Fine'}],'麗':[{c:'理',m:'Reason'},{c:'莉',m:'Jasmine'}],'傑':[{c:'捷',m:'Victory'},{c:'界',m:'World'}]};
-    const oDict={'艾':{m:'Mugwort'},'蜜':{m:'Honey'},'莉':{m:'Jasmine'},'大':{m:'Big'},'衛':{m:'Guard'},'瑪':{m:'Agate'},'麗':{m:'Elegant'},'傑':{m:'Hero'}};
-    let data={f:"",g:"",c:"",m:""}, curSl="", okC=0, chatStage=0;
-    let sentences=[], availableOpts=[];
-    let currentUtterance=null, fallbackTimer=null;
+/**
+ * 📚 核心資料庫 (Dictionary)
+ */
+const Dictionary = {
+    // 預設常見字
+    hardcoded: {
+        '艾': { m: 'Mugwort', ops: [{c:'愛',m:'Love'},{c:'安',m:'Peace'}] },
+        '蜜': { m: 'Honey', ops: [{c:'米',m:'Rice'},{c:'明',m:'Bright'}] },
+        '莉': { m: 'Jasmine', ops: [{c:'麗',m:'Beautiful'},{c:'立',m:'Stand'}] },
+        '大': { m: 'Big', ops: [{c:'達',m:'Reach'},{c:'德',m:'Virtue'}] },
+        '衛': { m: 'Guard', ops: [{c:'偉',m:'Great'},{c:'威',m:'Power'}] },
+        '瑪': { m: 'Agate', ops: [{c:'馬',m:'Energetic'},{c:'美',m:'Fine'}] },
+        '麗': { m: 'Elegant', ops: [{c:'理',m:'Reason'},{c:'莉',m:'Jasmine'}] },
+        '傑': { m: 'Hero', ops: [{c:'捷',m:'Victory'},{c:'界',m:'World'}] },
+        // 特別為高橋空矢同學準備的字庫！
+        '高': { m: 'High', ops: [{c:'顥',m:'Vast'},{c:'浩',m:'Grand'}] },
+        '橋': { m: 'Bridge', ops: [{c:'喬',m:'Tall'},{c:'巧',m:'Skillful'}] },
+        '空': { m: 'Sky', ops: [{c:'孔',m:'Great'},{c:'康',m:'Health'}] },
+        '矢': { m: 'Arrow', ops: [{c:'石',m:'Solid'},{c:'世',m:'World'}] }
+    },
+    // 動態備用字與意涵 (解決全都是 Sound 的問題)
+    fallbackMeanings: ['Joy', 'Hope', 'Shine', 'Glory', 'Star', 'Wind', 'River', 'Forest', 'Brave', 'Smart', 'Pure', 'Grace'],
+    fallbackChars: [
+        {c:'佳', m:'Excellent'}, {c:'恩', m:'Grace'}, {c:'明', m:'Bright'}, 
+        {c:'智', m:'Smart'}, {c:'勇', m:'Brave'}, {c:'真', m:'True'}, 
+        {c:'善', m:'Kind'}, {c:'平', m:'Peace'}, {c:'星', m:'Star'}
+    ],
+    getCharData: function(char, index) {
+        if(this.hardcoded[char]) return { main_m: this.hardcoded[char].m, ops: this.hardcoded[char].ops };
+        
+        // 根據字碼產生隨機但不重複的備用意涵，保證不會全都是一樣的
+        let code = char.charCodeAt(0) + index;
+        let mIdx = code % this.fallbackMeanings.length;
+        let op1Idx = (code + 1) % this.fallbackChars.length;
+        let op2Idx = (code + 2) % this.fallbackChars.length;
+        
+        return { 
+            main_m: this.fallbackMeanings[mIdx], 
+            ops: [ this.fallbackChars[op1Idx], this.fallbackChars[op2Idx] ] 
+        };
+    }
+};
 
-    // ✨ 終極語音引擎：雙重保險（防護網），解決卡死 Bug ✨
-    function speak(t, callback = null){
-        if('speechSynthesis' in window){
+/**
+ * 🎮 遊戲核心邏輯 (Game Controller)
+ */
+const Core = {
+    data: { f: "", g: "", c: "", m: "" },
+    sentences: [],
+    chatStage: 0,
+    availableOpts: [],
+    curSlot: "",
+    matchedCount: 0,
+
+    // 介面切換
+    show: function(stepNum) {
+        document.querySelectorAll('.step-section').forEach(s => s.classList.remove('active'));
+        document.getElementById('step-' + stepNum).classList.add('active');
+    },
+
+    // 語音雙重防護引擎
+    speak: function(text, callback = null) {
+        if('speechSynthesis' in window) {
             window.speechSynthesis.cancel();
-            clearTimeout(fallbackTimer);
             setTimeout(() => {
-                currentUtterance = new SpeechSynthesisUtterance(t.replace(/👩🏻‍🏫 Emily 老師: /g,''));
-                currentUtterance.lang = 'zh-TW'; 
-                currentUtterance.rate = 0.9;
+                let u = new SpeechSynthesisUtterance(text.replace(/👩🏻‍🏫 Emily 老師: /g,''));
+                u.lang = 'zh-TW'; u.rate = 0.9;
                 
-                if(callback){
+                if(callback) {
                     let called = false;
-                    let safeCallback = () => { if(!called){ called=true; callback(); } };
-                    // 第一道保險：依賴瀏覽器回報結束
-                    currentUtterance.onend = safeCallback;
-                    currentUtterance.onerror = safeCallback;
-                    
-                    // 第二道保險：如果瀏覽器當機，依字數強行計算時間並解鎖 (每個字 350 毫秒 + 1000 毫秒緩衝)
-                    let waitTime = (t.length * 350) + 1000;
-                    fallbackTimer = setTimeout(safeCallback, waitTime);
+                    let safeCb = () => { if(!called) { called=true; callback(); } };
+                    u.onend = safeCb;
+                    u.onerror = safeCb;
+                    // 保險計時器：字數 * 300ms + 1秒緩衝
+                    setTimeout(safeCb, (text.length * 300) + 1000); 
                 }
-                window.speechSynthesis.speak(currentUtterance);
+                window.speechSynthesis.speak(u);
             }, 50);
         } else {
-            if(callback) setTimeout(callback, 1500); // 無語音支援時直接等待跳轉
+            if(callback) setTimeout(callback, 1500);
         }
-    }
+    },
 
-    function show(n){ document.querySelectorAll('.step-section').forEach(s=>s.classList.remove('active')); document.getElementById('step-'+n).classList.add('active'); }
-    function startGame(){ show(1); speak("你好！我是 Emily 老師。很高興認識你，請告訴我你的本國名字是什麼？"); }
-    function toS2(){ data.f=document.getElementById('fn-input').value.trim(); if(data.f){ show(2); speak("太好了，請貼上翻譯後的中文名字貼給我吧！"); } }
-    
-    function toS3(){
-        data.g=document.getElementById('gn-input').value.trim(); if(!data.g)return;
-        let area=document.getElementById('choice-area'); area.innerHTML="";
-        for(let i=0;i<data.g.length;i++){
-            let c=data.g[i], ops=pMap[c]||[{c:'佳',m:'Excellent'},{c:'安',m:'Peace'}], orig=oDict[c]||{m:'Sound'};
-            area.innerHTML+=`<div class="char-selection-block">字 ${i+1}：【${c}】
-                <label class="radio-option" onclick="speak('${c}')"><input type="radio" name="char${i}" value="${c}" data-m="${orig.m}" checked> <b>${c}</b> (${orig.m})<div style="font-size:1.2em">🔊</div></label>
-                <label class="radio-option" onclick="speak('${ops[0].c}')"><input type="radio" name="char${i}" value="${ops[0].c}" data-m="${ops[0].m}"> <b>${ops[0].c}</b> (${ops[0].m})<div style="font-size:1.2em">🔊</div></label>
-                <label class="radio-option" onclick="speak('${ops[1].c}')"><input type="radio" name="char${i}" value="${ops[1].c}" data-m="${ops[1].m}"> <b>${ops[1].c}</b> (${ops[1].m})<div style="font-size:1.2em">🔊</div></label></div>`;
+    // S0 -> S1
+    startGame: function() {
+        this.show(1);
+        document.getElementById("msg-box").innerText = "很高興認識你！請問你的本國名字是什麼？";
+        this.speak("你好！我是 Emily 老師。很高興認識你，請告訴我你的本國名字是什麼？");
+    },
+
+    // S1 -> S2
+    toS2: function() {
+        this.data.f = document.getElementById('fn-in').value.trim();
+        if(this.data.f) {
+            this.show(2);
+            document.getElementById("msg-box").innerText = "太好了！請查出並貼上你的中文名字。";
+            this.speak("太好了，請貼上翻譯後的中文名字貼給我吧！");
         }
-        show(3); speak("針對每一個字，聽聽看發音，挑選你最喜歡的組合！");
-    }
+    },
 
-    function toS4(){
-        let n="",m=[];for(let i=0;i<data.g.length;i++){let r=document.querySelector(`input[name="char${i}"]:checked`);n+=r.value;m.push(r.getAttribute('data-m'));}
-        data.c=n; data.m=m.join(", "); 
-        sentences=["你好，我叫 " + data.f, "我的中文名字是 " + data.c, "它的意思是 " + data.m];
-        let pool=document.getElementById('card-pool'); pool.innerHTML="";
-        [{id:'f',t:data.f},{id:'c',t:data.c},{id:'m',t:data.m}].sort(()=>Math.random()-0.5).forEach(o=>{
-            let b=document.createElement('div'); b.className="word-card"; b.innerText=o.t;
-            b.onclick=()=>{if(!curSl)return; speak(o.t); if(o.id===curSl){document.getElementById('slot-'+curSl).innerText=o.t;document.getElementById('slot-'+curSl).classList.add('filled');b.classList.add('used');curSl="";okC++;if(okC===3)setTimeout(startChat,1500);}else{speak("不對喔");}};
-            pool.appendChild(b);
-        });
-        show(4); speak("請點擊空格，再點選字卡進行配對。");
-    }
-
-    function selSlot(t){curSl=t;document.querySelectorAll('.drop-slot').forEach(s=>s.style.background="transparent");document.getElementById('slot-'+t).style.background="#FFF0F0";}
-
-    function startChat(){ 
-        show(5); chatStage=0; availableOpts = [0, 1, 2]; renderNextTurn(); 
-    }
-    
-    function renderNextTurn(){
-        const box = document.getElementById('chat-history'); 
-        const opts = document.getElementById('chat-opts-area'); 
-        opts.innerHTML = "";
+    // S2 -> S3 (動態生成選項)
+    toS3: function() {
+        this.data.g = document.getElementById('gn-in').value.trim();
+        if(!this.data.g) return;
         
-        if(chatStage === 0){
-            box.innerHTML = `<div class="chat-bubble chat-emily">👩🏻‍🏫 Emily: 你好！很高興認識你。</div>`; speak("你好！很高興認識你");
-        } else if(chatStage === 1){
-            box.innerHTML += `<div class="chat-bubble chat-emily">👩🏻‍🏫 Emily: 你的中文名字是什麼？</div>`; speak("你的中文名字是什麼？");
-        } else if(chatStage === 2){
-            box.innerHTML += `<div class="chat-bubble chat-emily">👩🏻‍🏫 Emily: 這名字真好聽！它的意思是什麼？</div>`; speak("這名字真好聽！它的意思是什麼？");
-        } else {
-            box.innerHTML += `<div class="chat-bubble chat-emily">👩🏻‍🏫 Emily: 太棒了！任務大成功！</div>`; 
-            speak("太棒了！你的中文真的非常好喔！任務大成功！", () => {
-                triggerEnd();
-            }); 
-            return;
-        }
+        const area = document.getElementById('choice-area');
+        area.innerHTML = "";
         
-        box.scrollTop = box.scrollHeight; // 讓聊天室自動滾動到底部
+        for(let i=0; i<this.data.g.length; i++) {
+            let char = this.data.g[i];
+            let charData = Dictionary.getCharData(char, i);
+            
+            area.innerHTML += `
+                <div class="char-block">
+                    <div style="color:var(--ntnu-red); font-weight:bold; margin-bottom:8px;">字 ${i+1}：【${char}】</div>
+                    <label class="radio-option" onclick="Core.speak('${char}')">
+                        <input type="radio" name="char${i}" value="${char}" data-m="${charData.main_m}" checked> 
+                        <b>${char}</b> (${charData.main_m}) <div style="font-size:1.2em">🔊</div>
+                    </label>
+                    <label class="radio-option" onclick="Core.speak('${charData.ops[0].c}')">
+                        <input type="radio" name="char${i}" value="${charData.ops[0].c}" data-m="${charData.ops[0].m}"> 
+                        <b>${charData.ops[0].c}</b> (${charData.ops[0].m}) <div style="font-size:1.2em">🔊</div>
+                    </label>
+                    <label class="radio-option" onclick="Core.speak('${charData.ops[1].c}')">
+                        <input type="radio" name="char${i}" value="${charData.ops[1].c}" data-m="${charData.ops[1].m}"> 
+                        <b>${charData.ops[1].c}</b> (${charData.ops[1].m}) <div style="font-size:1.2em">🔊</div>
+                    </label>
+                </div>`;
+        }
+        this.show(3);
+        document.getElementById("msg-box").innerText = "聽聽看發音，挑選最喜歡的組合！";
+        this.speak("針對每一個字，聽聽看發音，挑選你最喜歡的組合！");
+    },
 
-        let shuffled = [...availableOpts].sort(()=>Math.random()-0.5);
-        shuffled.forEach(idx => {
-            let btn = document.createElement('button'); btn.className="chat-btn";
-            btn.innerHTML = `<span>${sentences[idx]}</span> 🔊`;
+    // S3 -> S4 (配對)
+    toS4: function() {
+        let nameStr = "", meaningArr = [];
+        for(let i=0; i<this.data.g.length; i++){
+            let r = document.querySelector(`input[name="char${i}"]:checked`);
+            nameStr += r.value;
+            meaningArr.push(r.getAttribute('data-m'));
+        }
+        this.data.c = nameStr;
+        this.data.m = meaningArr.join(", ");
+        
+        this.sentences = [
+            "你好，我叫 " + this.data.f, 
+            "我的中文名字是 " + this.data.c, 
+            "它的意思是 " + this.data.m
+        ];
+        
+        const pool = document.getElementById('card-pool');
+        pool.innerHTML = "";
+        
+        let cards = [ {id:'f', t:this.data.f}, {id:'c', t:this.data.c}, {id:'m', t:this.data.m} ];
+        cards.sort(() => Math.random() - 0.5).forEach(obj => {
+            let btn = document.createElement('div');
+            btn.className = "word-card"; btn.innerText = obj.t;
             btn.onclick = () => {
-                document.querySelectorAll('.chat-btn').forEach(b => b.disabled = true); // 鎖定防連點
-                
-                if(idx === chatStage){
-                    box.innerHTML += `<div class="chat-bubble chat-student">${sentences[idx]}</div>`;
-                    box.scrollTop = box.scrollHeight;
-                    availableOpts = availableOpts.filter(opt => opt !== idx); 
-                    chatStage++; 
-                    speak(sentences[idx], () => { renderNextTurn(); }); // 唸完才進行下一題
+                if(!this.curSlot) return;
+                this.speak(obj.t);
+                if(obj.id === this.curSlot) {
+                    document.getElementById('slot-'+this.curSlot).innerText = obj.t;
+                    document.getElementById('slot-'+this.curSlot).classList.add('filled');
+                    btn.classList.add('used');
+                    this.curSlot = ""; this.matchedCount++;
+                    if(this.matchedCount === 3) setTimeout(() => this.startChat(), 1500);
                 } else {
-                    btn.style.borderColor="red"; setTimeout(()=>btn.style.borderColor="#DDD", 500);
-                    speak(sentences[idx], () => { document.querySelectorAll('.chat-btn').forEach(b => b.disabled = false); }); // 解鎖按鈕
+                    this.speak("不對喔，再試一次");
                 }
             };
-            opts.appendChild(btn);
+            pool.appendChild(btn);
+        });
+        
+        this.show(4);
+        document.getElementById("msg-box").innerText = "請點擊空格，再點選字卡進行配對。";
+        this.speak("請點擊空格，再點選下方的字卡進行配對。");
+    },
+
+    selSlot: function(type) {
+        this.curSlot = type;
+        document.querySelectorAll('.drop-slot').forEach(s => s.style.background = "transparent");
+        document.getElementById('slot-'+type).style.background = "#FFF0F0";
+    },
+
+    // S4 -> S5 (聊天室 3->2->1)
+    startChat: function() {
+        this.show(5);
+        document.getElementById("msg-box").innerText = "最後一關：跟老師對話！";
+        this.chatStage = 0;
+        this.availableOpts = [0, 1, 2];
+        this.renderChatTurn();
+    },
+
+    renderChatTurn: function() {
+        const box = document.getElementById('chat-history');
+        const optsArea = document.getElementById('chat-opts-area');
+        optsArea.innerHTML = "";
+        
+        let teacherText = "";
+        if(this.chatStage === 0) teacherText = "你好！很高興認識你。";
+        else if(this.chatStage === 1) teacherText = "你的中文名字是什麼？";
+        else if(this.chatStage === 2) teacherText = "這名字真好聽！它的意思是什麼？";
+        
+        if(this.chatStage < 3) {
+            box.innerHTML += `<div class="chat-bubble chat-emily">👩🏻‍🏫 Emily: ${teacherText}</div>`;
+            box.scrollTop = box.scrollHeight;
+            this.speak(teacherText);
+            
+            // 繪製選項按鈕
+            let shuffled = [...this.availableOpts].sort(() => Math.random() - 0.5);
+            shuffled.forEach(idx => {
+                let btn = document.createElement('button');
+                btn.className = "chat-btn";
+                btn.innerHTML = `<span>${this.sentences[idx]}</span> 🔊`;
+                btn.onclick = () => {
+                    document.querySelectorAll('.chat-btn').forEach(b => b.disabled = true);
+                    
+                    if(idx === this.chatStage) { // 答對
+                        box.innerHTML += `<div class="chat-bubble chat-student">${this.sentences[idx]}</div>`;
+                        box.scrollTop = box.scrollHeight;
+                        this.availableOpts = this.availableOpts.filter(o => o !== idx);
+                        this.chatStage++;
+                        this.speak(this.sentences[idx], () => this.renderChatTurn());
+                    } else { // 答錯
+                        btn.style.borderColor = "red";
+                        setTimeout(() => btn.style.borderColor = "#DDD", 500);
+                        this.speak(this.sentences[idx], () => {
+                            document.querySelectorAll('.chat-btn').forEach(b => b.disabled = false);
+                        });
+                    }
+                };
+                optsArea.appendChild(btn);
+            });
+        } else {
+            // 結束
+            box.innerHTML += `<div class="chat-bubble chat-emily">👩🏻‍🏫 Emily: 太棒了！任務大成功！</div>`;
+            box.scrollTop = box.scrollHeight;
+            this.speak("太棒了！你的中文真的非常好喔！任務大成功！", () => this.triggerEnd());
+        }
+    },
+
+    // S5 -> S6 (煙火與名片)
+    triggerEnd: function() {
+        new Audio('https://actions.google.com/sounds/v1/weapons/fireworks_with_whistle.ogg').play().catch(e=>{});
+        this.show(6);
+        document.getElementById("msg-box").innerText = "報到完成！這是你的專屬名片。";
+        
+        document.getElementById('bc-f').innerText = this.data.f;
+        document.getElementById('bc-c').innerText = this.data.c;
+        document.getElementById('bc-m').innerText = this.data.m;
+        
+        this.drawSeal();
+        this.startFW();
+        this.genDecor();
+        
+        setTimeout(() => this.replayEnd(), 500);
+    },
+
+    genDecor: function() {
+        let layer = document.getElementById('bc-decor');
+        let mStr = this.data.m.toLowerCase();
+        let svg = `<svg style="position:absolute;top:-20px;right:-30px;width:220px;height:220px;" viewBox="0 0 100 100" fill="#8A1538" opacity="0.1"><path d="M80,30 c0,-10 -10,-15 -20,-10 c0,-15 -25,-15 -30,-5 c-10,-5 -20,0 -15,15 Z"/></svg>`; // 預設雲朵
+        if(mStr.includes('love')) svg = `<svg style="position:absolute;bottom:0;left:10px;width:150px;height:150px;" viewBox="0 0 100 100" fill="#8A1538" opacity="0.15"><path d="M50,90 c-20,-20 -45,-35 -45,-60 c0,-20 15,-30 30,-30 c10,0 15,5 15,10 c0,-5 5,-10 15,-10 c15,0 30,10 30,30 c0,25 -25,40 -45,60 Z"/></svg>`;
+        if(mStr.includes('jasmine') || mStr.includes('beautiful')) svg = `<svg style="position:absolute;top:50px;right:0;width:150px;height:150px;" viewBox="0 0 100 100" fill="#8A1538" opacity="0.15"><path d="M50,50 c10,-20 30,-20 40,0 c10,20 -10,30 -40,10 M50,50 c20,-10 20,-30 0,-40 c-20,-10 -30,10 -10,40 Z"/></svg>`;
+        layer.innerHTML = svg;
+    },
+
+    startFW: function() {
+        let c = document.createElement('canvas');
+        c.style.cssText = "position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:99999";
+        document.body.appendChild(c);
+        let ctx = c.getContext('2d');
+        c.width = window.innerWidth; c.height = window.innerHeight;
+        let p = [];
+        for(let i=0;i<50;i++) p.push({x:c.width/2, y:c.height/2, vx:(Math.random()-0.5)*18, vy:(Math.random()-0.5)*18, l:1.0, d:0.02, c:`hsl(${Math.random()*360},100%,60%)`});
+        function anim() {
+            ctx.clearRect(0,0,c.width,c.height); let active = false;
+            p.forEach(i => {
+                if(i.l > 0){ i.x+=i.vx; i.y+=i.vy; i.vy+=0.15; i.l-=i.d; ctx.fillStyle=i.c; ctx.globalAlpha=i.l; ctx.beginPath(); ctx.arc(i.x,i.y,4,0,Math.PI*2); ctx.fill(); active=true; }
+            });
+            if(active) requestAnimationFrame(anim); else c.remove();
+        } anim();
+    },
+
+    drawSeal: function() {
+        let c = document.getElementById("seal-canvas"), ctx = c.getContext("2d"), n = this.data.c;
+        c.width = 320; c.height = 320;
+        ctx.strokeStyle = "#C1121F"; ctx.lineWidth = 14; ctx.strokeRect(20,20,280,280); 
+        ctx.lineWidth = 4; ctx.strokeRect(36,36,248,248);
+        ctx.fillStyle = "#C1121F"; ctx.textAlign = "center"; ctx.textBaseline = "middle"; 
+        let f = '"Long Cang", cursive';
+        
+        // 支援 2-4 個字的印章排版 (解決高橋空矢的問題)
+        if(n.length === 2) {
+            ctx.font = `bold 140px ${f}`; ctx.fillText(n[0], 215, 160); ctx.fillText(n[1], 105, 160);
+        } else if(n.length === 3) {
+            ctx.font = `bold 150px ${f}`; ctx.fillText(n[0], 215, 160); 
+            ctx.font = `bold 110px ${f}`; ctx.fillText(n[1], 105, 95); ctx.fillText(n[2], 105, 225);
+        } else if(n.length >= 4) {
+            ctx.font = `bold 110px ${f}`; 
+            ctx.fillText(n[0], 215, 95); ctx.fillText(n[1], 215, 225); // 右行
+            ctx.fillText(n[2], 105, 95); ctx.fillText(n[3], 105, 225); // 左行
+        } else {
+            ctx.font = `bold 180px ${f}`; ctx.fillText(n[0] || "印", 160, 160);
+        }
+    },
+
+    replayEnd: function() {
+        this.speak(`你好，我叫${this.data.f}。我的中文名字是${this.data.c}。它的意思是${this.data.m}。`);
+    },
+
+    downloadCard: function() {
+        html2canvas(document.getElementById('card-wrap')).then(c => {
+            let a = document.createElement('a'); a.download = 'MyNTNUCard.png'; a.href = c.toDataURL(); a.click();
         });
     }
-
-    function triggerEnd(){
-        new Audio('https://actions.google.com/sounds/v1/weapons/fireworks_with_whistle.ogg').play().catch(e=>{});
-        show(6); document.getElementById('bc-f').innerText=data.f; document.getElementById('bc-c').innerText=data.c; document.getElementById('bc-m').innerText=data.m;
-        drawSeal(); startFW(); generateDecor(); 
-        setTimeout(()=>speak(`這是你的中文名字，你好，我叫${data.f}。我的中文名字是${data.c}。它的意思是${data.m}。`), 600);
-    }
-
-    function generateDecor(){
-        let l=document.getElementById('bc-decorations'), m=data.m.toLowerCase();
-        let loveSvg=`<svg style="position:absolute;bottom:0;left:10px;width:150px;height:150px;" viewBox="0 0 100 100" fill="#8A1538" opacity="0.2"><path d="M50,90 c-20,-20 -45,-35 -45,-60 c0,-20 15,-30 30,-30 c10,0 15,5 15,10 c0,-5 5,-10 15,-10 c15,0 30,10 30,30 c0,25 -25,40 -45,60 Z"/></svg>`;
-        let jasmineSvg=`<svg style="position:absolute;top:50px;right:0;width:150px;height:150px;" viewBox="0 0 100 100" fill="#8A1538" opacity="0.2"><path d="M50,50 c10,-20 30,-20 40,0 c10,20 -10,30 -40,10 M50,50 c20,-10 20,-30 0,-40 c-20,-10 -30,10 -10,40 Z"/></svg>`;
-        let cloudSvg=`<svg style="position:absolute;top:-20px;right:-30px;width:220px;height:220px;" viewBox="0 0 100 100" fill="#8A1538" opacity="0.1"><path d="M80,30 c0,-10 -10,-15 -20,-10 c0,-15 -25,-15 -30,-5 c-10,-5 -20,0 -15,15 Z"/></svg>`;
-        l.innerHTML = m.includes('love') ? loveSvg : (m.includes('jasmine') ? jasmineSvg : cloudSvg);
-    }
-
-    function startFW(){
-        let c=document.createElement('canvas'); c.style.cssText="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:99999"; document.body.appendChild(c);
-        let ctx=c.getContext('2d'); c.width=window.innerWidth; c.height=window.innerHeight;
-        let p=[]; function cr(x,y){for(let i=0;i<40;i++)p.push({x:x,y:y,vx:(Math.random()-0.5)*15,vy:(Math.random()-0.5)*15,l:1.0,d:0.02,c:`hsl(${Math.random()*360},100%,50%)`});}
-        cr(c.width/2,c.height/2); function am(){ctx.clearRect(0,0,c.width,c.height);let al=false;p.forEach(i=>{if(i.l>0){i.x+=i.vx;i.y+=i.vy;i.vy+=0.1;i.l-=i.d;ctx.fillStyle=i.c;ctx.globalAlpha=i.l;ctx.beginPath();ctx.arc(i.x,i.y,4,0,Math.PI*2);ctx.fill();al=true;}});if(al)requestAnimationFrame(am);else c.remove();} am();
-    }
-
-    function drawSeal(){
-        let c=document.getElementById("seal-canvas"),ctx=c.getContext("2d"),n=data.c;
-        c.width=320;c.height=320;ctx.strokeStyle="#C1121F";ctx.lineWidth=14;ctx.strokeRect(20,20,280,280);ctx.lineWidth=4;ctx.strokeRect(36,36,248,248);
-        ctx.fillStyle="#C1121F";ctx.textAlign="center";ctx.textBaseline="middle";let f='"Long Cang", cursive';
-        if(n.length===2){ctx.font=`bold 140px ${f}`;ctx.fillText(n[0],215,160);ctx.fillText(n[1],105,160);}
-        else if(n.length===3){ctx.font=`bold 150px ${f}`;ctx.fillText(n[0],215,160);ctx.font=`bold 110px ${f}`;ctx.fillText(n[1],105,95);ctx.fillText(n[2],105,225);}
-        else{ctx.font=`bold 180px ${f}`;ctx.fillText(n[0]||"",160,160);}
-    }
-
-    function replaySpeech(){ speak(`你好，我叫${data.f}。我的中文名字是${data.c}。它的意思是${data.m}。`); }
-    function download(){ html2canvas(document.getElementById('card-wrap')).then(c=>{let a=document.createElement('a');a.download='MyCard.png';a.href=c.toDataURL();a.click();});}
+};
 </script>
 </body>
 </html>
