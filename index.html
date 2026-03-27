@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>師大華語學園 - 新生報到</title>
     <link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Noto+Sans+TC:wght@400;700&family=Noto+Serif+TC:wght@700&display=swap" rel="stylesheet">
-    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
     <style>
         :root { --ntnu-red: #8A1538; --bg-color: #FDFBF7; --text-main: #333333; --accent: #D4A373; --chat-emily: #E8F0FE; --chat-student: #FCE8E6; }
         body { margin: 0; font-family: 'Noto Sans TC', sans-serif; background: var(--bg-color); display: flex; justify-content: center; align-items: center; min-height: 100vh; color: var(--text-main); overflow-x: hidden; }
@@ -34,120 +36,4 @@
         .radio-option { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; cursor: pointer; padding: 10px; border: 1px solid #EEE; border-radius: 8px; background: #FAFAFA; transition: 0.2s;}
         .radio-option:hover { border-color: var(--ntnu-red); background: #FFF8F8; }
         
-        .drop-slot { display: inline-block; min-width: 90px; border-bottom: 2px dashed #999; text-align: center; color: var(--ntnu-red); font-weight: bold; cursor: pointer; margin: 0 5px; padding-bottom: 2px;}
-        .drop-slot.filled { border-bottom: 2px solid #4CAF50; color: #4CAF50; }
-        .word-card { display: inline-block; background: #FFF; border: 2px solid var(--accent); padding: 10px 15px; border-radius: 10px; cursor: pointer; font-weight: bold; margin: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: 0.2s;}
-        .word-card:hover:not(.used) { transform: scale(1.05); }
-        .word-card.used { opacity: 0.3; pointer-events: none; border-color: #CCC; }
-        
-        .chat-container { background: #F8F9FA; border: 1px solid #E0E0E0; border-radius: 12px; padding: 15px; height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; text-align: left; scroll-behavior: smooth;}
-        .chat-bubble { max-width: 80%; padding: 10px 15px; border-radius: 15px; clear: both; font-size: 0.95em; line-height: 1.4; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);}
-        .chat-emily { background: var(--chat-emily); align-self: flex-start; color: #1A73E8; font-weight: bold; }
-        .chat-student { background: var(--chat-student); align-self: flex-end; color: var(--ntnu-red); font-weight: bold; }
-        .chat-btn { background: #FFF; border: 2px solid #DDD; color: #555; text-align: left; padding: 12px 15px; border-radius: 10px; margin-bottom: 8px; width: 100%; cursor: pointer; transition: 0.2s; box-shadow: none;}
-        .chat-btn:hover:not(:disabled) { border-color: var(--ntnu-red); background: #FFF8F8; transform: translateX(5px); }
-        
-        .business-card { width: 100%; max-width: 450px; background: #FFF; border: 1px solid #E0E0E0; box-shadow: 0 8px 25px rgba(0,0,0,0.1); padding: 30px; box-sizing: border-box; position: relative; overflow: hidden; border-left: 12px solid var(--ntnu-red); min-height: 250px; text-align: left; border-radius: 8px;}
-        .card-decor { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; opacity: 0.15; pointer-events: none; }
-        .card-content { position: relative; z-index: 5; }
-        .bc-header { color: #666; font-size: 0.8em; margin-bottom: 15px; border-bottom: 1px solid #EEE; padding-bottom: 10px; font-family: 'Noto Serif TC', serif; letter-spacing: 1px;}
-        .bc-name-chinese { font-size: 2.8em; font-weight: bold; color: var(--text-main); margin-bottom: 10px; font-family: 'Noto Serif TC', serif; letter-spacing: 3px;}
-        .bc-meaning-tag { display: inline-block; background: var(--ntnu-red); color: white; padding: 4px 10px; border-radius: 6px; font-size: 0.85em; font-weight: bold; }
-        .seal-container { position: absolute; bottom: 20px; right: 25px; width: 80px; height: 80px; z-index: 10; }
-        
-        /* 專屬彩帶飄落動畫 */
-        .confetti { position: fixed; width: 10px; height: 10px; background-color: #f00; z-index: 9999; top: -10px; pointer-events: none; }
-        @keyframes fall {
-            0% { transform: translateY(0px) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
-        }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes popIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
-    </style>
-</head>
-<body>
-<div id="game-container">
-    <div id="scene-area"><div class="campus-bg">NTNU</div><div id="avatar-container">
-        <svg viewBox="0 0 100 100" style="width:100%;height:100%;"><path d="M20 100 C20 70, 80 70, 80 100" fill="#8A1538" /><path d="M25 40 C15 60, 20 90, 25 100 L75 100 C80 90, 85 60, 75 40 Z" fill="#2C3E50" /><circle cx="50" cy="45" r="20" fill="#FFE0BD" /><circle cx="42" cy="45" r="2" fill="#333" /><circle cx="58" cy="45" r="2" fill="#333" /><path d="M46 52 Q50 57 54 52" stroke="#333" stroke-width="2" fill="none" /><circle cx="37" cy="49" r="3" fill="#FFB6C1" /><circle cx="63" cy="49" r="3" fill="#FFB6C1" /><path d="M70 35 C75 30, 80 35, 75 40 C80 45, 75 50, 70 45 C65 50, 60 45, 65 40 C60 35, 65 30, 70 35 Z" fill="#F1C40F" /></svg>
-    </div></div>
-    
-    <div id="interaction-area">
-        <div class="dialogue-box" id="msg-box">歡迎來到師大華語學園！</div>
-        
-        <div id="step-0" class="step-section active">
-            <h2 style="text-align:center; color:var(--ntnu-red);">華語文新生報到</h2>
-            <button onclick="Core.startGame()">開始報到 Start</button>
-        </div>
-        
-        <div id="step-1" class="step-section">
-            <label style="font-weight:bold; color:#555;">本國名字 (Your Name)：</label>
-            <input type="text" id="fn-in" placeholder="e.g. Emily">
-            <button onclick="Core.toS2()">下一步 Next</button>
-        </div>
-        
-        <div id="step-2" class="step-section">
-            <button class="btn-secondary" onclick="window.open('https://translate.google.com/?sl=auto&tl=zh-TW','_blank')">🔍 Google 翻譯聽發音</button>
-            <p style="font-weight:bold; color:#555; margin-top:20px;">貼上查到的中文名字：</p>
-            <input type="text" id="gn-in" placeholder="e.g. 艾蜜莉">
-            <button onclick="Core.toS3()">下一步 Next</button>
-        </div>
-        
-        <div id="step-3" class="step-section">
-            <div id="choice-area"></div>
-            <button onclick="Core.toS4()">確認名字 Confirm</button>
-        </div>
-        
-        <div id="step-4" class="step-section">
-            <div style="text-align:left; font-size:1.1em; line-height:2;">
-                <p>你好，我叫 <span id="slot-f" class="drop-slot" onclick="Core.selSlot('f')">[填空]</span>。</p>
-                <p>我的中文名字是 <span id="slot-c" class="drop-slot" onclick="Core.selSlot('c')">[填空]</span>。</p>
-                <p>意思是 <span id="slot-m" class="drop-slot" onclick="Core.selSlot('m')">[填空]</span>。</p>
-            </div>
-            <div id="card-pool" style="margin-top:20px; text-align:center;"></div>
-        </div>
-        
-        <div id="step-5" class="step-section">
-            <div class="chat-container" id="chat-history"></div>
-            <div id="chat-opts-area"></div>
-        </div>
-        
-        <div id="step-6" class="step-section">
-            <div id="card-wrap" class="business-card">
-                <div class="card-decor" id="bc-decor"></div>
-                <div class="card-content">
-                    <div class="bc-header">National Taiwan Normal University<br>國立台灣師範大學</div>
-                    <div id="bc-f" style="font-size:1.2em; color:#666; margin-bottom:5px; font-weight:bold;"></div>
-                    <div id="bc-c" class="bc-name-chinese"></div>
-                    <div id="bc-m" class="bc-meaning-tag"></div>
-                </div>
-                <div class="seal-container"><canvas id="seal-canvas" width="320" height="320" style="width:100%;height:100%;"></canvas></div>
-            </div>
-            <button style="background:#27AE60" onclick="Core.downloadCard()">📥 下載名片 Download</button>
-            <button class="btn-secondary" onclick="Core.replayEnd()">🔊 再聽一次名片</button>
-        </div>
-    </div>
-</div>
-
-<script>
-/**
- * 📚 全新手工打造豪華字典 (保證絕不出現 Name Character)
- */
-const Dict = {
-    // 艾蜜莉 / 愛美麗 相關
-    '艾': { m: 'Mugwort', ops: [{c:'愛',m:'Love'},{c:'安',m:'Peace'}] },
-    '蜜': { m: 'Honey', ops: [{c:'米',m:'Rice'},{c:'明',m:'Bright'}] },
-    '莉': { m: 'Jasmine', ops: [{c:'麗',m:'Beautiful'},{c:'立',m:'Stand'}] },
-    '愛': { m: 'Love', ops: [{c:'艾',m:'Mugwort'},{c:'安',m:'Peace'}] },
-    '美': { m: 'Beautiful', ops: [{c:'梅',m:'Plum'},{c:'妹',m:'Sister'}] },
-    '麗': { m: 'Elegant', ops: [{c:'理',m:'Reason'},{c:'莉',m:'Jasmine'}] },
-    '安': { m: 'Peace', ops: [{c:'諳',m:'Familiar'},{c:'岸',m:'Shore'}] },
-    '米': { m: 'Rice', ops: [{c:'蜜',m:'Honey'},{c:'秘',m:'Secret'}] },
-    '明': { m: 'Bright', ops: [{c:'名',m:'Name'},{c:'鳴',m:'Sing'}] },
-    '立': { m: 'Stand', ops: [{c:'力',m:'Power'},{c:'利',m:'Benefit'}] },
-    
-    // 大衛 / 瑪麗 / 傑
-    '大': { m: 'Big', ops: [{c:'達',m:'Reach'},{c:'德',m:'Virtue'}] },
-    '衛': { m: 'Guard', ops: [{c:'偉',m:'Great'},{c:'威',m:'Power'}] },
-    '瑪': { m: 'Agate', ops: [{c:'馬',m:'Horse'},{c:'美',m:'Beautiful'}] },
-    '傑': { m: 'Hero', ops:
+        .drop-slot { display: inline-block; min-width: 90px; border-bottom: 2px dashed #999; text-align: center; color: var(--ntnu-red
