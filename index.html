@@ -75,14 +75,14 @@
         
         <div id="step-1" class="step-section">
             <label style="font-weight:bold; color:#555;">本國名字 (Your Name)：</label>
-            <input type="text" id="fn-in" placeholder="e.g. Emily">
+            <input type="text" id="fn-in" placeholder="e.g. Emily, Kuya">
             <button onclick="Core.toS2()">下一步 Next</button>
         </div>
         
         <div id="step-2" class="step-section">
             <button class="btn-secondary" onclick="window.open('https://translate.google.com/?sl=auto&tl=zh-TW','_blank')">🔍 Google 翻譯聽發音</button>
             <p style="font-weight:bold; color:#555; margin-top:20px;">貼上查到的中文名字：</p>
-            <input type="text" id="gn-in" placeholder="e.g. 艾蜜莉">
+            <input type="text" id="gn-in" placeholder="e.g. 愛美麗, 愛蜜莉">
             <button onclick="Core.toS3()">下一步 Next</button>
         </div>
         
@@ -124,38 +124,20 @@
 
 <script>
 /**
- * 📚 全新手工打造豪華字典 (保證絕不出現 Name Character)
+ * 📚 字典庫初始化
  */
 const Dict = {
-    // 艾蜜莉 / 愛美麗 相關
     '艾': { m: 'Mugwort', ops: [{c:'愛',m:'Love'},{c:'安',m:'Peace'}] },
     '蜜': { m: 'Honey', ops: [{c:'米',m:'Rice'},{c:'明',m:'Bright'}] },
     '莉': { m: 'Jasmine', ops: [{c:'麗',m:'Beautiful'},{c:'立',m:'Stand'}] },
-    '愛': { m: 'Love', ops: [{c:'艾',m:'Mugwort'},{c:'安',m:'Peace'}] },
-    '美': { m: 'Beautiful', ops: [{c:'梅',m:'Plum'},{c:'妹',m:'Sister'}] },
-    '麗': { m: 'Elegant', ops: [{c:'理',m:'Reason'},{c:'莉',m:'Jasmine'}] },
-    '安': { m: 'Peace', ops: [{c:'諳',m:'Familiar'},{c:'岸',m:'Shore'}] },
-    '米': { m: 'Rice', ops: [{c:'蜜',m:'Honey'},{c:'秘',m:'Secret'}] },
-    '明': { m: 'Bright', ops: [{c:'名',m:'Name'},{c:'鳴',m:'Sing'}] },
-    '立': { m: 'Stand', ops: [{c:'力',m:'Power'},{c:'利',m:'Benefit'}] },
-    
-    // 大衛 / 瑪麗 / 傑
     '大': { m: 'Big', ops: [{c:'達',m:'Reach'},{c:'德',m:'Virtue'}] },
     '衛': { m: 'Guard', ops: [{c:'偉',m:'Great'},{c:'威',m:'Power'}] },
-    '瑪': { m: 'Agate', ops: [{c:'馬',m:'Horse'},{c:'美',m:'Beautiful'}] },
+    '瑪': { m: 'Agate', ops: [{c:'馬',m:'Energetic'},{c:'美',m:'Fine'}] },
+    '麗': { m: 'Elegant', ops: [{c:'理',m:'Reason'},{c:'莉',m:'Jasmine'}] },
     '傑': { m: 'Hero', ops: [{c:'捷',m:'Victory'},{c:'界',m:'World'}] },
-    '達': { m: 'Reach', ops: [{c:'大',m:'Big'},{c:'答',m:'Answer'}] },
-    '德': { m: 'Virtue', ops: [{c:'得',m:'Get'},{c:'的',m:'Of'}] },
-    '偉': { m: 'Great', ops: [{c:'衛',m:'Guard'},{c:'威',m:'Power'}] },
-    '威': { m: 'Power', ops: [{c:'偉',m:'Great'},{c:'微',m:'Tiny'}] },
-    '馬': { m: 'Horse', ops: [{c:'瑪',m:'Agate'},{c:'碼',m:'Yard'}] },
-    '理': { m: 'Reason', ops: [{c:'禮',m:'Courtesy'},{c:'里',m:'Village'}] },
-
-    // 張納豆
+    
     '納': { m: 'Receive', ops: [{c:'娜',m:'Elegant'},{c:'那',m:'That'}] },
     '豆': { m: 'Bean', ops: [{c:'逗',m:'Tease'},{c:'斗',m:'Fight'}] },
-    
-    // 同學名單 (高橋空矢、籃玉如、黃晨瑋、陸永強...)
     '籃': { m: 'Basket', ops: [{c:'藍',m:'Blue'},{c:'蘭',m:'Orchid'}] },
     '如': { m: 'As/Like', ops: [{c:'茹',m:'Plant'},{c:'儒',m:'Scholar'}] },
     '晨': { m: 'Morning', ops: [{c:'辰',m:'Dawn'},{c:'陳',m:'Exhibit'}] },
@@ -167,6 +149,7 @@ const Dict = {
     '橋': { m: 'Bridge', ops: [{c:'喬',m:'Tall'},{c:'巧',m:'Skillful'}] },
     '空': { m: 'Sky', ops: [{c:'孔',m:'Great'},{c:'康',m:'Health'}] },
     '矢': { m: 'Arrow', ops: [{c:'石',m:'Solid'},{c:'世',m:'World'}] },
+    
     '陳': { m: 'Exhibit', ops: [{c:'晨',m:'Morning'},{c:'辰',m:'Dawn'}] },
     '慧': { m: 'Wisdom', ops: [{c:'惠',m:'Favor'},{c:'匯',m:'Gather'}] },
     '樺': { m: 'Birch', ops: [{c:'華',m:'Splendid'},{c:'畫',m:'Draw'}] },
@@ -209,6 +192,7 @@ const Dict = {
     '玄': { m: 'Mysterious', ops: [{c:'宣',m:'Declare'},{c:'旋',m:'Return'}] },
     '英': { m: 'Hero', ops: [{c:'櫻',m:'Cherry'},{c:'鷹',m:'Eagle'}] },
     '欣': { m: 'Joyful', ops: [{c:'心',m:'Heart'},{c:'新',m:'New'}] },
+    '安': { m: 'Peace', ops: [{c:'諳',m:'Familiar'},{c:'岸',m:'Shore'}] },
     '儀': { m: 'Ceremony', ops: [{c:'宜',m:'Suitable'},{c:'怡',m:'Pleasant'}] },
     '凱': { m: 'Triumphant', ops: [{c:'愷',m:'Joyful'},{c:'楷',m:'Model'}] },
     '琳': { m: 'Beautiful Jade', ops: [{c:'林',m:'Forest'},{c:'霖',m:'Rain'}] },
@@ -225,6 +209,7 @@ const Dict = {
     '家': { m: 'Home', ops: [{c:'加',m:'Add'},{c:'佳',m:'Good'}] },
     '葉': { m: 'Leaf', ops: [{c:'業',m:'Karma'},{c:'夜',m:'Night'}] },
     '查': { m: 'Investigate', ops: [{c:'茶',m:'Tea'},{c:'察',m:'Examine'}] },
+    '理': { m: 'Reason', ops: [{c:'禮',m:'Courtesy'},{c:'里',m:'Village'}] },
     '伃': { m: 'Fair', ops: [{c:'宇',m:'Universe'},{c:'雨',m:'Rain'}] },
     '后': { m: 'Queen', ops: [{c:'厚',m:'Thick'},{c:'候',m:'Wait'}] },
     '鄧': { m: 'Deng', ops: [{c:'登',m:'Ascend'},{c:'等',m:'Wait'}] },
@@ -232,15 +217,32 @@ const Dict = {
     '蔡': { m: 'Herb', ops: [{c:'彩',m:'Color'},{c:'財',m:'Wealth'}] },
     '沛': { m: 'Abundant', ops: [{c:'配',m:'Match'},{c:'佩',m:'Admire'}] },
     '辰': { m: 'Dawn', ops: [{c:'晨',m:'Morning'},{c:'沉',m:'Sink'}] },
-    '俊': { m: 'Handsome', ops: [{c:'駿',m:'Steed'},{c:'峻',m:'High'}] }
+    '俊': { m: 'Handsome', ops: [{c:'駿',m:'Steed'},{c:'峻',m:'High'}] },
+    '德': { m: 'Virtue', ops: [{c:'得',m:'Get'},{c:'的',m:'Of'}] }
 };
 
-// 隨機備用干擾池
+// 隨機干擾池
 const Decoys = [
     {c:'佳', m:'Excellent'}, {c:'平', m:'Peace'}, {c:'星', m:'Star'}, {c:'誠', m:'Sincere'}, 
     {c:'信', m:'Honest'}, {c:'樂', m:'Joy'}, {c:'和', m:'Harmony'}, {c:'康', m:'Health'}, 
     {c:'富', m:'Wealth'}, {c:'貴', m:'Noble'}, {c:'真', m:'True'}, {c:'善', m:'Kind'}
 ];
+
+// ✨ 自動擴充字典：將所有出現過的干擾字、選項都註冊成主角，避免 Name Character
+Object.keys(Dict).forEach(key => {
+    Dict[key].ops.forEach(opt => {
+        if(!Dict[opt.c]) {
+            let shuffledDecoys = [...Decoys].filter(d => d.c !== opt.c).sort(() => Math.random() - 0.5);
+            Dict[opt.c] = { m: opt.m, ops: [shuffledDecoys[0], shuffledDecoys[1]] };
+        }
+    });
+});
+Decoys.forEach(dec => {
+    if(!Dict[dec.c]) {
+        let shuffledDecoys = [...Decoys].filter(d => d.c !== dec.c).sort(() => Math.random() - 0.5);
+        Dict[dec.c] = { m: dec.m, ops: [shuffledDecoys[0], shuffledDecoys[1]] };
+    }
+});
 
 const Core = {
     data: { f: "", g: "", c: "", m: "" },
@@ -305,9 +307,10 @@ const Core = {
         
         for(let i=0; i<this.data.g.length; i++) {
             let char = this.data.g[i];
-            let meaning = "Chinese Character"; // 極少數未建檔字的最後防線
+            let meaning = "Name Character";
             let ops = [];
 
+            // 抓取擴充後的字典
             if(Dict[char]) {
                 meaning = Dict[char].m;
                 ops = Dict[char].ops;
@@ -470,4 +473,53 @@ const Core = {
 
     startFW: function() {
         let c = document.createElement('canvas');
-        c.style.cssText
+        c.style.cssText = "position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:99999";
+        document.body.appendChild(c);
+        let ctx = c.getContext('2d');
+        c.width = window.innerWidth; c.height = window.innerHeight;
+        let p = [];
+        for(let i=0;i<50;i++) p.push({x:c.width/2, y:c.height/2, vx:(Math.random()-0.5)*18, vy:(Math.random()-0.5)*18, l:1.0, d:0.02, c:`hsl(${Math.random()*360},100%,60%)`});
+        function anim() {
+            ctx.clearRect(0,0,c.width,c.height); let active = false;
+            p.forEach(i => {
+                if(i.l > 0){ i.x+=i.vx; i.y+=i.vy; i.vy+=0.15; i.l-=i.d; ctx.fillStyle=i.c; ctx.globalAlpha=i.l; ctx.beginPath(); ctx.arc(i.x,i.y,4,0,Math.PI*2); ctx.fill(); active=true; }
+            });
+            if(active) requestAnimationFrame(anim); else c.remove();
+        } anim();
+    },
+
+    drawSeal: function() {
+        let c = document.getElementById("seal-canvas"), ctx = c.getContext("2d"), n = this.data.c;
+        c.width = 320; c.height = 320;
+        ctx.strokeStyle = "#C1121F"; ctx.lineWidth = 14; ctx.strokeRect(20,20,280,280); 
+        ctx.lineWidth = 4; ctx.strokeRect(36,36,248,248);
+        ctx.fillStyle = "#C1121F"; ctx.textAlign = "center"; ctx.textBaseline = "middle"; 
+        let f = '"Long Cang", cursive';
+        
+        if(n.length === 2) {
+            ctx.font = `bold 140px ${f}`; ctx.fillText(n[0], 215, 160); ctx.fillText(n[1], 105, 160);
+        } else if(n.length === 3) {
+            ctx.font = `bold 150px ${f}`; ctx.fillText(n[0], 215, 160); 
+            ctx.font = `bold 110px ${f}`; ctx.fillText(n[1], 105, 95); ctx.fillText(n[2], 105, 225);
+        } else if(n.length >= 4) {
+            ctx.font = `bold 110px ${f}`; 
+            ctx.fillText(n[0], 215, 95); ctx.fillText(n[1], 215, 225); 
+            ctx.fillText(n[2], 105, 95); ctx.fillText(n[3], 105, 225); 
+        } else {
+            ctx.font = `bold 180px ${f}`; ctx.fillText(n[0] || "印", 160, 160);
+        }
+    },
+
+    replayEnd: function() {
+        this.speak(`你好，我叫${this.data.f}。我的中文名字是${this.data.c}。它的意思是${this.data.m}。`);
+    },
+
+    downloadCard: function() {
+        html2canvas(document.getElementById('card-wrap')).then(c => {
+            let a = document.createElement('a'); a.download = 'MyNTNUCard.png'; a.href = c.toDataURL(); a.click();
+        });
+    }
+};
+</script>
+</body>
+</html>
